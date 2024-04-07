@@ -7,8 +7,10 @@ const RoomFilter = ({ data, setFilteredData }) => {
 		const selectedType = e.target.value
 		setFilter(selectedType)
 
-		const filteredRooms = data.filter((room) =>
-			room.roomType.toLowerCase().includes(selectedType.toLowerCase())
+		const filteredRooms = data.filter((room) => room
+			.roomType
+			.toLowerCase()
+			.includes(selectedType.toLowerCase())
 		)
 		setFilteredData(filteredRooms)
 	}
@@ -23,7 +25,7 @@ const RoomFilter = ({ data, setFilteredData }) => {
 	return (
 		<div className="input-group mb-3">
 			<span className="input-group-text" id="room-type-filter">
-				FIlter rooms by type
+				Filter rooms by type
 			</span>
 			<select
 				className="form-select"

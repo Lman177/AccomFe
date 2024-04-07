@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { addRoom } from "../utils/ApiFunctions"
 import RoomTypeSelector from "../common/RoomTypeSelector"
-// import { Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const AddRoom = () => {
 	const [newRoom, setNewRoom] = useState({
@@ -15,16 +15,16 @@ const AddRoom = () => {
 	const [imagePreview, setImagePreview] = useState("")
 
 	const handleRoomInputChange = (e) => {
-		const name = e.target.name
+		const price = e.target.name
 		let value = e.target.value
-		if (name === "roomPrice") {
+		if (price === "roomPrice") {
 			if (!isNaN(value)) {
 				value = parseInt(value)
 			} else {
 				value = ""
 			}
 		}
-		setNewRoom({ ...newRoom, [name]: value })
+		setNewRoom({ ...newRoom, [price]: value })
 	}
 
 	const handleImageChange = (e) => {
