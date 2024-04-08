@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { getAllRooms } from "../utils/ApiFunctions"
+import { deleteRoom, getAllRooms } from "../utils/ApiFunctions"
 import { Col, Row } from "react-bootstrap"
 import RoomFilter from "../common/RoomFilter"
 import RoomPaginator from "../common/RoomPaginator"
@@ -118,25 +118,25 @@ const ExistingRooms = () => {
 										<td>{room.id}</td>
 										<td>{room.roomType}</td>
 										<td>{room.roomPrice}</td>
-										<td className="gap-2">
-											{/* <Link to={`/edit-room/${room.id}`} className="gap-2">
+										<td className="gap-2"> 
+											<Link to={`/edit-room/${room.id}`} className="gap-2">
 												<span className="btn btn-info btn-sm">
 													<FaEye />
 												</span>
 												<span className="btn btn-warning btn-sm ml-5">
 													<FaEdit />
 												</span>
-											</Link> */}
-                                            <td>
-                                                <button>View / Edit</button>
-                                                <button>Delete</button>
-                                            </td>
-											{/* <button
+											</Link>
+                                            
+                                                
+                                                <button
 												className="btn btn-danger btn-sm ml-5"
 												onClick={() => handleDelete(room.id)}>
 												<FaTrashAlt />
-											</button> */}
-										</td>
+											</button>
+                                            	
+											
+										</td> 
 									</tr>
 								))}
 							</tbody>
