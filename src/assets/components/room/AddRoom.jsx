@@ -15,16 +15,16 @@ const AddRoom = () => {
 	const [imagePreview, setImagePreview] = useState("")
 
 	const handleRoomInputChange = (e) => {
-		const price = e.target.name
+		const name = e.target.name
 		let value = e.target.value
-		if (price === "roomPrice") {
+		if (name === "roomPrice") {
 			if (!isNaN(value)) {
 				value = parseInt(value)
 			} else {
 				value = ""
 			}
 		}
-		setNewRoom({ ...newRoom, [price]: value })
+		setNewRoom({ ...newRoom, [name]: value })
 	}
 
 	const handleImageChange = (e) => {

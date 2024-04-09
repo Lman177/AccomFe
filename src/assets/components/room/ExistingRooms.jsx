@@ -90,17 +90,17 @@ const ExistingRooms = () => {
 							<h2>Existing Rooms</h2>
 						</div>
 
-						{/* <Row> */}
+						<Row>
 							<Col md={6} className="mb-2 md-mb-0">
 								<RoomFilter data={rooms} setFilteredData={setFilteredRooms} />
 							</Col>
 
-							{/* <Col md={6} className="d-flex justify-content-end">
+							<Col md={6} className="d-flex justify-content-end">
 								<Link to={"/add-room"}>
 									<FaPlus /> Add Room
 								</Link>
-							</Col> */}
-						{/* </Row> */}
+							</Col>
+						</Row>
 
 						<table className="table table-bordered table-hover">
 							<thead>
@@ -118,7 +118,7 @@ const ExistingRooms = () => {
 										<td>{room.id}</td>
 										<td>{room.roomType}</td>
 										<td>{room.roomPrice}</td>
-										<td className="gap-2"> 
+										<td className="gap-2">
 											<Link to={`/edit-room/${room.id}`} className="gap-2">
 												<span className="btn btn-info btn-sm">
 													<FaEye />
@@ -127,16 +127,12 @@ const ExistingRooms = () => {
 													<FaEdit />
 												</span>
 											</Link>
-                                            
-                                                
-                                                <button
+											<button
 												className="btn btn-danger btn-sm ml-5"
 												onClick={() => handleDelete(room.id)}>
 												<FaTrashAlt />
 											</button>
-                                            	
-											
-										</td> 
+										</td>
 									</tr>
 								))}
 							</tbody>
