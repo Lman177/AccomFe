@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 const RoomFilter = ({ data, setFilteredData }) => {
 	const [filter, setFilter] = useState("")
@@ -7,13 +7,17 @@ const RoomFilter = ({ data, setFilteredData }) => {
 		const selectedType = e.target.value
 		setFilter(selectedType)
 
-		const filteredRooms = data.filter((room) => room
+		const filteredRooms = Array.isArray(data) ? data.filter((room) => room
 			.roomType
 			.toLowerCase()
 			.includes(selectedType.toLowerCase())
-		)
+		) : [];
 		setFilteredData(filteredRooms)
 	}
+
+	useEffect(() => {
+		setFilteredData(data);
+	  }, [data]);
 
 	const clearFilter = () => {
 		setFilter("")

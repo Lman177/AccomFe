@@ -28,10 +28,12 @@ const AddRoom = () => {
 	}
 
 	const handleImageChange = (e) => {
-		const selectedImage = e.target.files[0]
-		setNewRoom({ ...newRoom, photo: selectedImage })
-		setImagePreview(URL.createObjectURL(selectedImage))
-	}
+		if (e.target.files.length > 0) {
+		  const selectedImage = e.target.files[0];
+		  setNewRoom({ ...newRoom, photo: selectedImage });
+		  setImagePreview(URL.createObjectURL(selectedImage));
+		}
+	  };
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
