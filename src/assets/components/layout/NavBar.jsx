@@ -63,19 +63,18 @@ const NavBar = () => {
 							<ul
 								className={`dropdown-menu ${showAccount ? "show" : ""}`}
 								aria-labelledby="navbarDropdown">
-								
 									<li>
 										<Link className="dropdown-item" to={"/login"}>
 											Login
 										</Link>
 									</li>
                                     <li>
-										<Link className="dropdown-item" to={"/login"}>
+										<Link className="dropdown-item" to={"/profile"}>
 											Profile
 										</Link>
 									</li>
                                     <li>
-										<Link className="dropdown-item" to={"/login"}>
+										<Link className="dropdown-item" to={"/logout"}>
 											Logout
 										</Link>
 									</li>
