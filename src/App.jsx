@@ -9,6 +9,8 @@ import Home from './assets/components/home/Home'
 import NavBar from './assets/components/layout/NavBar'
 import RoomListing from './assets/components/room/RoomListing'
 import Admin from './assets/components/admin/Admin'
+import Checkout from './assets/components/booking/Checkout'
+import BookingSuccess from './assets/components/booking/BookingSuccess'
 
 
 function App() {
@@ -22,9 +24,11 @@ function App() {
               <Route path="/edit-room/:roomId" element={<EditRoom />} />
               <Route path="/existing-rooms" element={<ExistingRooms />} />
               <Route path="/add-room" element={<AddRoom />} />
+              <Route path="/book-room/:roomId" element={<Checkout />} />
               <Route path="/browse-all-rooms" element={<RoomListing />} />
               <Route path="/admin" element={<Admin />} />
-              
+              <Route path="/booking-success" element={<BookingSuccess />} />
+
           
           </Routes>
           

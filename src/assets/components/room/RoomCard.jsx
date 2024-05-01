@@ -9,11 +9,13 @@ const RoomCard = ({room}) => {
     <Card key={room.id} className='mb-4' xs={12}>
        <Card.Body className='d-flex flex-wrap align-items-center'>
         <div className='flex-shirk-0 mr-3 mb-3 md-0'>
+        <Link to={`/book-room/${room.id}`}>
             <Card.Img
             variant='top'
             src={`data:image/png;base64, ${room.photo}`}
             alt='roomPhoto'
             style={{width: '100%', maxWidth: '200px', height: 'auto'}}/>
+        </Link>
         </div>
         <div className='flex-grow-1 ml-3 px-5'>
             <Card.Title className='hotel-color'>{room.roomType}</Card.Title>
@@ -21,7 +23,7 @@ const RoomCard = ({room}) => {
             <Card.Text>Some room infor goes here</Card.Text> 
         </div>
         <div className='flex-shrink-0 mt-3'>
-            <Link to={`booking/${room.id}`} className='btn btn-hotel btn-sm'>
+            <Link to={`/book-room/${room.id}`} className='btn btn-hotel btn-sm'>
                 Book Now
             </Link>
 
@@ -34,3 +36,4 @@ const RoomCard = ({room}) => {
 }
 
 export default RoomCard
+
