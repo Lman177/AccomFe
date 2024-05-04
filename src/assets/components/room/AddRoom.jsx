@@ -6,8 +6,9 @@ import { Link } from "react-router-dom"
 const AddRoom = () => {
 	const [newRoom, setNewRoom] = useState({
 		photo: null,
-		roomType: "",
-		roomPrice: ""
+		roomTypeName: "",
+		roomPrice: "",
+		description:""
 	})
 
 	const [successMessage, setSuccessMessage] = useState("")
@@ -38,10 +39,10 @@ const AddRoom = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const success = await addRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice)
+			const success = await addRoom(newRoom.photo, newRoom.roomTypeName, newRoom.roomPrice, newRoom.description)
 			if (success !== undefined) {
 				setSuccessMessage("A new room was  added successfully !")
-				setNewRoom({ photo: null, roomType: "", roomPrice: "" })
+				setNewRoom({ photo: null, roomTypeName: "", roomPrice: "", description:"" })
 				setImagePreview("")
 				setErrorMessage("")
 			} else {
@@ -70,7 +71,7 @@ const AddRoom = () => {
 
 						<form onSubmit={handleSubmit}>
 							<div className="mb-3">
-								<label htmlFor="roomType" className="form-label">
+								<label htmlFor="roomTypeName" className="form-label">
 									Room Type
 								</label>
 								<div>
@@ -114,6 +115,20 @@ const AddRoom = () => {
 										style={{ maxWidth: "400px", maxHeight: "400px" }}
 										className="mb-3"></img>
 								)}
+								<div className="mb-3">
+								<label htmlFor="description" className="form-label">
+									Room Description
+								</label>
+								<input
+									required
+									type="text"
+									className="form-control"
+									id="description"
+									name="description"
+									value={newRoom.description}
+									onChange={handleRoomInputChange}
+								/>
+							</div>
 							</div>
 							<div className="d-grid gap-2 d-md-flex mt-2">
 								<Link to={"/existing-rooms"} className="btn btn-outline-info">
