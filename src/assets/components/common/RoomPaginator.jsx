@@ -1,22 +1,34 @@
-import React from "react"
+import React from 'react';
 
 const RoomPaginator = ({ currentPage, totalPages, onPageChange }) => {
-	const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
-	return (
-		<nav aria-label="Page navigation">
-			<ul className="pagination justify-content-center">
-				{pageNumbers.map((pageNumber) => (
-					<li
-						key={pageNumber}
-						className={`page-item ${currentPage === pageNumber ? "active" : ""}`}>
-						<button onClick={() => onPageChange(pageNumber)} className="page-link">
-							{pageNumber}
-						</button>
-					</li>
-				))}
-			</ul>
-		</nav>
-	)
-}
+    const pageNumbers = [];
+    
+    // Determine the range of pages to display
+    for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+    }
 
-export default RoomPaginator
+    // Handle click on page number
+    const handleClick = (number) => {
+        onPageChange(number);
+    };
+
+    return (
+        <nav aria-label="Room pagination">
+            <ul className="pagination justify-content-center">
+                {/* Display page numbers */}
+                {pageNumbers.map(number => (
+                    <li key={number} className={`page-item ${number === currentPage ? 'active' : ''}`}>
+                        <a className="page-link" href="#!" onClick={() => handleClick(number)}>
+                            {number}
+                        </a>
+                    </li>
+                ))}
+
+                
+            </ul>
+        </nav>
+    );
+};
+
+export default RoomPaginator;

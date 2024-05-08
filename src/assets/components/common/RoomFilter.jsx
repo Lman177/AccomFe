@@ -8,7 +8,7 @@ const RoomFilter = ({ data, setFilteredData }) => {
 		setFilter(selectedType)
 
 		const filteredRooms = Array.isArray(data) ? data.filter((room) => room
-			.roomType
+			.roomTypeName.name
 			.toLowerCase()
 			.includes(selectedType.toLowerCase())
 		) : [];
@@ -24,7 +24,8 @@ const RoomFilter = ({ data, setFilteredData }) => {
 		setFilteredData(data)
 	}
 
-	const roomTypes = ["", ...new Set(data.map((room) => room.roomType))]
+	const roomTypes = ["", ...new Set(data.map((room) => room.roomTypeName.name))]
+	console.log(roomTypes)
 
 	return (
 		<div className="input-group mb-3">
