@@ -18,9 +18,9 @@ const RoomCard = ({room}) => {
         </Link>
         </div>
         <div className='flex-grow-1 ml-3 px-5'>
-            <Card.Title className='hotel-color'>{room.roomType}</Card.Title>
-            <Card.Title className='hotel-color'>{room.roomPrice}</Card.Title>
-            <Card.Text>Some room infor goes here</Card.Text> 
+            <Card.Title className='hotel-color'>{room.roomTypeName.name}</Card.Title>
+            <Card.Title className="room-price">{room.roomPrice}$</Card.Title>
+            <Card.Text>{room.description}</Card.Text> 
         </div>
         <div className='flex-shrink-0 mt-3'>
             <Link to={`/book-room/${room.id}`} className='btn btn-hotel btn-sm'>

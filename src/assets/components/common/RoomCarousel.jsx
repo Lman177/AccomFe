@@ -3,7 +3,7 @@ import { Card, Carousel, Col, Container, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { getAllRooms } from '../utils/ApiFunctions'
 const RoomCarousel = () => {
-    const[rooms, setRooms] = useState([{id:"", roomType:"", roomPrice:"", photo:""}])
+    const[rooms, setRooms] = useState([{id:"", roomTypeName:"", roomPrice:"", photo:""}])
     const[errorMessage, setErrorMessage] = useState("")
     const[isLoading, setIsLoading] = useState(false)
 
@@ -48,7 +48,7 @@ const RoomCarousel = () => {
                       />
                     </Link>
                     <Card.Body>
-												<Card.Title className="hotel-color">{room.roomType}</Card.Title>
+												<Card.Title className="hotel-color">{room.roomTypeName.name}</Card.Title>
 												<Card.Title className="room-price">${room.roomPrice}/night</Card.Title>
 												<div className="flex-shrink-0">
 													<Link to={`/book-room/${room.id}`} className="btn btn-hotel btn-sm">
