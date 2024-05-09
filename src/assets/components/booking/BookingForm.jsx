@@ -20,8 +20,8 @@ const BookingForm = () => {
 		guestEmail: "",
 		checkInDate: "",
 		checkOutDate: "",
-		numOfAdults: "",
-		numOfChildren: ""
+		numberOfAdults: "",
+		numberOfChildren: ""
 	})
 
 	const { roomId } = useParams()
@@ -56,8 +56,8 @@ const BookingForm = () => {
 	}
 
 	const isGuestCountValid = () => {
-		const adultCount = parseInt(booking.numOfAdults)
-		const childrenCount = parseInt(booking.numOfChildren)
+		const adultCount = parseInt(booking.numberOfAdults)
+		const childrenCount = parseInt(booking.numberOfChildren)
 		const totalCount = adultCount + childrenCount
 		return totalCount >= 1 && adultCount >= 1
 	}
@@ -188,15 +188,15 @@ const BookingForm = () => {
 									<legend>Number of Guest</legend>
 									<div className="row">
 										<div className="col-6">
-											<Form.Label htmlFor="numOfAdults" className="hotel-color">
+											<Form.Label htmlFor="numberOfAdults" className="hotel-color">
 												Adults
 											</Form.Label>
 											<FormControl
 												required
 												type="number"
-												id="numOfAdults"
-												name="numOfAdults"
-												value={booking.numOfAdults}
+												id="numberOfAdults"
+												name="numberOfAdults"
+												value={booking.numberOfAdults}
 												min={1}
 												placeholder="0"
 												onChange={handleInputChange}
@@ -206,15 +206,15 @@ const BookingForm = () => {
 											</Form.Control.Feedback>
 										</div>
 										<div className="col-6">
-											<Form.Label htmlFor="numOfChildren" className="hotel-color">
+											<Form.Label htmlFor="numberOfChildren" className="hotel-color">
 												Children
 											</Form.Label>
 											<FormControl
 												required
 												type="number"
-												id="numOfChildren"
-												name="numOfChildren"
-												value={booking.numOfChildren}
+												id="numberOfChildren"
+												name="numberOfChildren"
+												value={booking.numberOfChildren}
 												placeholder="0"
 												min={0}
 												onChange={handleInputChange}
