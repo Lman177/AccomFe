@@ -83,11 +83,11 @@ export async function getRoomById(roomId){
 	}
 }
 
-/* This function gets alll bokings from the database */
+/* This function gets all bokings from the database */
 export async function getAllBookings() {
 	try {
 		const result = await api.get("/bookings/all-bookings", {
-			headers: getHeader()
+			// headers: getHeader()
 		})
 		return result.data
 	} catch (error) {
@@ -120,10 +120,10 @@ export async function cancelBooking(bookingId) {
 }
 
 /* This function gets all availavle rooms from the database with a given date and a room type */
-export async function getAvailableRooms(checkInDate, checkOutDate, roomType) {
+export async function getAvailableRooms(checkInDate, checkOutDate, roomLocation, roomType) {
 	const result = await api.get(
 		`rooms/available-rooms?checkInDate=${checkInDate}
-		&checkOutDate=${checkOutDate}&roomType=${roomType}`
+		&checkOutDate=${checkOutDate}&roomLocation=${roomLocation}&roomType=${roomType}`
 	)
 	return result
 }
