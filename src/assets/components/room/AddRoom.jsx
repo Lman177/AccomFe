@@ -1,14 +1,17 @@
 import React, { useState } from "react"
 import { addRoom } from "../utils/ApiFunctions"
 import RoomTypeSelector from "../common/RoomTypeSelector"
+import RoomLocationSelector from "../common/RoomLocationSelector"
 import { Link } from "react-router-dom"
 
 const AddRoom = () => {
 	const [newRoom, setNewRoom] = useState({
-		photo: null,
 		roomTypeName: "",
-		roomPrice: "",
-		description:""
+		description:"",
+		roomAddress:"",
+		roomLocation:""	,
+		photo: null,
+		roomPrice: ""
 	})
 
 	const [successMessage, setSuccessMessage] = useState("")
@@ -39,10 +42,10 @@ const AddRoom = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const success = await addRoom(newRoom.photo, newRoom.roomTypeName, newRoom.roomPrice, newRoom.description)
+			const success = await addRoom(newRoom.photo, newRoom.roomTypeName, newRoom.roomPrice, newRoom.description, newRoom.roomAddress, newRoom.roomLocation )
 			if (success !== undefined) {
 				setSuccessMessage("A new room was  added successfully !")
-				setNewRoom({ photo: null, roomTypeName: "", roomPrice: "", description:"" })
+				setNewRoom({ photo: null, roomTypeName: "", roomPrice: "", description:"", roomAddress:"", roomLocation:"" })
 				setImagePreview("")
 				setErrorMessage("")
 			} else {
@@ -72,7 +75,7 @@ const AddRoom = () => {
 						<form onSubmit={handleSubmit}>
 							<div className="mb-3">
 								<label htmlFor="roomTypeName" className="form-label">
-									Room Type
+									What type of place will guests have?
 								</label>
 								<div>
 									<RoomTypeSelector
@@ -82,19 +85,30 @@ const AddRoom = () => {
 								</div>
 							</div>
 							<div className="mb-3">
-								<label htmlFor="roomPrice" className="form-label">
-									Room Price
-								</label>
-								<input
-									required
-									type="number"
-									className="form-control"
-									id="roomPrice"
-									name="roomPrice"
-									value={newRoom.roomPrice}
-									onChange={handleRoomInputChange}
-								/>
+									<label htmlFor="roomAddress" className="form-label">
+										Number and Lane of your Place?
+									</label>
+									<input
+										required
+										type="text"
+										className="form-control"
+										id="roomAddress"
+										name="roomAddress"
+										value={newRoom.roomAddress}
+										onChange={handleRoomInputChange}
+									/>
+								</div>
+							<div className="mb-3">
+								<label htmlFor="roomLocation" className="form-label">
+									Where's your place located?</label>
+								<div>
+									<RoomLocationSelector
+										handleRoomInputChange={handleRoomInputChange}
+										newRoom={newRoom}
+									/>
+								</div>
 							</div>
+
 
 							<div className="mb-3">
 								<label htmlFor="photo" className="form-label">
@@ -116,16 +130,30 @@ const AddRoom = () => {
 										className="mb-3"></img>
 								)}
 								<div className="mb-3">
-								<label htmlFor="description" className="form-label">
-									Room Description
+									<label htmlFor="description" className="form-label">
+										Room Description
+									</label>
+									<input
+										required
+										type="text"
+										className="form-control"
+										id="description"
+										name="description"
+										value={newRoom.description}
+										onChange={handleRoomInputChange}
+									/>
+								</div>
+								<div className="mb-3">
+								<label htmlFor="roomPrice" className="form-label">
+									Room Price
 								</label>
 								<input
 									required
-									type="text"
+									type="number"
 									className="form-control"
-									id="description"
-									name="description"
-									value={newRoom.description}
+									id="roomPrice"
+									name="roomPrice"
+									value={newRoom.roomPrice}
 									onChange={handleRoomInputChange}
 								/>
 							</div>
