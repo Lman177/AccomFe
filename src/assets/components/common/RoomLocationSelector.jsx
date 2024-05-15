@@ -13,17 +13,7 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 		})
 	}, [])
 
-	const handleLocationInputChange = (e) => {
-		setNewLocation(e.target.value)
-	}
 
-	// const handleAddNewRoomType = () => {
-	// 	if (newRoomType !== "") {
-	// 		setLocations([...locations, newLocation])
-	// 		setNewLocation("")
-	// 		setShowNewRoomTypeInput(false)
-	// 	}
-	// }
 
 	return (
 		<>
@@ -35,7 +25,6 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 						name="roomLocation"
 						onChange={(e) => {
 								handleRoomInputChange(e)
-							
 						}}
 						value={newRoom.roomLocation}>
 						<option value="">Select District</option>
@@ -45,22 +34,6 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 			            </option>
 			        ))}
 					</select>
-					{/* {showNewRoomTypeInput && (
-						<div className="mt-2">
-							<div className="input-group">
-								<input
-									type="text"
-									className="form-control"
-									placeholder="Enter New Room Type"
-									value={newRoomType}
-									onChange={handleLocationInputChange}
-								/>
-								<button className="btn btn-hotel" type="button" onClick={handleAddNewRoomType}>
-									Add
-								</button>
-							</div>
-						</div>
-					)} */}
 				</div>
 			)}
 		</>
