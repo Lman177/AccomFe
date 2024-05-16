@@ -26,7 +26,7 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 						onChange={(e) => {
 								handleRoomInputChange(e)
 						}}
-						value={newRoom.roomLocation}>
+						>
 						<option value="">Select District</option>
 						{locations.map((roomLocation, index) => (
 			            <option key={index} value={roomLocation.locationName}>

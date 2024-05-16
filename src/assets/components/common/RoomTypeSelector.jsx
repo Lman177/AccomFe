@@ -20,12 +20,12 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 					<select
 						required
 						className="form-select"
-						name="roomType"
+						name="roomTypeName"
 						onChange={(e) => {
 								handleRoomInputChange(e)
 							
 						}}
-						value={newRoom.roomType}>
+						>
 						<option value="">Select a room type</option>
 						{roomTypes.map((roomType, index) => (
             
