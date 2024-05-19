@@ -12,6 +12,17 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 		})
 	}, [])
 
+	const handleNewRoomTypeInputChange = (e) => {
+		setNewRoomType(e.target.value)
+	}
+
+	const handleAddNewRoomType = () => {
+		if (newRoomType !== "") {
+			setRoomTypes([...roomTypes, newRoomType])
+			setNewRoomType("")
+			setShowNewRoomTypeInput(false)
+		}
+	}
 
 	return (
 		<>
@@ -23,9 +34,8 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 						name="roomTypeName"
 						onChange={(e) => {
 								handleRoomInputChange(e)
-							
 						}}
-						>
+						value={newRoom.roomTypeName}>
 						<option value="">Select a room type</option>
 						{roomTypes.map((roomType, index) => (
             
@@ -34,7 +44,20 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 			            </option>
 			        ))}
 					</select>
-					
+					{showNewRoomTypeInput && (
+						<div className="mt-2">
+							<div className="input-group">
+								<input
+									type="text"
+									className="form-control"
+									placeholder="Enter New Room Type"
+									value={newRoomType}
+									onChange={handleNewRoomTypeInputChange}
+								/>
+		
+							</div>
+						</div>
+					)}
 				</div>
 			)}
 		</>

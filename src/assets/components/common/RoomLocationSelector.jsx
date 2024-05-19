@@ -13,7 +13,9 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 		})
 	}, [])
 
-
+	const handleNewLocationInputChange = (e) => {
+		setNewRoomType(e.target.value)
+	}
 
 	return (
 		<>
@@ -26,6 +28,7 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 						onChange={(e) => {
 								handleRoomInputChange(e)
 						}}
+						value={newRoom.roomLocation}
 						>
 						<option value="">Select District</option>
 						{locations.map((roomLocation, index) => (
@@ -34,6 +37,20 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 			            </option>
 			        ))}
 					</select>
+					{showNewRoomTypeInput && (
+						<div className="mt-2">
+							<div className="input-group">
+								<input
+									type="text"
+									className="form-control"
+									placeholder="Enter New Room Type"
+									value={newRoomType}
+									onChange={handleNewLocationInputChange}
+								/>
+		
+							</div>
+						</div>
+					)}
 				</div>
 			)}
 		</>

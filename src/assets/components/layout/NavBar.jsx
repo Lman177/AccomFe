@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react"
 import { NavLink, Link } from "react-router-dom"
-// import Logout from "../auth/Logout"
+import Logout from "../auth/Logout"
 
 
 const NavBar = () => {
@@ -10,14 +10,14 @@ const NavBar = () => {
 		setShowAccount(!showAccount)
 	}
 
-	// const isLoggedIn = localStorage.getItem("token")
-	// const userRole = localStorage.getItem("userRole")
+	const isLoggedIn = localStorage.getItem("token")
+	const userRole = localStorage.getItem("userRole")
 
 	return (
 		<nav className="navbar navbar-expand-lg bg-body-tertiary px-5 shadow sticky-top">
 			<div className="container-fluid">
 				<Link to={"/"} className="navbar-brand">
-					<span className="hotel-color">lakeSide Hotel</span>
+					<span className="hotel-color">Accom</span>
 				</Link>
 				<button
 					className="navbar-toggler"
