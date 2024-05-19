@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react"
 import { getLocation } from "../utils/ApiFunctions"
 
 
-const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
+const RoomTypeSelector = ({ handleRoomInputChange, selectedLocation, setSelectedLocation }) => {
 	const [locations, setLocations] = useState([""])
-	const [showNewRoomTypeInput, setShowNewRoomTypeInput] = useState(false)
-	const [newLocation, setNewLocation] = useState("")
+
 
 	useEffect(() => {
 		getLocation().then((data) => {
@@ -13,9 +12,7 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 		})
 	}, [])
 
-	const handleNewLocationInputChange = (e) => {
-		setNewRoomType(e.target.value)
-	}
+	
 
 	return (
 		<>
@@ -26,9 +23,10 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 						className="form-select"
 						name="roomLocation"
 						onChange={(e) => {
-								handleRoomInputChange(e)
+							setSelectedLocation(e.target.value)
+							handleRoomInputChange(e)
 						}}
-						value={newRoom.roomLocation}
+						value={selectedLocation}
 						>
 						<option value="">Select District</option>
 						{locations.map((roomLocation, index) => (
@@ -37,20 +35,7 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 			            </option>
 			        ))}
 					</select>
-					{showNewRoomTypeInput && (
-						<div className="mt-2">
-							<div className="input-group">
-								<input
-									type="text"
-									className="form-control"
-									placeholder="Enter New Room Type"
-									value={newRoomType}
-									onChange={handleNewLocationInputChange}
-								/>
-		
-							</div>
-						</div>
-					)}
+				
 				</div>
 			)}
 		</>
