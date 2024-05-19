@@ -15,6 +15,8 @@ const RoomSearch = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [selectedRoomType, setSelectedRoomType] = useState("")
+	const [selectedLocation, setSelectedLocation] = useState("")
   const [availableRooms, setAvailableRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,8 +39,8 @@ const RoomSearch = () => {
     getAvailableRooms(
         searchQuery.checkInDate,
         searchQuery.checkOutDate,
-        searchQuery.roomType,
-		searchQuery.roomLocation,
+        selectedRoomType,
+		    selectedLocation,
     )
     .then((response) => {
         setAvailableRooms(response.data);
@@ -62,7 +64,7 @@ const RoomSearch = () => {
     setSearchQuery({
       checkInDate: "",
       checkOutDate: "",
-      roomType: "",
+      roomTypeName: "",
       roomLocation: ""
     });
     setAvailableRooms([]);
@@ -100,19 +102,23 @@ const RoomSearch = () => {
           <Col xs={12} md={3}>
             <Form.Group controlId="roomTypeName">
               <Form.Label>Room Type</Form.Label>
+              <div>
               <RoomTypeSelector
-                handleRoomInputChange={handleInputChange}
-                newRoom={searchQuery}
-              />
+                  handleRoomInputChange={handleInputChange}
+                  selectedRoomType={selectedRoomType}
+                  setSelectedRoomType={setSelectedRoomType}
+                />
+							</div>
             </Form.Group>
           </Col>
 		  <Col xs={12} md={3}>
             <Form.Group controlId="roomLocation">
               <Form.Label>Room Location</Form.Label>
               <RoomLocationSelector
-                handleRoomInputChange={handleInputChange}
-                newRoom={searchQuery}
-              />
+                  handleRoomInputChange={handleInputChange}
+                  selectedLocation={selectedLocation}
+                  setSelectedLocation={setSelectedLocation}
+                />
             </Form.Group>
           </Col>
         </Row>
