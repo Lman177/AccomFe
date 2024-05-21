@@ -1,0 +1,53 @@
+/* NavBar.css */
+.navbar {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .navbar-brand .hotel-color {
+    color: #ff5a5f;
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+  
+  .navbar-toggler {
+    border: none;
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+  .nav-link {
+    color: #555;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-link svg {
+    margin-right: 5px;
+  }
+  
+  .nav-link:hover {
+    color: #ff5a5f;
+  }
+  
+  .navbar-nav .dropdown-menu {
+    border: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .dropdown-item svg {
+    margin-right: 8px;
+  }
+  
+  .navbar-nav .dropdown-menu.show {
+    display: block;
+  }
+  

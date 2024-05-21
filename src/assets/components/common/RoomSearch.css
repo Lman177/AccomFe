@@ -1,0 +1,37 @@
+/* RoomSearch.css */
+.room-search-container {
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  
+  .room-search-container .form-label {
+    font-weight: bold;
+  }
+  
+.room-search-container .btn-primary {
+    background-color: #ff5a5f;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+  
+  .room-search-container .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+  }
+  
+  .room-search-container .btn-primary:hover,
+  .room-search-container .btn-secondary:hover {
+    opacity: 0.9;
+  }
+  
+  .room-search-container .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .room-search-container .text-center p {
+    margin-top: 10px;
+    font-size: 1.2em;
+  }
+  

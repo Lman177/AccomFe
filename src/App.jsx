@@ -18,6 +18,7 @@ import Login from "./assets/components/auth/Login"
 import Registration from "./assets/components/auth/Registration"
 import Profile from "./assets/components/auth/Profile"
 import RequireAuth from "./assets/components/auth/RequireAuth"
+import AdminPanel from "./assets/components/admin/AdminPanel"
 // import Footer from './assets/components/layout/Footer'
 
 
@@ -44,6 +45,8 @@ function App() {
 				<Route path="/browse-all-rooms" element={<RoomListing />} />
 
 				<Route path="/admin" element={<Admin />} />
+				<Route path="/admin-panel" element={<AdminPanel />} />
+
 				<Route path="/booking-success" element={<BookingSuccess />} />
 				<Route path="/existing-bookings" element={<Bookings />} />
 				<Route path="/find-booking" element={<FindBooking />} />

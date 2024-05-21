@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Form, Button, Row, Col, Container } from "react-bootstrap";
+import { Form, Button, Row, Col, Container, Spinner } from "react-bootstrap";
 import moment from "moment";
 import { getAvailableRooms } from "../utils/ApiFunctions";
 import RoomSearchResults from "./RoomSearchResult";
 import RoomTypeSelector from "./RoomTypeSelector";
 import RoomLocationSelector from "./RoomLocationSelector";
+import './RoomSearch.css';
 
 const RoomSearch = () => {
   const [searchQuery, setSearchQuery] = useState({
@@ -16,7 +17,7 @@ const RoomSearch = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedRoomType, setSelectedRoomType] = useState("")
-	const [selectedLocation, setSelectedLocation] = useState("")
+  const [selectedLocation, setSelectedLocation] = useState("")
   const [availableRooms, setAvailableRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +41,7 @@ const RoomSearch = () => {
         searchQuery.checkInDate,
         searchQuery.checkOutDate,
         selectedRoomType,
-		    selectedLocation,
+        selectedLocation,
     )
     .then((response) => {
         setAvailableRooms(response.data);
@@ -52,7 +53,6 @@ const RoomSearch = () => {
         setIsLoading(false);
     });
 };
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,7 +72,7 @@ const RoomSearch = () => {
   };
 
   return (
-    <Container className="shadow mt-n5 mb-5 py-5">
+    <Container className="shadow mt-n5 mb-5 py-5 room-search-container">
       <Form onSubmit={handleSearch}>
         <Row className="justify-content-center">
           <Col xs={12} md={3}>
@@ -108,10 +108,10 @@ const RoomSearch = () => {
                   selectedRoomType={selectedRoomType}
                   setSelectedRoomType={setSelectedRoomType}
                 />
-							</div>
+              </div>
             </Form.Group>
           </Col>
-		  <Col xs={12} md={3}>
+          <Col xs={12} md={3}>
             <Form.Group controlId="roomLocation">
               <Form.Label>Room Location</Form.Label>
               <RoomLocationSelector
@@ -122,20 +122,24 @@ const RoomSearch = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Row className="justify-content-center mt-3">
-          <Button variant="secondary" type="submit">
+        <Row className="justify-content-center mt-3 ">
+          <Button variant="primary" type="submit">
             Search
           </Button>
+          
         </Row>
       </Form>
       {isLoading ? (
-        <p className="mt-4">Finding available rooms...</p>
+        <div className="text-center mt-4">
+          <Spinner animation="border" />
+          <p>Finding available rooms...</p>
+        </div>
       ) : availableRooms.length > 0 ? (
         <RoomSearchResults results={availableRooms} onClearSearch={handleClearSearch} />
       ) : (
-        <p className="mt-4">No rooms available for the selected dates and room type.</p>
+        <p ></p>
       )}
-      {errorMessage && <p className="text-danger">{errorMessage}</p>}
+      {errorMessage && <p className="text-danger text-center mt-4">{errorMessage}</p>}
     </Container>
   );
 };
