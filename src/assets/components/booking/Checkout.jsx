@@ -103,14 +103,11 @@ const Checkout = () => {
 							</div>
 						)}
 					</div>
-					<div className="col-md-8">
+					{/* <div className="col-md-8">
 						<BookingForm />
-					</div>
+					</div> */}
 				</div>
 			</section>
-			<div className="container">
-				<RoomCarousel />
-			</div>
 		</div>
 	)
 }

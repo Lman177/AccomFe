@@ -1,34 +1,24 @@
 import React from 'react';
+import { Pagination } from 'antd';
 
 const RoomPaginator = ({ currentPage, totalPages, onPageChange }) => {
-    const pageNumbers = [];
-    
-    // Determine the range of pages to display
-    for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i);
-    }
+  // Handle page change
+  const handlePageChange = (page) => {
+    onPageChange(page);
+  };
 
-    // Handle click on page number
-    const handleClick = (number) => {
-        onPageChange(number);
-    };
-
-    return (
-        <nav aria-label="Room pagination">
-            <ul className="pagination justify-content-center">
-                {/* Display page numbers */}
-                {pageNumbers.map(number => (
-                    <li key={number} className={`page-item ${number === currentPage ? 'active' : ''}`}>
-                        <a className="page-link" href="#!" onClick={() => handleClick(number)}>
-                            {number}
-                        </a>
-                    </li>
-                ))}
-
-                
-            </ul>
-        </nav>
-    );
+  return (
+    <nav aria-label="Room pagination">
+      <Pagination
+        current={currentPage}
+        total={totalPages * 10}  // Ant Design requires total number of items, not pages
+        onChange={handlePageChange}
+        showSizeChanger={false}
+        pageSize={10}  // Assuming 10 items per page for simplicity
+        className="pagination justify-content-center"
+      />
+    </nav>
+  );
 };
 
 export default RoomPaginator;

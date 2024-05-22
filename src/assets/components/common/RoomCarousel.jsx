@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Carousel, Col, Container, Row, Spinner, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Carousel, Card, Row, Col, Spin, Alert, Button } from 'antd';
 import { getAllRooms } from '../utils/ApiFunctions';
+import RoomPaginator from './RoomPaginator';
 import './RoomCarousel.css';
 
 const RoomCarousel = () => {
   const [rooms, setRooms] = useState([{ id: "", roomTypeName: "", roomPrice: "", photo: "" }]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const roomsPerPage = 4; // Number of rooms per page
 
   useEffect(() => {
     setIsLoading(true);
@@ -22,62 +25,73 @@ const RoomCarousel = () => {
       });
   }, []);
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const indexOfLastRoom = currentPage * roomsPerPage;
+  const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
+  const currentRooms = rooms.slice(indexOfFirstRoom, indexOfLastRoom);
+  const totalPages = Math.ceil(rooms.length / roomsPerPage);
+
   if (isLoading) {
     return (
       <div className="loading-container">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-        <p>Loading rooms...</p>
+        <Spin tip="Loading rooms..." size="large" />
       </div>
     );
   }
-  
+
   if (errorMessage) {
     return (
-      <Alert variant="danger" className="mt-5">
-        Error: {errorMessage}
-      </Alert>
+      <Alert message={`Error: ${errorMessage}`} type="error" className="mt-5" />
     );
   }
 
   return (
-    <section className="room-carousel-section bg-light mb-5  shadow">
-      <Container>
+    <section className="room-carousel-section bg-light mb-5 shadow">
+      <div className="container">
         <Link to="/browse-all-rooms" className="hotel-color text-center d-block mb-3">
           Browse all rooms
         </Link>
-        <Carousel indicators={false} interval={null}>
-          {[...Array(Math.ceil(rooms.length / 4))].map((_, index) => (
-            <Carousel.Item key={index}>
-              <Row>
-                {rooms.slice(index * 4, index * 4 + 4).map((room) => (
-                  <Col key={room.id} className="mb-4" xs={12} md={6} lg={3}>
-                    <Card className="room-card h-100">
-                      <Link to={`/book-room/${room.id}`}>
-                        <Card.Img
-                          variant="top"
-                          src={`data:image/png;base64, ${room.photo}`}
-                          alt="Room Photo"
-                          className="w-100"
-                          style={{ height: "200px", objectFit: "cover" }}
-                        />
-                      </Link>
-                      <Card.Body className="d-flex flex-column">
-                        <Card.Title className="hotel-color">{room.roomTypeName.name}</Card.Title>
-                        <Card.Text className="room-price">${room.roomPrice}/night</Card.Text>
-                        <Link to={`/book-room/${room.id}`} className="btn btn-hotel mt-auto">
-                          Book Now
+        <Carousel dotPosition="bottom" autoplay>
+          {[...Array(Math.ceil(currentRooms.length / roomsPerPage))].map((_, index) => (
+            <div key={index}>
+              <Row gutter={16}>
+                {currentRooms.slice(index * roomsPerPage, index * roomsPerPage + roomsPerPage).map((room) => (
+                  <Col key={room.id} xs={24} sm={12} md={8} lg={6} className="mb-4">
+                    <Card
+                      hoverable
+                      cover={
+                        <Link to={`/book-room/${room.id}`}>
+                          <img
+                            alt="Room Photo"
+                            src={`data:image/png;base64, ${room.photo}`}
+                            style={{ height: "200px", objectFit: "cover" }}
+                          />
                         </Link>
-                      </Card.Body>
+                      }
+                    >
+                      <Card.Meta
+                        title={<span className="hotel-color">{room.roomTypeName.name}</span>}
+                        description={<div className="room-price">${room.roomPrice}/night</div>}
+                      />
+                      <Button type="primary" className="btn-hotel mt-2">
+                        <Link to={`/book-room/${room.id}`}>Book Now</Link>
+                      </Button>
                     </Card>
                   </Col>
                 ))}
               </Row>
-            </Carousel.Item>
+            </div>
           ))}
         </Carousel>
-      </Container>
+        <RoomPaginator
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </section>
   );
 };
