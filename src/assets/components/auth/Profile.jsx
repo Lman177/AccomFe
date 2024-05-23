@@ -135,11 +135,11 @@ const Profile = () => {
 												<label className="col-md-2 col-form-label fw-bold">Roles:</label>
 												<div className="col-md-10">
 													<ul className="list-unstyled">
-														{user.roles.map((role) => (
-															<li key={role.id} className="card-text">
-																{role.name}
-															</li>
-														))}
+													{user.roles && user.roles.map((role) => (
+													<li key={role.id} className="card-text">
+														{role.name}
+													</li>
+													))}
 													</ul>
 												</div>
 											</div>

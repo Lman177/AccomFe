@@ -1,45 +1,48 @@
-import React, { useState, useEffect } from "react"
-import { getLocation } from "../utils/ApiFunctions"
+import React, { useState, useEffect } from "react";
+import { Select, Typography, Spin } from "antd";
+import { getLocation } from "../utils/ApiFunctions";
+import { EnvironmentOutlined } from '@ant-design/icons';
 
+const { Option } = Select;
+const { Title } = Typography;
 
 const RoomTypeSelector = ({ handleRoomInputChange, selectedLocation, setSelectedLocation }) => {
-	const [locations, setLocations] = useState([""])
-
+	const [locations, setLocations] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		getLocation().then((data) => {
-			setLocations(data)
-		})
-	}, [])
+			setLocations(data);
+			setLoading(false);
+		});
+	}, []);
 
-	
+	const handleChange = (value) => {
+		setSelectedLocation(value);
+		handleRoomInputChange({ target: { name: 'roomLocation', value } });
+	};
 
 	return (
-		<>
-			{locations.length > 0 && (
-				<div>
-					<select
-						required
-						className="form-select"
-						name="roomLocation"
-						onChange={(e) => {
-							setSelectedLocation(e.target.value)
-							handleRoomInputChange(e)
-						}}
-						value={selectedLocation}
-						>
-						<option value="">Select District</option>
-						{locations.map((roomLocation, index) => (
-			            <option key={index} value={roomLocation.locationName}>
-			                {roomLocation.locationName}
-			            </option>
-			        ))}
-					</select>
-				
-				</div>
-			)}
-		</>
-	)
-}
+		<div>
+				<Select
+					required
+					name="roomLocation"
+					onChange={handleChange}
+					value={selectedLocation || undefined}
+					style={{ width: '100%' }}
+					placeholder="Select a location"
+					showSearch
+                	allowClear
+				>
+					{locations.map((location, index) => (
+						<Option key={index} value={location.locationName}>
+							{location.locationName}
+						</Option>
+					))}
+				</Select>
+			
+		</div>
+	);
+};
 
-export default RoomTypeSelector
+export default RoomTypeSelector;

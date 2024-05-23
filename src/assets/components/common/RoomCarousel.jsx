@@ -49,7 +49,7 @@ const RoomCarousel = () => {
   }
 
   return (
-    <section className="room-carousel-section bg-light mb-5 shadow">
+    <section className="room-carousel-section bg-light mb-5 mt-2 shadow">
       <div className="container">
         <Link to="/browse-all-rooms" className="hotel-color text-center d-block mb-3">
           Browse all rooms
@@ -67,7 +67,7 @@ const RoomCarousel = () => {
                           <img
                             alt="Room Photo"
                             src={`data:image/png;base64, ${room.photo}`}
-                            style={{ height: "200px", objectFit: "cover" }}
+                            className="room-image" // Add a class for styling
                           />
                         </Link>
                       }

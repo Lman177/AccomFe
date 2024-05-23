@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Form, Button, Row, Col, Container, Spinner } from "react-bootstrap";
 import moment from "moment";
 import { getAvailableRooms } from "../utils/ApiFunctions";
 import RoomSearchResults from "./RoomSearchResult";
 import RoomTypeSelector from "./RoomTypeSelector";
 import RoomLocationSelector from "./RoomLocationSelector";
-import './RoomSearch.css';
+import { DatePicker, Form, Button, Row, Col, Input, Space, Spin } from "antd";
+// import "antd/dist/antd.min.css";
+import "./RoomSearch.css";
+import { SearchOutlined } from "@ant-design/icons";
 
 const RoomSearch = () => {
   const [searchQuery, setSearchQuery] = useState({
@@ -16,43 +18,50 @@ const RoomSearch = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [selectedRoomType, setSelectedRoomType] = useState("")
-  const [selectedLocation, setSelectedLocation] = useState("")
   const [availableRooms, setAvailableRooms] = useState([]);
+  const [selectedRoomType, setSelectedRoomType] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  const handleSearch = () => {
     const checkInMoment = moment(searchQuery.checkInDate);
     const checkOutMoment = moment(searchQuery.checkOutDate);
 
     if (!checkInMoment.isValid() || !checkOutMoment.isValid()) {
-        setErrorMessage("Please enter valid dates");
-        return;
+      setErrorMessage("Please enter valid dates");
+      return;
     }
 
     if (!checkOutMoment.isSameOrAfter(checkInMoment)) {
-        setErrorMessage("Check-out date must be after check-in date");
-        return;
+      setErrorMessage("Check-out date must be after check-in date");
+      return;
     }
 
     setIsLoading(true);
     getAvailableRooms(
-        searchQuery.checkInDate,
-        searchQuery.checkOutDate,
-        selectedRoomType,
-        selectedLocation,
+      searchQuery.checkInDate,
+      searchQuery.checkOutDate,
+      selectedRoomType,
+      selectedLocation
     )
-    .then((response) => {
+      .then((response) => {
         setAvailableRooms(response.data);
-        setTimeout(() => setIsLoading(false), 2000);
-    })
-    .catch((error) => {
-        console.error("Error fetching available rooms:", error);
+        setIsLoading(false);
+        if (response.data.length === 0) {
+          setErrorMessage("No rooms available for the selected dates and options.");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
         setErrorMessage("An error occurred while fetching available rooms.");
         setIsLoading(false);
-    });
-};
+      });
+  };
+
+  const handleDateChange = (name, date) => {
+    setSearchQuery({ ...searchQuery, [name]: date ? date.format("YYYY-MM-DD") : "" });
+    setErrorMessage("");
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,75 +81,71 @@ const RoomSearch = () => {
   };
 
   return (
-    <Container className="shadow mt-n5 mb-5 py-5 room-search-container">
-      <Form onSubmit={handleSearch}>
-        <Row className="justify-content-center">
-          <Col xs={12} md={3}>
-            <Form.Group controlId="checkInDate">
-              <Form.Label>Check-in Date</Form.Label>
-              <Form.Control
-                type="date"
-                name="checkInDate"
-                value={searchQuery.checkInDate}
-                onChange={handleInputChange}
-                min={moment().format("YYYY-MM-DD")}
-              />
-            </Form.Group>
-          </Col>
-          <Col xs={12} md={3}>
-            <Form.Group controlId="checkOutDate">
-              <Form.Label>Check-out Date</Form.Label>
-              <Form.Control
-                type="date"
-                name="checkOutDate"
-                value={searchQuery.checkOutDate}
-                onChange={handleInputChange}
-                min={moment().format("YYYY-MM-DD")}
-              />
-            </Form.Group>
-          </Col>
-          <Col xs={12} md={3}>
-            <Form.Group controlId="roomTypeName">
-              <Form.Label>Room Type</Form.Label>
-              <div>
-              <RoomTypeSelector
-                  handleRoomInputChange={handleInputChange}
-                  selectedRoomType={selectedRoomType}
-                  setSelectedRoomType={setSelectedRoomType}
-                />
-              </div>
-            </Form.Group>
-          </Col>
-          <Col xs={12} md={3}>
-            <Form.Group controlId="roomLocation">
-              <Form.Label>Room Location</Form.Label>
-              <RoomLocationSelector
-                  handleRoomInputChange={handleInputChange}
-                  selectedLocation={selectedLocation}
-                  setSelectedLocation={setSelectedLocation}
-                />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row className="justify-content-center mt-3 ">
-          <Button variant="primary" type="submit">
-            Search
-          </Button>
+    <div className="search-container">
+      <Form onFinish={handleSearch} className="search-form">
+        <Space size="large">
           
-        </Row>
+          <Form.Item>
+            <DatePicker
+              placeholder="Add dates"
+              name="checkInDate"
+              value={searchQuery.checkInDate ? moment(searchQuery.checkInDate) : null}
+              onChange={(date) => handleDateChange("checkInDate", date)}
+              format="YYYY-MM-DD"
+              style={{ width: 150 }}
+            />
+          </Form.Item>
+          <Form.Item>
+            <DatePicker
+              placeholder="Add dates"
+              name="checkOutDate"
+              value={searchQuery.checkOutDate ? moment(searchQuery.checkOutDate) : null}
+              onChange={(date) => handleDateChange("checkOutDate", date)}
+              format="YYYY-MM-DD"
+              style={{ width: 150 }}
+            />
+          </Form.Item>
+          <Form.Item>
+            {/* <Input
+              placeholder="Search destinations"
+              name="roomLocation"
+              value={searchQuery.roomLocation}
+              onChange={handleInputChange}
+              style={{ width: 200 }}
+            /> */}
+            <RoomLocationSelector
+              handleRoomInputChange={handleInputChange}
+              selectedLocation={selectedLocation}
+              setSelectedLocation={setSelectedLocation}
+            />
+          </Form.Item>
+          <Form.Item>
+            <RoomTypeSelector
+              handleRoomInputChange={handleInputChange}
+              selectedRoomType={selectedRoomType}
+              setSelectedRoomType={setSelectedRoomType}
+            />
+            {/* <Input
+              placeholder="Select RoomType"
+              name="roomTypeName"
+              value={searchQuery.roomTypeName}
+              onChange={handleInputChange}
+              style={{ width: 150 }}
+            /> */}
+          </Form.Item>
+          <Button type="primary" htmlType="submit" icon={<SearchOutlined />} />
+        </Space>
       </Form>
       {isLoading ? (
         <div className="text-center mt-4">
-          <Spinner animation="border" />
-          <p>Finding available rooms...</p>
+          <Spin tip="Finding available rooms..." size="large" />
         </div>
       ) : availableRooms.length > 0 ? (
         <RoomSearchResults results={availableRooms} onClearSearch={handleClearSearch} />
       ) : (
-        <p ></p>
+        errorMessage && <div className="mt-4">{errorMessage}</div>
       )}
-      {errorMessage && <p className="text-danger text-center mt-4">{errorMessage}</p>}
-    </Container>
+    </div>
   );
 };
 
