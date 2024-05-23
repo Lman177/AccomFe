@@ -53,7 +53,7 @@ RoomCarousel.css
   
   .room-carousel-section .ant-card-cover img {
     max-width: 100%;
-    max-height: 200px;
+    max-height: 300px;
     object-fit: cover;
   }
   

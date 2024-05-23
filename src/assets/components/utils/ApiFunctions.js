@@ -235,3 +235,12 @@ export async function getBookingsByUserId(userId, token) {
 		throw new Error("Failed to fetch bookings")
 	}
 }
+
+export async function getUserRoom(userId, token ){
+	try {
+		const response = await api.get(`/rooms/${userId}`)
+		return response.data
+	} catch (error) {
+		throw new Error(`Error fetching user room : ${error.message}`)
+	}
+}

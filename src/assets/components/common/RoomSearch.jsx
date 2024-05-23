@@ -106,33 +106,22 @@ const RoomSearch = () => {
             />
           </Form.Item>
           <Form.Item>
-            {/* <Input
-              placeholder="Search destinations"
-              name="roomLocation"
-              value={searchQuery.roomLocation}
-              onChange={handleInputChange}
-              style={{ width: 200 }}
-            /> */}
+            <RoomTypeSelector
+              handleRoomInputChange={handleInputChange}
+              selectedRoomType={selectedRoomType}
+              setSelectedRoomType={setSelectedRoomType}
+            />
+            
+          </Form.Item>
+          <Form.Item>
+            
             <RoomLocationSelector
               handleRoomInputChange={handleInputChange}
               selectedLocation={selectedLocation}
               setSelectedLocation={setSelectedLocation}
             />
           </Form.Item>
-          <Form.Item>
-            <RoomTypeSelector
-              handleRoomInputChange={handleInputChange}
-              selectedRoomType={selectedRoomType}
-              setSelectedRoomType={setSelectedRoomType}
-            />
-            {/* <Input
-              placeholder="Select RoomType"
-              name="roomTypeName"
-              value={searchQuery.roomTypeName}
-              onChange={handleInputChange}
-              style={{ width: 150 }}
-            /> */}
-          </Form.Item>
+          
           <Button type="primary" htmlType="submit" icon={<SearchOutlined />} />
         </Space>
       </Form>

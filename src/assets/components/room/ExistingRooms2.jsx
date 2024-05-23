@@ -20,6 +20,9 @@ const ExistingRooms2 = () => {
         fetchRoomTypes();
     }, []);
 
+    const userId = localStorage.getItem("userId")
+	const token = localStorage.getItem("token")
+    
     const fetchRooms = async () => {
         setIsLoading(true);
         try {
@@ -108,12 +111,7 @@ const ExistingRooms2 = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Link to={`/edit-room/${record.id}`} className="btn btn-info btn-sm">
-                        <FaEye />
-                    </Link>
-                    <Link to={`/edit-room/${record.id}`} className="btn btn-warning btn-sm ml-2">
-                        <FaEdit />
-                    </Link>
+                   
                     <Button
                         type="primary"
                         danger

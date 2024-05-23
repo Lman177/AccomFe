@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react"
 import { deleteUser, getBookingsByUserId, getUser } from "../utils/ApiFunctions"
 import { useNavigate } from "react-router-dom"
 import moment from "moment"
+import { Avatar, Space } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 const Profile = () => {
 	const [user, setUser] = useState({
@@ -15,7 +17,7 @@ const Profile = () => {
 	const [bookings, setBookings] = useState([
 		{
 			id: "",
-			room: { id: "", roomType: "" },
+			room: { id: "", roomTypeName: "" },
 			checkInDate: "",
 			checkOutDate: "",
 			bookingConfirmationCode: ""
@@ -87,13 +89,12 @@ const Profile = () => {
 							<div className="card mb-3 shadow">
 								<div className="row g-0">
 									<div className="col-md-2">
-										<div className="d-flex justify-content-center align-items-center mb-4">
-											<img
-												src="https://themindfulaimanifesto.org/wp-content/uploads/2020/09/male-placeholder-image.jpeg"
-												alt="Profile"
-												className="rounded-circle"
-												style={{ width: "150px", height: "150px", objectFit: "cover" }}
-											/>
+										<div className="d-flex justify-content-center align-items-center mt-4">
+										<Avatar 
+										size={80}
+										style={{ backgroundColor: '#87d068',  }} 
+										icon={<UserOutlined />} />
+
 										</div>
 									</div>
 
@@ -101,7 +102,7 @@ const Profile = () => {
 										<div className="card-body">
 											<div className="form-group row">
 												<label className="col-md-2 col-form-label fw-bold">ID:</label>
-												<div className="col-md-10">
+												<div className="col-md-10 mt-2">
 													<p className="card-text">{user.id}</p>
 												</div>
 											</div>
@@ -109,7 +110,7 @@ const Profile = () => {
 
 											<div className="form-group row">
 												<label className="col-md-2 col-form-label fw-bold">First Name:</label>
-												<div className="col-md-10">
+												<div className="col-md-10 mt-2">
 													<p className="card-text">{user.firstName}</p>
 												</div>
 											</div>
@@ -117,7 +118,7 @@ const Profile = () => {
 
 											<div className="form-group row">
 												<label className="col-md-2 col-form-label fw-bold">Last Name:</label>
-												<div className="col-md-10">
+												<div className="col-md-10 mt-2">
 													<p className="card-text">{user.lastName}</p>
 												</div>
 											</div>
@@ -125,7 +126,7 @@ const Profile = () => {
 
 											<div className="form-group row">
 												<label className="col-md-2 col-form-label fw-bold">Email:</label>
-												<div className="col-md-10">
+												<div className="col-md-10 mt-2">
 													<p className="card-text">{user.email}</p>
 												</div>
 											</div>
@@ -133,7 +134,7 @@ const Profile = () => {
 
 											<div className="form-group row">
 												<label className="col-md-2 col-form-label fw-bold">Roles:</label>
-												<div className="col-md-10">
+												<div className="col-md-10 mt-2">
 													<ul className="list-unstyled">
 													{user.roles && user.roles.map((role) => (
 													<li key={role.id} className="card-text">
@@ -168,7 +169,7 @@ const Profile = () => {
 											<tr key={index}>
 												<td>{booking.id}</td>
 												<td>{booking.room.id}</td>
-												<td>{booking.room.roomType}</td>
+												<td>{booking.room.roomTypeName.name}</td>
 												<td>
 													{moment(booking.checkInDate).subtract(1, "month").format("MMM Do, YYYY")}
 												</td>

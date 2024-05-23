@@ -46,11 +46,16 @@ const NavBar = () => {
 								</NavLink>
 							</li>
 						
-            <li className="nav-item">
-                <NavLink className="nav-link" aria-current="page" to={"/admin-panel"}>
-                  Admin panle
-                </NavLink>
-              </li>
+							<li className="nav-item">
+								<NavLink className="nav-link" aria-current="page" to={"/admin-panel"}>
+								Admin panle
+								</NavLink>
+							</li>
+							<li className="nav-item">
+								<NavLink className="nav-link" aria-current="page" to={"/admin-rooms"}>
+								Your Room
+								</NavLink>
+							</li>
 					</ul>
 
 					<ul className="d-flex navbar-nav">
