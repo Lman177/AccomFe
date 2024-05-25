@@ -51,9 +51,6 @@ const RoomCarousel = () => {
   return (
     <section className="room-carousel-section bg-light mb-5 mt-2 shadow">
       <div className="container">
-        <Link to="/browse-all-rooms" className="hotel-color text-center d-block mb-3">
-          Browse all rooms
-        </Link>
         <Carousel dotPosition="bottom" autoplay>
           {[...Array(Math.ceil(currentRooms.length / roomsPerPage))].map((_, index) => (
             <div key={index}>

@@ -25,7 +25,7 @@ const RoomFilter = ({ data, setFilteredData }) => {
 	}
 
 	const roomTypes = ["", ...new Set(data.map((room) => room.roomTypeName.name))]
-	console.log(roomTypes)
+	// console.log(roomTypes)
 
 	return (
 		<div className="input-group mb-3">

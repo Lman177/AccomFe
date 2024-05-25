@@ -1,43 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { deleteRoom, getAllRooms, getUserRoom } from "../utils/ApiFunctions";
-import { Col, Row } from "react-bootstrap";
-import RoomFilter from "../common/RoomFilter";
-import RoomPaginator from "../common/RoomPaginator";  // Make sure to import the RoomPaginator
-import { FaEdit, FaEye, FaPlus, FaTrashAlt } from "react-icons/fa";
+import { Table, Space, message, Spin, Typography, Select, Alert, Button, Row, Col } from "antd";
+import { getAllRooms, deleteRoom, getRoomTypes, getUserRoom } from "../utils/ApiFunctions";
 import { Link } from "react-router-dom";
-import { id } from "date-fns/locale";
-import { Descriptions } from "antd";
+import { FaEdit, FaEye, FaPlus, FaTrashAlt } from "react-icons/fa";
 
-const ExistingRooms = () => {
-    const [rooms, setRooms] = useState([
-        {
-        id: "",
-        roomTypeName: "",
-        roomPrice: "",
-        descriptions: "",
-        roomLocation:"",
-        roomAddress:""
-        }
-    ]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [roomsPerPage] = useState(8);
+const { Title } = Typography;
+const { Option } = Select;
+
+const AdminRooms = () => {
+    const [rooms, setRooms] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [filteredRooms, setFilteredRooms] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
-	const [selectedRoomType, setSelectedRoomType] = useState("");
-
+    const [roomTypes, setRoomTypes] = useState([]);
+    const [selectedRoomType, setSelectedRoomType] = useState("");
 
     useEffect(() => {
         fetchRooms();
+        fetchRoomTypes();
     }, []);
 
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    
     const fetchRooms = async () => {
         setIsLoading(true);
         try {
-            const result = await getUserRoom();
+            const result = await getUserRoom(userId, token);
             setRooms(result);
-            setFilteredRooms(result);
             setIsLoading(false);
         } catch (error) {
             setErrorMessage(error.message);
@@ -45,21 +35,23 @@ const ExistingRooms = () => {
         }
     };
 
-    
-
-
-    const handlePaginationClick = (pageNumber) => {
-        setCurrentPage(pageNumber);
+    const fetchRoomTypes = async () => {
+        try {
+            const result = await getRoomTypes(token);
+            setRoomTypes(result);
+        } catch (error) {
+            setErrorMessage(error.message);
+        }
     };
 
     const handleDelete = async (roomId) => {
         try {
-            const result = await deleteRoom(roomId);
+            const result = await deleteRoom(roomId, token);
             if (result === "") {
                 setSuccessMessage(`Room No ${roomId} was deleted`);
                 fetchRooms();
             } else {
-                console.error(`Error deleting room : ${result.message}`);
+                console.error(`Error deleting room: ${result.message}`);
             }
         } catch (error) {
             setErrorMessage(error.message);
@@ -70,85 +62,123 @@ const ExistingRooms = () => {
         }, 3000);
     };
 
-    const calculateTotalPages = () => {
-        const totalRooms = filteredRooms.length;
-        return Math.ceil(totalRooms / roomsPerPage);
+    const handleRoomTypeChange = (value) => {
+        setSelectedRoomType(value);
     };
 
-    const indexOfLastRoom = currentPage * roomsPerPage;
-    const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
-    const currentRooms = filteredRooms.slice(indexOfFirstRoom, indexOfLastRoom);
+    const filteredRooms = selectedRoomType
+        ? rooms.filter(room => room.roomTypeName.name === selectedRoomType)
+        : rooms;
+
+    const columns = [
+        {
+            title: 'Room ID',
+            dataIndex: 'id',
+            key: 'id',
+            render: (text) => <a>{text}</a>,
+        },
+        {
+            title: 'Owner ID',
+            dataIndex: 'ownerId',
+            key: 'ownerId',
+            render: (text) => <a>{text}</a>,
+        },
+        {
+            title: 'Room Type',
+            dataIndex: 'roomTypeName',
+            key: 'roomTypeName',
+            render: (roomTypeName) => roomTypeName.name,
+        },
+        {
+            title: 'Room Price',
+            dataIndex: 'roomPrice',
+            key: 'roomPrice',
+        },
+        {
+            title: 'Room Location',
+            dataIndex: 'roomLocation',
+            key: 'roomLocation',
+            render: (roomLocation) => roomLocation,
+        },
+        {
+            title: 'Room Address',
+            dataIndex: 'roomAddress',
+            key: 'roomAddress',
+            render: (roomAddress) => roomAddress,
+        },
+        {
+            title: 'Actions',
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Link to={`/edit-room/${record.id}`}>
+                        <Button type="primary">
+                            <FaEdit />
+                        </Button>
+                    </Link>
+                    <Link to={`/view-room/${record.id}`}>
+                        <Button>
+                            <FaEye />
+                        </Button>
+                    </Link>
+                    <Button
+                        type="primary"
+                        danger
+                        onClick={() => handleDelete(record.id)}
+                    >
+                        <FaTrashAlt />
+                    </Button>
+                </Space>
+            ),
+        },
+    ];
 
     return (
-        <>
-            <div className="container col-md-8 col-lg-6">
-                {successMessage && <p className="alert alert-success mt-5">{successMessage}</p>}
-                {errorMessage && <p className="alert alert-danger mt-5">{errorMessage}</p>}
+        <div style={{ padding: "20px", backgroundColor: "whitesmoke" }}>
+            <Title level={2}>Existing Rooms</Title>
+            {successMessage && <Alert message="Success" description={successMessage} type="success" showIcon closable />}
+            {errorMessage && <Alert message="Error" description={errorMessage} type="error" showIcon closable />}
+            <div style={{ marginBottom: "20px" }}>
+                <Row>
+                    <Col>
+                        <Select
+                        placeholder="Select a room type"
+                        onChange={handleRoomTypeChange}
+                        value={selectedRoomType}
+                        style={{ width: 200 }}
+                    >
+                        <Option value="">All Room Types</Option>
+                        {roomTypes.map((roomType) => (
+                            <Option key={roomType.id} value={roomType.name}>
+                                {roomType.name}
+                            </Option>
+                        ))}
+                        </Select>
+                    </Col>
+                    <Col>
+                        <Link to="/add-room">
+                            <Button type="primary">
+                                <FaPlus /> Add Room
+                            </Button>
+                        </Link>
+                    </Col>
+                
+
+                </Row>
+                
             </div>
-
             {isLoading ? (
-                <p>Loading existing rooms...</p>
+                <Spin tip="Loading existing rooms..." size="large" />
             ) : (
-                <>
-                    <section className="mt-5 mb-5 container">
-                        <div className="d-flex justify-content-between mb-3 mt-5">
-                            <h2>Existing Rooms</h2>
-                        </div>
-
-                        <Row>
-                            <Col md={6} className="mb-2 md-mb-0">
-                                <RoomFilter data={rooms} setFilteredData={setFilteredRooms} />
-                            </Col>
-
-                            <Col md={6} className="d-flex justify-content-end">
-                                <Link to={"/add-room"}>
-                                    <FaPlus /> Add Room
-                                </Link>
-                            </Col>
-                        </Row>
-
-                        <table className="table table-bordered table-hover">
-                            <thead>
-                                <tr className="text-center">
-                                    <th>ID</th>
-                                    <th>Room Type</th>
-                                    <th>Room Price</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentRooms.map((room) => (
-                                    <tr key={room.id} className="text-center">
-                                        <td>{room.id}</td>
-                                        <td>{room.roomTypeName.name}</td>
-                                        <td>{room.roomPrice}</td>
-                                        <td>
-                                            <Link to={`/edit-room/${room.id}`} className="btn btn-info btn-sm">
-                                                <FaEye />
-                                            </Link>
-                                            <Link to={`/edit-room/${room.id}`} className="btn btn-warning btn-sm ml-2">
-                                                <FaEdit />
-                                            </Link>
-                                            <button
-                                                className="btn btn-danger btn-sm ml-2"
-                                                onClick={() => handleDelete(room.id)}>
-                                                <FaTrashAlt />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <RoomPaginator
-                            currentPage={currentPage}
-                            totalPages={calculateTotalPages()}
-                            onPageChange={handlePaginationClick}
-                        />
-                    </section>
-                </>
+                <Table
+                    columns={columns}
+                    dataSource={filteredRooms}
+                    rowKey="id"
+                    pagination={{ pageSize: 6 }}
+                />
             )}
-        </>
+        </div>
     );
 };
 
-export default ExistingRooms;
+export default AdminRooms;
