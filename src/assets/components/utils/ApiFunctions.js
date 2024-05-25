@@ -6,7 +6,6 @@ export const api = axios.create({
 
 export const getHeader = () => {
 	const token = localStorage.getItem("token")
-	console.log(token)
 	return {
 		Authorization: `Bearer ${token}`,
 		"Content-Type": "multipart/form-data"
@@ -188,9 +187,9 @@ export async function loginUser(login) {
 }
 
 /*  This is function to get the user profile */
-export async function getUserProfile(userId, token) {
+export async function getUserProfile(userEmail, token) {
 	try {
-		const response = await api.get(`users/profile/${userId}`, {
+		const response = await api.get(`users/profile/${userEmail}`, {
 			headers: getHeader()
 		})
 		return response.data
@@ -200,9 +199,9 @@ export async function getUserProfile(userId, token) {
 }
 
 /* This isthe function to delete a user */
-export async function deleteUser(userId) {
+export async function deleteUser(userEmail) {
 	try {
-		const response = await api.delete(`/users/delete/${userId}`, {
+		const response = await api.delete(`/users/delete/${userEmail}`, {
 			headers: getHeader()
 		})
 		return response.data
@@ -212,9 +211,9 @@ export async function deleteUser(userId) {
 }
 
 /* This is the function to get a single user */
-export async function getUser(userId, token) {
+export async function getUser(userEmail, token) {
 	try {
-		const response = await api.get(`/users/${userId}`, {
+		const response = await api.get(`/users/${userEmail}`, {
 			headers: getHeader()
 		})
 		return response.data
@@ -224,9 +223,9 @@ export async function getUser(userId, token) {
 }
 
 /* This is the function to get user bookings by the user id */
-export async function getBookingsByUserId(userId, token) {
+export async function getBookingsByUserId(userEmail, token) {
 	try {
-		const response = await api.get(`/bookings/user/${userId}/bookings`, {
+		const response = await api.get(`/bookings/user/${userEmail}/bookings`, {
 			headers: getHeader()
 		})
 		return response.data
@@ -238,7 +237,9 @@ export async function getBookingsByUserId(userId, token) {
 
 export async function getUserRoom(userId, token ){
 	try {
-		const response = await api.get(`/rooms/${userId}`)
+		const response = await api.get(`/rooms/${userId}`, {
+			headers: getHeader()
+		})
 		return response.data
 	} catch (error) {
 		throw new Error(`Error fetching user room : ${error.message}`)
