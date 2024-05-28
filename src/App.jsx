@@ -21,7 +21,7 @@ import RequireAuth from "./assets/components/auth/RequireAuth"
 import AdminPanel from "./assets/components/admin/AdminPanel"
 import AdminRooms from './assets/components/admin/AdminRooms'
 // import Footer from './assets/components/layout/Footer'
-
+import RoomDetails from "./assets/components/booking/RoomDetails"
 
 function App() {
   return (
@@ -51,7 +51,7 @@ function App() {
 				<Route path="/booking-success" element={<BookingSuccess />} />
 				<Route path="/existing-bookings" element={<Bookings />} />
 				<Route path="/find-booking" element={<FindBooking />} />
-
+				<Route path="view-room/:roomId" element={<RoomDetails />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Registration />} />
 
