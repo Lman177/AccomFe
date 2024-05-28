@@ -36,7 +36,8 @@ const EditRoom = () => {
 			try {
 				const roomData = await getRoomById(roomId)
 				setRoom(roomData)
-				setSelectedRoomType(roomData.roomTypeName)
+				setSelectedRoomType(roomData.roomTypeName.name)
+				setSelectedRoomType(roomData.roomLocation)
 				setImagePreview(roomData.photo)
 			} catch (error) {
 				console.error(error)
@@ -96,7 +97,7 @@ const EditRoom = () => {
 								Number and Lane of your Place?
 							</label>
 							<input
-								required
+								
 								type="text"
 								className="form-control"
 								id="roomAddress"
@@ -121,16 +122,18 @@ const EditRoom = () => {
 								Room Photo
 							</label>
 							<input
-								required
+								
 								name="photo"
 								id="photo"
 								type="file"
 								className="form-control"
 								onChange={handleImageChange}
 							/>
+							
 							{imagePreview && (
 								<img
-									src={imagePreview}
+									
+									src={`data:image/png;base64, ${imagePreview}`}
 									alt="Preview room photo"
 									style={{ maxWidth: "400px", maxHeight: "400px" }}
 									className="mb-3"
@@ -142,7 +145,7 @@ const EditRoom = () => {
 								Room Description
 							</label>
 							<input
-								required
+								
 								type="text"
 								className="form-control"
 								id="description"
@@ -156,7 +159,7 @@ const EditRoom = () => {
 								Room Price
 							</label>
 							<input
-								required
+								
 								type="number"
 								className="form-control"
 								id="roomPrice"
