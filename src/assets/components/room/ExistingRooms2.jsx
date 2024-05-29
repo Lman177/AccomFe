@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Space, message, Spin, Typography, Select, Alert, Button } from "antd";
-import { getAllRooms, deleteRoom, getRoomTypes } from "../utils/ApiFunctions";
-import { Link } from "react-router-dom";
-import { FaEdit, FaEye, FaPlus, FaTrashAlt } from "react-icons/fa";
+import { getAllRooms, deleteRoom, getRoomTypes, getLocation } from "../utils/ApiFunctions";
+import { FaTrashAlt } from "react-icons/fa";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -14,15 +13,15 @@ const ExistingRooms2 = () => {
     const [successMessage, setSuccessMessage] = useState("");
     const [roomTypes, setRoomTypes] = useState([]);
     const [selectedRoomType, setSelectedRoomType] = useState("");
+    const [selectedLocation, setSelectedLocation] = useState("");
+    const [locations, setLocation] = useState([]);
 
     useEffect(() => {
         fetchRooms();
         fetchRoomTypes();
+        fetchLocations();
     }, []);
 
-    const userId = localStorage.getItem("userId")
-	const token = localStorage.getItem("token")
-    
     const fetchRooms = async () => {
         setIsLoading(true);
         try {
@@ -39,6 +38,15 @@ const ExistingRooms2 = () => {
         try {
             const result = await getRoomTypes();
             setRoomTypes(result);
+        } catch (error) {
+            setErrorMessage(error.message);
+        }
+    };
+
+    const fetchLocations = async () => {
+        try {
+            const result = await getLocation();
+            setLocation(result);
         } catch (error) {
             setErrorMessage(error.message);
         }
@@ -66,9 +74,16 @@ const ExistingRooms2 = () => {
         setSelectedRoomType(value);
     };
 
-    const filteredRooms = selectedRoomType
-        ? rooms.filter(room => room.roomTypeName.name === selectedRoomType)
-        : rooms;
+    const handleLocationChange = (value) => {
+        setSelectedLocation(value);
+    };
+
+    const filteredRooms = rooms.filter(room => {
+        return (
+            (selectedRoomType ? room.roomTypeName.name === selectedRoomType : true) &&
+            (selectedLocation ? room.roomLocation === selectedLocation : true)
+        );
+    });
 
     const columns = [
         {
@@ -111,7 +126,6 @@ const ExistingRooms2 = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                   
                     <Button
                         type="primary"
                         danger
@@ -129,7 +143,7 @@ const ExistingRooms2 = () => {
             <Title level={2}>Existing Rooms</Title>
             {successMessage && <Alert message="Success" description={successMessage} type="success" showIcon closable />}
             {errorMessage && <Alert message="Error" description={errorMessage} type="error" showIcon closable />}
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
                 <Select
                     placeholder="Select a room type"
                     onChange={handleRoomTypeChange}
@@ -140,6 +154,19 @@ const ExistingRooms2 = () => {
                     {roomTypes.map((roomType) => (
                         <Option key={roomType.id} value={roomType.name}>
                             {roomType.name}
+                        </Option>
+                    ))}
+                </Select>
+                <Select
+                    placeholder="Select location"
+                    onChange={handleLocationChange}
+                    value={selectedLocation}
+                    style={{ width: 200 }}
+                >
+                    <Option value="">All Locations</Option>
+                    {locations.map((location, index) => (
+                        <Option key={index} value={location.locationName}>
+                            {location.locationName}
                         </Option>
                     ))}
                 </Select>

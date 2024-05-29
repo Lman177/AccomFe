@@ -25,8 +25,8 @@ const App = () => {
   };
 
   return (
-    <div style={{ height: '100%', width: '100%' }}>
-      <h1 className='ms-4 mt-2'>Admin Panel</h1>
+    <div className=""style={{ height: '100%', width: '100%' }}>
+      
       <Layout style={{ height: '100%', width: '100%' }}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="demo-logo-vertical " />
@@ -71,7 +71,7 @@ const App = () => {
                 height: 64,
               }}
             />
-              <span style={{ marginLeft: '10px' }}>Your Text Here</span>
+              <span style={{ marginLeft: '10px' }}>Admin Panel</span>
 
           </Header>
           <Content

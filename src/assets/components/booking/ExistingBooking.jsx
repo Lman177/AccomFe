@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Spin, Alert, Typography, DatePicker, Space } from "antd";
+import { Button, Spin, Alert, Typography, Space, Modal, Descriptions } from "antd";
 import { cancelBooking, getAllBookings } from "../utils/ApiFunctions";
 import moment from "moment";
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const { Title } = Typography;
-const { RangePicker } = DatePicker;
+const localizer = momentLocalizer(moment);
 
 const ExistingBooking = () => {
   const [bookingInfo, setBookingInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [dateRange, setDateRange] = useState([null, null]);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     fetchBookings();
@@ -32,98 +35,30 @@ const ExistingBooking = () => {
       await cancelBooking(bookingId);
       const data = await getAllBookings();
       setBookingInfo(data);
+      setIsModalVisible(false);
     } catch (error) {
       setError(error.message);
     }
   };
 
-  const handleDateRangeChange = (dates) => {
-    setDateRange(dates);
+  const events = bookingInfo.map(booking => ({
+    id: booking.id,
+    title: booking.guestName,
+    start: new Date(booking.checkInDate),
+    end: new Date(booking.checkOutDate),
+    bookingId: booking.id,
+    ...booking,
+  }));
+
+  const handleSelectEvent = (event) => {
+    setSelectedBooking(event);
+    setIsModalVisible(true);
   };
 
-  const filteredBookings = bookingInfo.filter((booking) => {
-    if (!dateRange[0] || !dateRange[1]) return true;
-    const checkInDate = moment(booking.checkInDate);
-    const checkOutDate = moment(booking.checkOutDate);
-    return checkInDate.isBetween(dateRange[0], dateRange[1], undefined, '[]') ||
-           checkOutDate.isBetween(dateRange[0], dateRange[1], undefined, '[]');
-  });
-
-  const columns = [
-    {
-      title: "S/N",
-      key: "index",
-      render: (_, __, index) => index + 1,
-    },
-    {
-      title: "Booking ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Room ID",
-      dataIndex: ["room", "id"],
-      key: "room.id",
-    },
-    {
-      title: "Room Type",
-      dataIndex: ["room", "roomTypeName", "name"],
-      key: "room.roomTypeName.name",
-    },
-    {
-      title: "Check-In Date",
-      dataIndex: "checkInDate",
-      key: "checkInDate",
-    },
-    {
-      title: "Check-Out Date",
-      dataIndex: "checkOutDate",
-      key: "checkOutDate",
-    },
-    {
-      title: "Guest Name",
-      dataIndex: "guestName",
-      key: "guestName",
-    },
-    {
-      title: "Guest Email",
-      dataIndex: "guestEmail",
-      key: "guestEmail",
-    },
-    {
-      title: "Adults",
-      dataIndex: "numOfAdults",
-      key: "numOfAdults",
-    },
-    {
-      title: "Children",
-      dataIndex: "numOfChildren",
-      key: "numOfChildren",
-    },
-    {
-      title: "Total Guest",
-      dataIndex: "totalNumOfGuests",
-      key: "totalNumOfGuests",
-    },
-    {
-      title: "Confirmation Code",
-      dataIndex: "bookingConfirmationCode",
-      key: "bookingConfirmationCode",
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (text, record) => (
-        <Button
-          type="primary"
-          danger
-          onClick={() => handleBookingCancellation(record.id)}
-        >
-          Cancel
-        </Button>
-      ),
-    },
-  ];
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+    setSelectedBooking(null);
+  };
 
   return (
     <section>
@@ -138,17 +73,48 @@ const ExistingBooking = () => {
             closable
           />
         )}
-        <RangePicker onChange={handleDateRangeChange} style={{ marginBottom: 20 }} />
         {isLoading ? (
           <Spin tip="Loading existing bookings..." size="large" />
         ) : (
-          <Table
-            dataSource={filteredBookings}
-            columns={columns}
-            rowKey="id"
-            pagination={{ pageSize: 5 }}
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 500 }}
+            onSelectEvent={handleSelectEvent}
           />
         )}
+        <Modal
+          title="Booking Details"
+          visible={isModalVisible}
+          onCancel={handleModalCancel}
+          footer={[
+            <Button key="cancel" onClick={handleModalCancel}>
+              Close
+            </Button>,
+            <Button key="delete" type="primary" danger onClick={() => handleBookingCancellation(selectedBooking.id)}>
+              Cancel Booking
+            </Button>,
+          ]}
+          bodyStyle={{ padding: '24px' }}
+        >
+          {selectedBooking && (
+            <Descriptions bordered column={1} size="middle">
+              <Descriptions.Item label="Booking ID">{selectedBooking.id}</Descriptions.Item>
+              <Descriptions.Item label="Room ID">{selectedBooking.room.id}</Descriptions.Item>
+              <Descriptions.Item label="Room Type">{selectedBooking.room.roomTypeName.name}</Descriptions.Item>
+              <Descriptions.Item label="Check-In Date">{moment(selectedBooking.checkInDate).format('YYYY-MM-DD')}</Descriptions.Item>
+              <Descriptions.Item label="Check-Out Date">{moment(selectedBooking.checkOutDate).format('YYYY-MM-DD')}</Descriptions.Item>
+              <Descriptions.Item label="Guest Name">{selectedBooking.guestName}</Descriptions.Item>
+              <Descriptions.Item label="Guest Email">{selectedBooking.guestEmail}</Descriptions.Item>
+              <Descriptions.Item label="Adults">{selectedBooking.numOfAdults}</Descriptions.Item>
+              <Descriptions.Item label="Children">{selectedBooking.numOfChildren}</Descriptions.Item>
+              <Descriptions.Item label="Total Guests">{selectedBooking.totalNumOfGuests}</Descriptions.Item>
+              <Descriptions.Item label="Confirmation Code">{selectedBooking.bookingConfirmationCode}</Descriptions.Item>
+            </Descriptions>
+          )}
+        </Modal>
       </Space>
     </section>
   );

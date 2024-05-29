@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { loginUser } from "../utils/ApiFunctions"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "./AuthProvider"
-
+import jwt_decode from "jwt-decode"
 const Login = () => {
 	const [errorMessage, setErrorMessage] = useState("")
 	const [login, setLogin] = useState({
@@ -19,17 +19,44 @@ const Login = () => {
 		setLogin({ ...login, [e.target.name]: e.target.value })
 	}
 
+	// const handleSubmit = async (e) => {
+	// 	e.preventDefault()
+	// 	console.log(login)
+	// 	const success = await loginUser(login)
+	// 	console.log(success);
+	// 	if (success) {
+	// 		const token = success.jwt
+	// 		console.log(token)
+	// 		auth.handleLogin(token)
+			
+	// 		navigate(redirectUrl, { replace: true })
+	// 	} else {
+	// 		setErrorMessage("Invalid username or password. Please try again.")
+	// 	}
+	// 	setTimeout(() => {
+	// 		setErrorMessage("")
+	// 	}, 4000)
+	// }
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		console.log(login)
 		const success = await loginUser(login)
-		console.log(success);
+		console.log(success)
 		if (success) {
 			const token = success.jwt
 			console.log(token)
 			auth.handleLogin(token)
-			
-			navigate(redirectUrl, { replace: true })
+	
+			// Decode the token to extract the roles
+			const decodedToken = jwt_decode(token)
+			const userRoles = decodedToken.roles
+	
+			// Conditional redirection based on roles
+			if (userRoles.includes("ROLE_ADMIN")) {
+				navigate("/admin-panel", { replace: true })
+			} else {
+				navigate("/", { replace: true })
+			}
 		} else {
 			setErrorMessage("Invalid username or password. Please try again.")
 		}
