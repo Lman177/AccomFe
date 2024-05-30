@@ -23,6 +23,7 @@ import AdminRooms from './assets/components/admin/AdminRooms'
 // import Footer from './assets/components/layout/Footer'
 import RoomDetails from "./assets/components/booking/RoomDetails"
 import Layout from './assets/components/layout/Layout'
+import UserList from './assets/components/User/UserList'
 function App() {
   return (
 	<AuthProvider>
@@ -52,6 +53,7 @@ function App() {
             <Route path="/find-booking" element={<FindBooking />} />
             <Route path="/view-room/:roomId" element={<RoomDetails />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/user-list" element={<UserList />} />
             <Route path="/register" element={<Registration />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/logout" element={<FindBooking />} />

@@ -199,9 +199,9 @@ export async function getUserProfile(userEmail, token) {
 }
 
 /* This isthe function to delete a user */
-export async function deleteUser(userEmail) {
+export async function deleteUser(userId) {
 	try {
-		const response = await api.delete(`/users/delete/${userEmail}`, {
+		const response = await api.delete(`/users/delete/${userId}`, {
 			headers: getHeader()
 		})
 		return response.data
@@ -245,3 +245,18 @@ export async function getUserRoom(userId, token ){
 		throw new Error(`Error fetching user room : ${error.message}`)
 	}
 }
+
+
+
+export async function getAllUser() {
+	try {
+	  const response = await api.get('/users/all', {
+		// headers: getHeader()
+	  });
+	  console.log('API Response:', response);
+	  return response.data;
+	} catch (error) {
+	  console.error('Error fetching user:', error.response);
+	  throw new Error(`Error fetching user: ${error.response ? error.response.status : error.message}`);
+	}
+  }

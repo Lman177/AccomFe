@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Table, Space, message, Spin, Typography, Select, Alert, Button } from "antd";
 import { getAllRooms, deleteRoom, getRoomTypes, getLocation } from "../utils/ApiFunctions";
 import { FaTrashAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaEdit, FaEye, FaPlus} from "react-icons/fa";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -126,6 +128,11 @@ const ExistingRooms2 = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
+                    <Link to={`/view-room/${record.id}`}>
+                        <Button>
+                            <FaEye />
+                        </Button>
+                    </Link>
                     <Button
                         type="primary"
                         danger
@@ -133,7 +140,9 @@ const ExistingRooms2 = () => {
                     >
                         <FaTrashAlt />
                     </Button>
+                    
                 </Space>
+                
             ),
         },
     ];

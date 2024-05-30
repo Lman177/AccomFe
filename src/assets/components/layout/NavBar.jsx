@@ -51,6 +51,11 @@ const NavBar = () => {
 								Your Room
 								</NavLink>
 							</li>
+							<li className="nav-item">
+								<NavLink className="nav-link" aria-current="page" to={"/user-list"}>
+								User
+								</NavLink>
+							</li>
 					</ul>
 
 					<ul className="d-flex navbar-nav">

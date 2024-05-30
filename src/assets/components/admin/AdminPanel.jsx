@@ -10,6 +10,8 @@ import {
 import { Button, Layout, Menu, theme } from 'antd';
 import ExistingRooms2 from '../room/ExistingRooms2'; // Import the ExistingRooms component
 import ExistingBooking from '../booking/ExistingBooking'; // Import the ExistingBooking component
+import UserList from '../User/UserList'; // Import the ListUser component
+
 const { Header, Sider, Content } = Layout;
 
 const App = () => {
@@ -71,8 +73,7 @@ const App = () => {
                 height: 64,
               }}
             />
-              <span style={{ marginLeft: '10px' }}>Admin Panel</span>
-
+        <span style={{ marginLeft: '10px', fontSize: '20px', fontWeight: 'bold' }}>Admin Panel</span>
           </Header>
           <Content
             style={{
@@ -83,7 +84,7 @@ const App = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            {currentPage === 'User' && <div>User Content</div>}
+            {currentPage === 'User' && <UserList/>}
             {currentPage === 'Room' && <ExistingRooms2/>}
             {currentPage === 'Booking' && <ExistingBooking/>}
           </Content>
