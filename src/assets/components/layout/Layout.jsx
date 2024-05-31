@@ -4,7 +4,9 @@ import NavBar from './NavBar'; // Import your NavBar component
 
 const Layout = ({ children }) => {
   const location = useLocation();
-  const hideNavbarPaths = ['/admin-panel']; // Add paths where the navbar should be hidden
+  const hideNavbarPaths = ['/admin-panel', '/login', '/register', '/forgot-password', '/reset-password'];
+  
+   // Add paths where the navbar should be hidden
 
   const shouldShowNavBar = !hideNavbarPaths.includes(location.pathname);
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Spin, Alert, Button, Modal } from 'antd';
+import { Table, Spin, Alert, Button, Modal, Space } from 'antd';
 import { getAllUser, deleteUser } from '../utils/ApiFunctions';
-import { FaEdit, FaEye, FaPlus} from "react-icons/fa";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaEye, FaTrashAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -31,19 +31,18 @@ const UserList = () => {
     setIsModalVisible(true);
   };
 
-  const handleDelete = async (userId) => {
+  const handleDelete = async (userEmail) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         setLoading(true);
-        await deleteUser(userId);
-        setUsers(users.filter(user => user.id !== userId));
+        await deleteUser(userEmail);
+        setUsers(users.filter(user => user.email !== userEmail));
       } catch (error) {
         setError(`Error deleting user: ${error.message}`);
       } finally {
         setLoading(false);
       }
     }
-    
   };
 
   const columns = [
@@ -77,14 +76,14 @@ const UserList = () => {
       title: 'Actions',
       key: 'actions',
       render: (_, user) => (
-        <>
-          <Button type="link" onClick={() => handleViewDetails(user)}>
-          <FaEye />
+        <Space size="middle">
+          <Button onClick={() => handleViewDetails(user)}>
+            <FaEye />
           </Button>
-          <Button type="link" danger onClick={() => handleDelete(user.id)}>
-          <FaTrashAlt />
+          <Button type="primary" danger onClick={() => handleDelete(user.email)}>
+            <FaTrashAlt />
           </Button>
-        </>
+        </Space>
       ),
     },
   ];
@@ -102,11 +101,11 @@ const UserList = () => {
       >
         {selectedUser && (
           <div>
-            <p>ID: {selectedUser.id}</p>
-            <p>First Name: {selectedUser.firstName}</p>
-            <p>Last Name: {selectedUser.lastName}</p>
-            <p>Email: {selectedUser.email}</p>
-            <p>Roles: {selectedUser.roles.map(role => role.name).join(', ')}</p>
+            <p><strong>ID:</strong> {selectedUser.id}</p>
+            <p><strong>First Name:</strong> {selectedUser.firstName}</p>
+            <p><strong>Last Name:</strong> {selectedUser.lastName}</p>
+            <p><strong>Email:</strong> {selectedUser.email}</p>
+            <p><strong>Roles:</strong> {selectedUser.roles.map(role => role.name).join(', ')}</p>
           </div>
         )}
       </Modal>
