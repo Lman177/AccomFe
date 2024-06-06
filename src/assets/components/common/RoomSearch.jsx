@@ -5,15 +5,13 @@ import RoomSearchResults from "./RoomSearchResult";
 import RoomTypeSelector from "./RoomTypeSelector";
 import RoomLocationSelector from "./RoomLocationSelector";
 import { DatePicker, Form, Button, Row, Col, Input, Space, Spin } from "antd";
-// import "antd/dist/antd.min.css";
-import "./RoomSearch.css";
 import { SearchOutlined } from "@ant-design/icons";
 
 const RoomSearch = () => {
   const [searchQuery, setSearchQuery] = useState({
     checkInDate: "",
     checkOutDate: "",
-    roomTypeName: "",
+    roomType: "",
     roomLocation: ""
   });
 
@@ -73,7 +71,7 @@ const RoomSearch = () => {
     setSearchQuery({
       checkInDate: "",
       checkOutDate: "",
-      roomTypeName: "",
+      roomType: "",
       roomLocation: ""
     });
     setAvailableRooms([]);
@@ -84,7 +82,8 @@ const RoomSearch = () => {
     <div className="search-container">
       <Form onFinish={handleSearch} className="search-form">
         <Space size="large">
-          
+        <Row gutter={[16, 16]} justify="center" align="middle">
+        <Col xs={24} sm={12} md={6} lg={5}>
           <Form.Item>
             <DatePicker
               placeholder="Add dates"
@@ -92,9 +91,12 @@ const RoomSearch = () => {
               value={searchQuery.checkInDate ? moment(searchQuery.checkInDate) : null}
               onChange={(date) => handleDateChange("checkInDate", date)}
               format="YYYY-MM-DD"
-              style={{ width: 150 }}
+              style={{ width: "100%"}}
+
             />
           </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={6} lg={5}>
           <Form.Item>
             <DatePicker
               placeholder="Add dates"
@@ -102,28 +104,44 @@ const RoomSearch = () => {
               value={searchQuery.checkOutDate ? moment(searchQuery.checkOutDate) : null}
               onChange={(date) => handleDateChange("checkOutDate", date)}
               format="YYYY-MM-DD"
-              style={{ width: 150 }}
+              style={{ width: "100%"}}
+
             />
           </Form.Item>
+          </Col>
+          <Col xs={24} sm={12} md={6} lg={5}>
           <Form.Item>
-            <RoomTypeSelector
+            <RoomTypeSelector className="room-type-selector"
               handleRoomInputChange={handleInputChange}
               selectedRoomType={selectedRoomType}
               setSelectedRoomType={setSelectedRoomType}
+              style={{ width: "100%", height: "50px" }}
+
             />
             
           </Form.Item>
+          
+          </Col>
+          <Col xs={24} sm={12} md={6} lg={5}>
           <Form.Item>
-            
-            <RoomLocationSelector
+            <RoomLocationSelector className="room-location-selector"
               handleRoomInputChange={handleInputChange}
               selectedLocation={selectedLocation}
               setSelectedLocation={setSelectedLocation}
+              style={{ width: "100%", height: "50px" }}
             />
           </Form.Item>
-          
+          </Col>
+
+          <Col xs={24} sm={24} md={24} lg={4}>
           <Button type="primary" htmlType="submit" icon={<SearchOutlined />} />
+
+          </Col>
+          </Row>
+
+          
         </Space>
+
       </Form>
       {isLoading ? (
         <div className="text-center mt-4">
@@ -134,6 +152,50 @@ const RoomSearch = () => {
       ) : (
         errorMessage && <div className="mt-4">{errorMessage}</div>
       )}
+     <style jsx>{`
+        .search-container {
+        
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center; /* Center horizontally */
+          margin-top: 30px;
+          padding: 0 20px;
+
+
+        }
+
+        .search-form {
+          width: 100%;
+          max-width: 1200px; /* Limit the max width */
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+        }
+
+        .ant-btn-primary {
+          margin-bottom: 25px;
+          background-color: #ff385c;
+          border-color: #ff385c;
+        }
+
+        .ant-btn-primary:hover {
+          background-color: #ff5a70;
+          border-color: #ff5a70;
+        }
+
+        .ant-btn-primary .anticon {
+          font-size: 18px;
+        }
+
+        @media (max-width: 576px) {
+          .search-form {
+            flex-direction: column;
+            gap: 10px;
+          }
+        }
+      `}</style>
+
     </div>
   );
 };

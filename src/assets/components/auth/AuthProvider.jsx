@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
 		localStorage.setItem("userId", decodedUser.userId)
 		localStorage.setItem("userRole", decodedUser.roles)
 		localStorage.setItem("token", token)
+		localStorage.setItem("name", decodedUser.name)
 		setUser(decodedUser)
 	}
 
@@ -24,6 +25,7 @@ export const AuthProvider = ({ children }) => {
 		localStorage.removeItem("userEmail")
 		localStorage.removeItem("userRole")
 		localStorage.removeItem("token")
+		localStorage.removeItem("name")
 		setUser(null)
 	}
 

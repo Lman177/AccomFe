@@ -21,9 +21,10 @@ import RequireAuth from "./assets/components/auth/RequireAuth"
 import AdminPanel from "./assets/components/admin/AdminPanel"
 import AdminRooms from './assets/components/admin/AdminRooms'
 // import Footer from './assets/components/layout/Footer'
-import RoomDetails from "./assets/components/booking/RoomDetails"
+import RoomDetails from "./assets/components/room/RoomDetails"
 import Layout from './assets/components/layout/Layout'
 import UserList from './assets/components/User/UserList'
+import WelcomePage from './assets/components/home/WelcomePage'
 function App() {
   return (
 	<AuthProvider>
@@ -31,6 +32,7 @@ function App() {
       <Router>
         <Layout>
           <Routes>
+          <Route path="/welcome" element={<WelcomePage/>} />
             <Route path="/" element={<Home />} />
             <Route path="/edit-room/:roomId" element={<EditRoom />} />
             <Route path="/existing-rooms" element={<ExistingRooms />} />
@@ -46,9 +48,19 @@ function App() {
             />
             <Route path="/browse-all-rooms" element={<RoomListing />} />
             <Route path="/admin" element={<Admin />} />
-            <Route path="/admin-panel" element={<AdminPanel />} />
-            <Route path="/admin-rooms" element={<AdminRooms />} />
-            <Route path="/booking-success" element={<BookingSuccess />} />
+
+            <Route path="/admin-panel" element={
+            <RequireAuth>
+              <AdminPanel />
+            </RequireAuth>
+            } />
+
+            <Route path="/admin-rooms" element={
+            <RequireAuth>
+              <AdminRooms />
+            </RequireAuth>
+            } />
+            <Route path="/booking-success" element={<BookingSuccess /> } />
             <Route path="/existing-bookings" element={<Bookings />} />
             <Route path="/find-booking" element={<FindBooking />} />
             <Route path="/view-room/:roomId" element={<RoomDetails />} />

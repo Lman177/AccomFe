@@ -11,7 +11,6 @@ import {
 } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { getRoomById } from "../utils/ApiFunctions";
-import "./Checkout.css";
 
 const Checkout = () => {
   const [error, setError] = useState(null);
@@ -93,6 +92,68 @@ const Checkout = () => {
           {!isLoading && !error && <BookingForm />}
         </div>
       </div>
+      <style jsx>{`.container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .image-wrapper {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  
+  .room-photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .list-inline-item {
+    display: inline-block;
+    margin-right: 15px;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+  
+  p {
+    margin: 0;
+    padding: 0;
+  }
+  
+  h2, h3, h4 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  
+  h3 {
+    color: #ff5a5f;
+  }
+  
+  ul {
+    padding: 0;
+  }
+  
+  ul.list-inline {
+    list-style: none;
+  }
+  
+  ul.list-inline li {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  ul.list-inline li svg {
+    margin-right: 5px;
+  }
+  `}</style>
     </div>
   );
 };

@@ -137,9 +137,10 @@ const Profile = () => {
                 <table className="table table-bordered table-hover shadow">
                   <thead>
                     <tr>
-                      <th scope="col">Booking ID</th>
-                      <th scope="col">Room ID</th>
+                      {/* <th scope="col">Booking ID</th>
+                      <th scope="col">Room ID</th> */}
                       <th scope="col">Room Type</th>
+
                       <th scope="col">Check In Date</th>
                       <th scope="col">Check Out Date</th>
                       <th scope="col">Confirmation Code</th>
@@ -153,8 +154,8 @@ const Profile = () => {
                       const isPastCheckout = currentDate.isAfter(checkOutDate);
                       return (
                         <tr key={index}>
-                          <td>{booking.id}</td>
-                          <td>{booking.room.id}</td>
+                          {/* <td>{booking.id}</td>
+                          <td>{booking.room.id}</td> */}
                           <td>{booking.room.roomTypeName.name}</td>
                           <td>{moment(booking.checkInDate).format("MMM Do, YYYY")}</td>
                           <td>{moment(booking.checkOutDate).format("MMM Do, YYYY")}</td>

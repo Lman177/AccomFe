@@ -3,7 +3,6 @@ import moment from "moment";
 import { Form, FormControl, Button, Modal } from "react-bootstrap";
 import { bookRoom, getRoomById } from "../utils/ApiFunctions";
 import { useNavigate, useParams } from "react-router-dom";
-import "./BookingForm.css"; // Importing custom CSS for styling
 import BookingSummary from "./BookingSumary"
 
 const BookingForm = () => {
@@ -13,9 +12,11 @@ const BookingForm = () => {
   const [roomPrice, setRoomPrice] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
+  const currentUser = localStorage.getItem("userEmail")
+  const userNames = localStorage.getItem("name")
   const [booking, setBooking] = useState({
-    guestFullName: "",
-    guestEmail: "",
+    guestFullName: userNames,
+    guestEmail: currentUser,
     checkInDate: "",
     checkOutDate: "",
     numberOfAdults: "",
@@ -115,6 +116,7 @@ const BookingForm = () => {
                   value={booking.guestFullName}
                   placeholder="Enter your fullname"
                   onChange={handleInputChange}
+                  disabled
                 />
                 <Form.Control.Feedback type="invalid">
                   Please enter your fullname.
@@ -131,7 +133,9 @@ const BookingForm = () => {
                   id="guestEmail"
                   name="guestEmail"
                   placeholder="Enter your email"
+                  value={booking.guestEmail}
                   onChange={handleInputChange}
+                  disabled
                 />
                 <Form.Control.Feedback type="invalid">
                   Please enter a valid email address.
@@ -139,7 +143,6 @@ const BookingForm = () => {
               </Form.Group>
 
               <fieldset>
-                <legend>Lodging Period</legend>
                 <div className="row">
                   <div className="col-6">
                     <Form.Label htmlFor="checkInDate" className="hotel-color">
@@ -252,6 +255,45 @@ const BookingForm = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <style jsx>{`
+  .booking-form-container {
+    margin-top: 50px;
+    max-width: 1400px;
+  }
+  
+  .booking-card {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    padding: 20px;
+  }
+  
+  .card-title {
+    color: #ff5a5f;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .hotel-color {
+    color: #555;
+  }
+  
+  .form-group {
+    margin-top: 20px;
+  }
+  
+  .btn-primary {
+    background-color: #ff5a5f;
+    border: none;
+    font-size: 1.1em;
+  }
+  
+  .error-message {
+    margin-top: 10px;
+    font-size: 0.9em;
+  }
+  `}</style>
+
     </div>
   );
 };

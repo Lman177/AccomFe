@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
-import "./BookingSummary.css"; // Import custom CSS for additional styling
 
 const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
   const checkInDate = moment(booking.checkInDate);
@@ -85,6 +84,45 @@ const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
           <p className="text-danger text-center">Check-out date must be after check-in date.</p>
         )}
       </div>
+      <style jsx>{`.booking-summary-container {
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+  }
+  
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .summary-label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .summary-value {
+    color: #555;
+  }
+  
+  .summary-payment {
+    margin-top: 20px;
+  }
+  
+  .payment-amount {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .btn-block {
+    width: 100%;
+    margin-top: 20px;
+  }
+  `}</style>
+
     </div>
   );
 };

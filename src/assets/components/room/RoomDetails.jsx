@@ -11,7 +11,6 @@ import {
 } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { getRoomById } from "../utils/ApiFunctions";
-import "./Checkout.css";
 
 const Checkout = () => {
   const [error, setError] = useState(null);
@@ -20,7 +19,8 @@ const Checkout = () => {
     photo: "",
     roomTypeName: "",
     roomPrice: "",
-    description: ""
+    description: "",
+    roomLocation: ""
   });
 
   const { roomId } = useParams();
@@ -59,6 +59,7 @@ const Checkout = () => {
               <div className="mt-3">
                 <h2>{roomInfo.roomTypeName.name}</h2>
                 <p>{roomInfo.description}</p>
+                {/* <p>{roomInfo.roomLocation.name}</p> */}
                 <h3 className="mt-4">${roomInfo.roomPrice} / night</h3>
                 <hr />
                 <h4>Amenities</h4>
@@ -90,6 +91,22 @@ const Checkout = () => {
           )}
         </div>
       </div>
+    <style jsx>{`
+    
+    .image-wrapper {
+          width: 100%; /* or any specific width */
+          height: auto; /* adjust height automatically */
+          display: flex; /* center the image */
+          justify-content: center;
+          align-items: center;
+        }
+
+        .room-photo {
+          max-width: 70%;
+          max-height: 70%;
+          object-fit: cover; /* maintain aspect ratio */
+        }
+`}</style>
     </div>
   );
 };

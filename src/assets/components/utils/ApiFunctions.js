@@ -64,6 +64,16 @@ export async function getAllRooms() {
 		throw new Error("Error fetching rooms")
 	}
 }
+
+/* This function gets all available rooms from the database */
+export async function getAllAvaRooms() {
+	try {
+		const result = await api.get("rooms/available")
+		return result.data
+	} catch (error) {
+		throw new Error("Error fetching rooms")
+	}
+}
 /** This function deletes a room by the Id */
 export async function deleteRoom(roomId){
 	try{

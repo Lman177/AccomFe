@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Carousel, Card, Row, Col, Spin, Alert, Button } from 'antd';
-import { getAllRooms } from '../utils/ApiFunctions';
+import { getAllAvaRooms } from '../utils/ApiFunctions';
 import RoomPaginator from './RoomPaginator';
 
 const RoomCarousel = () => {
-  const [rooms, setRooms] = useState([{ id: "", roomTypeName: "", roomPrice: "", photo: "" }]);
+  const [rooms, setRooms] = useState([{ id: "", roomTypeName: "", roomPrice: "", photo: "", roomLocation: ""}]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,7 +13,7 @@ const RoomCarousel = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getAllRooms()
+    getAllAvaRooms()
       .then((data) => {
         setRooms(data);
         setIsLoading(false);
@@ -49,8 +49,8 @@ const RoomCarousel = () => {
 
   return (
     <section className="room-carousel-section bg-light mb-5 mt-2 shadow">
-      <h2 className='heading '>All Room</h2>
       <div className="container">
+        <h2 className='heading'>Available Room</h2>
         <Carousel dotPosition="bottom" autoplay>
           {[...Array(Math.ceil(currentRooms.length / roomsPerPage))].map((_, index) => (
             <div key={index}>
@@ -73,6 +73,10 @@ const RoomCarousel = () => {
                         title={<span className="hotel-color">{room.roomTypeName.name}</span>}
                         description={<div className="room-price">${room.roomPrice}/night</div>}
                       />
+                      <Card.Meta
+                        title={<span className="hotel-color">{room.roomLocation.name}</span>}
+                        description={<div className="room-price">{room.roomLocation}</div>}
+                      />
                       <Button type="primary" className="btn-hotel mt-2">
                         <Link to={`/book-room/${room.id}`}>Book Now</Link>
                       </Button>
@@ -90,10 +94,10 @@ const RoomCarousel = () => {
         />
       </div>
       <style jsx>{`
-      .heading {
-        text-align: center;
-        margin-bottom: 2rem;
-      }
+.heading {
+   text-align: center;
+  margin-bottom: 2rem;
+        }
 .room-carousel-section {
     background-color: #f8f9fa;
     padding: 2rem 0;

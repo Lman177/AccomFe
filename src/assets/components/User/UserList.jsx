@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Spin, Alert, Button, Modal, Space } from 'antd';
+import { Table, Spin, Alert, Button, Modal, Space, Typography } from 'antd';
 import { getAllUser, deleteUser } from '../utils/ApiFunctions';
 import { FaEye, FaTrashAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -10,6 +10,7 @@ const UserList = () => {
   const [error, setError] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { Title } = Typography;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -89,9 +90,12 @@ const UserList = () => {
   ];
 
   return (
-    <>
+    
+    <div style={{ padding: "20px", backgroundColor: "whitesmoke" }}>
+      <Title level={2}>Existing User</Title>
       {loading && <Spin tip="Loading..." />}
       {error && <Alert message="Error" description={error} type="error" showIcon />}
+      
       <Table dataSource={users} columns={columns} rowKey="id" />
       <Modal
         title="User Details"
@@ -109,7 +113,7 @@ const UserList = () => {
           </div>
         )}
       </Modal>
-    </>
+    </div>
   );
 };
 

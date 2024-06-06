@@ -72,18 +72,6 @@ const AdminRooms = () => {
 
     const columns = [
         {
-            title: 'Room ID',
-            dataIndex: 'id',
-            key: 'id',
-            render: (text) => <a>{text}</a>,
-        },
-        {
-            title: 'Owner ID',
-            dataIndex: 'ownerId',
-            key: 'ownerId',
-            render: (text) => <a>{text}</a>,
-        },
-        {
             title: 'Room Type',
             dataIndex: 'roomTypeName',
             key: 'roomTypeName',

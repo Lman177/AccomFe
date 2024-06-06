@@ -1,13 +1,13 @@
 body {
   min-height: 100vh;
-  padding-bottom: 50px;
+
 }
 .card {
   opacity: 0.9;
 }
 
 /* Navigation bar definitions */
- .navbar{
+ /* .navbar{
   padding: 0;
  }
  .navbar .navbar-nav .nav-link{
@@ -15,9 +15,9 @@ body {
  }
  .navbar .navbar-nav .nav-item{
   position: relative;
- }
+ } */
 
- .navbar .navbar-nav .nav-item::after{
+ /* .navbar .navbar-nav .nav-item::after{
   position: absolute;
   bottom: 0;
   left: 0;
@@ -38,7 +38,7 @@ body {
 
 .navbar-dark .navbar-brand {
   color: rgb(25, 24, 24);
-}
+} */
 
  @media screen and (min-width: 992px){
   .navbar{
@@ -53,7 +53,7 @@ body {
  }
 
   /* Hotel custom color */
- .btn-hotel{
+ /* .btn-hotel{
   background-color: rgb(169, 77, 123);
   color: #fff;
   }
@@ -64,9 +64,9 @@ body {
   outline-color: transparent;
   outline-style:solid;
 
-  }
+  } */
 
-  .hotel-color{
+  /* .hotel-color{
     color: rgb(169, 77, 123);
   }
   .room-price{
@@ -78,9 +78,9 @@ body {
     border-left: '0.5px solid black';
     height: '100vh'
   }
+ */
 
-
-
+/* 
 .parallax {
   background-image: url("./assets/images/parrall.jpg");
   background-attachment: fixed;
@@ -107,7 +107,7 @@ body {
   margin-top: 50px;
   color: white;
   text-shadow: 2px 2px black;
-}
+} */
 
 .animated {
   animation-duration: 1s;
@@ -170,14 +170,14 @@ body {
   }
 }
 /* Header overlay */
-  .overlay {
+  /* .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-  }
+  } */
   .overlay-content {
     position: absolute;
     top: 50%;
