@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { getAvailableRooms } from "../utils/ApiFunctions";
 import RoomSearchResults from "./RoomSearchResult";
 import RoomTypeSelector from "./RoomTypeSelector";
 import RoomLocationSelector from "./RoomLocationSelector";
-import { DatePicker, Form, Button, Row, Col, Input, Space, Spin } from "antd";
+import { DatePicker, Form, Button, Row, Col, Space, Spin } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 const RoomSearch = () => {
@@ -20,6 +20,7 @@ const RoomSearch = () => {
   const [selectedRoomType, setSelectedRoomType] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
 
   const handleSearch = () => {
     const checkInMoment = moment(searchQuery.checkInDate);
@@ -67,6 +68,16 @@ const RoomSearch = () => {
     setErrorMessage("");
   };
 
+  // Function to handle changes in room type and save to localStorage
+  const handleRoomTypeChange = (value) => {
+    setSelectedRoomType(value);
+  };
+
+  // Function to handle changes in location and save to localStorage
+  const handleLocationChange = (value) => {
+    setSelectedLocation(value);
+  };
+
   const handleClearSearch = () => {
     setSearchQuery({
       checkInDate: "",
@@ -92,7 +103,6 @@ const RoomSearch = () => {
               onChange={(date) => handleDateChange("checkInDate", date)}
               format="YYYY-MM-DD"
               style={{ width: "100%"}}
-
             />
           </Form.Item>
           </Col>
@@ -105,29 +115,25 @@ const RoomSearch = () => {
               onChange={(date) => handleDateChange("checkOutDate", date)}
               format="YYYY-MM-DD"
               style={{ width: "100%"}}
-
             />
           </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={6} lg={5}>
           <Form.Item>
-            <RoomTypeSelector className="room-type-selector"
-              handleRoomInputChange={handleInputChange}
+            <RoomTypeSelector
+              className="room-type-selector"
               selectedRoomType={selectedRoomType}
-              setSelectedRoomType={setSelectedRoomType}
+              setSelectedRoomType={handleRoomTypeChange}
               style={{ width: "100%", height: "50px" }}
-
             />
-            
           </Form.Item>
-          
           </Col>
           <Col xs={24} sm={12} md={6} lg={5}>
           <Form.Item>
-            <RoomLocationSelector className="room-location-selector"
-              handleRoomInputChange={handleInputChange}
+            <RoomLocationSelector
+              className="room-location-selector"
               selectedLocation={selectedLocation}
-              setSelectedLocation={setSelectedLocation}
+              setSelectedLocation={handleLocationChange}
               style={{ width: "100%", height: "50px" }}
             />
           </Form.Item>
@@ -138,10 +144,7 @@ const RoomSearch = () => {
 
           </Col>
           </Row>
-
-          
         </Space>
-
       </Form>
       {isLoading ? (
         <div className="text-center mt-4">
@@ -154,15 +157,12 @@ const RoomSearch = () => {
       )}
      <style jsx>{`
         .search-container {
-        
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center; /* Center horizontally */
           margin-top: 30px;
           padding: 0 20px;
-
-
         }
 
         .search-form {
@@ -195,7 +195,6 @@ const RoomSearch = () => {
           }
         }
       `}</style>
-
     </div>
   );
 };

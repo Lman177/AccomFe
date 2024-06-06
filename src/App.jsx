@@ -2,7 +2,7 @@ import { useState } from 'react'
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import "/node_modules/bootstrap/dist/js/bootstrap.min.js"
 import AddRoom from './assets/components/room/AddRoom'
-import ExistingRooms from './assets/components/room/ExistingRooms'
+import ExistingRooms2 from './assets/components/room/ExistingRooms2'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import EditRoom from './assets/components/room/EditRoom'
 import Home from './assets/components/home/Home'
@@ -35,7 +35,7 @@ function App() {
           <Route path="/welcome" element={<WelcomePage/>} />
             <Route path="/" element={<Home />} />
             <Route path="/edit-room/:roomId" element={<EditRoom />} />
-            <Route path="/existing-rooms" element={<ExistingRooms />} />
+            <Route path="/existing-rooms" element={<ExistingRooms2 />} />
             <Route path="/add-room" element={<AddRoom />} />
 
             <Route
@@ -50,7 +50,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
 
             <Route path="/admin-panel" element={
-            <RequireAuth>
+            <RequireAuth adminOnly={true}>
               <AdminPanel />
             </RequireAuth>
             } />

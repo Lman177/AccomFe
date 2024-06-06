@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Space, message, Spin, Typography, Select, Alert, Button, Row, Col } from "antd";
-import { getAllRooms, deleteRoom, getRoomTypes, getUserRoom } from "../utils/ApiFunctions";
+import { getLocation, deleteRoom, getRoomTypes, getUserRoom } from "../utils/ApiFunctions";
 import { Link } from "react-router-dom";
 import { FaEdit, FaEye, FaPlus, FaTrashAlt } from "react-icons/fa";
 
@@ -14,10 +14,13 @@ const AdminRooms = () => {
     const [successMessage, setSuccessMessage] = useState("");
     const [roomTypes, setRoomTypes] = useState([]);
     const [selectedRoomType, setSelectedRoomType] = useState("");
-
+    const [selectedLocation, setSelectedLocation] = useState("");
+    const [locations, setLocation] = useState([]);
+    
     useEffect(() => {
         fetchRooms();
         fetchRoomTypes();
+        fetchLocations();
     }, []);
 
     const userId = localStorage.getItem("userId");
@@ -32,6 +35,15 @@ const AdminRooms = () => {
         } catch (error) {
             setErrorMessage(error.message);
             setIsLoading(false);
+        }
+    };
+
+    const fetchLocations = async () => {
+        try {
+            const result = await getLocation();
+            setLocation(result);
+        } catch (error) {
+            setErrorMessage(error.message);
         }
     };
 
@@ -65,11 +77,17 @@ const AdminRooms = () => {
     const handleRoomTypeChange = (value) => {
         setSelectedRoomType(value);
     };
+    const handleLocationChange = (value) => {
+        setSelectedLocation(value);
+    };
 
-    const filteredRooms = selectedRoomType
-        ? rooms.filter(room => room.roomTypeName.name === selectedRoomType)
-        : rooms;
-
+    const filteredRooms = rooms.filter(room => {
+        return (
+            (selectedRoomType ? room.roomTypeName.name === selectedRoomType : true) &&
+            (selectedLocation ? room.roomLocation === selectedLocation : true)
+        );
+    });
+    
     const columns = [
         {
             title: 'Room Type',
@@ -123,25 +141,38 @@ const AdminRooms = () => {
 
     return (
         <div style={{ padding: "20px", backgroundColor: "whitesmoke" }}>
-            <Title level={2}>Existing Rooms</Title>
+            <Title level={2}>Your Rooms</Title>
             {successMessage && <Alert message="Success" description={successMessage} type="success" showIcon closable />}
             {errorMessage && <Alert message="Error" description={errorMessage} type="error" showIcon closable />}
             <div style={{ marginBottom: "20px" }}>
                 <Row>
                     <Col>
-                        <Select
-                        placeholder="Select a room type"
-                        onChange={handleRoomTypeChange}
-                        value={selectedRoomType}
-                        style={{ width: 200 }}
-                    >
-                        <Option value="">All Room Types</Option>
-                        {roomTypes.map((roomType) => (
-                            <Option key={roomType.id} value={roomType.name}>
-                                {roomType.name}
-                            </Option>
-                        ))}
-                        </Select>
+                    <Select
+                    placeholder="Select a room type"
+                    onChange={handleRoomTypeChange}
+                    value={selectedRoomType}
+                    style={{ width: 200 }}
+                >
+                    <Option value="">All Room Types</Option>
+                    {roomTypes.map((roomType) => (
+                        <Option key={roomType.id} value={roomType.name}>
+                            {roomType.name}
+                        </Option>
+                    ))}
+                </Select>
+                <Select
+                    placeholder="Select location"
+                    onChange={handleLocationChange}
+                    value={selectedLocation}
+                    style={{ width: 200 }}
+                >
+                    <Option value="">All Locations</Option>
+                    {locations.map((location, index) => (
+                        <Option key={index} value={location.locationName}>
+                            {location.locationName}
+                        </Option>
+                    ))}
+                </Select>
                     </Col>
                     <Col>
                         <Link to="/add-room">

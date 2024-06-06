@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import BookingForm from "../booking/BookingForm";
+import { useParams } from "react-router-dom";
+import { getRoomById } from "../utils/ApiFunctions";
 import {
   FaUtensils,
   FaWifi,
@@ -9,8 +10,7 @@ import {
   FaCar,
   FaTshirt
 } from "react-icons/fa";
-import { useParams } from "react-router-dom";
-import { getRoomById } from "../utils/ApiFunctions";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Checkout = () => {
   const [error, setError] = useState(null);
@@ -33,7 +33,7 @@ const Checkout = () => {
           setIsLoading(false);
         })
         .catch((error) => {
-          setError(error);
+          setError(error.message);
           setIsLoading(false);
         });
     }, 1000);
@@ -41,72 +41,82 @@ const Checkout = () => {
 
   return (
     <div className="container mt-5">
-      <div className="d-flex">
-        <div className="flex-grow-1">
-          {isLoading ? (
-            <p>Loading room information...</p>
-          ) : error ? (
-            <p>{error}</p>
-          ) : (
-            <>
-              <div className="image-wrapper">
-                <img
-                  src={`data:image/png;base64,${roomInfo.photo}`}
-                  alt="Room photo"
-                  className="room-photo"
-                />
-              </div>
-              <div className="mt-3">
-                <h2>{roomInfo.roomTypeName.name}</h2>
-                <p>{roomInfo.description}</p>
-                {/* <p>{roomInfo.roomLocation.name}</p> */}
-                <h3 className="mt-4">${roomInfo.roomPrice} / night</h3>
-                <hr />
-                <h4>Amenities</h4>
-                <ul className="list-inline">
-                  <li className="list-inline-item">
-                    <FaWifi /> Wifi
-                  </li>
-                  <li className="list-inline-item">
-                    <FaTv /> Netflix Premium
-                  </li>
-                  <li className="list-inline-item">
-                    <FaUtensils /> Breakfast
-                  </li>
-                  <li className="list-inline-item">
-                    <FaWineGlassAlt /> Mini bar refreshment
-                  </li>
-                  <li className="list-inline-item">
-                    <FaCar /> Car Service
-                  </li>
-                  <li className="list-inline-item">
-                    <FaParking /> Parking Space
-                  </li>
-                  <li className="list-inline-item">
-                    <FaTshirt /> Laundry
-                  </li>
-                </ul>
-              </div>
-            </>
-          )}
-        </div>
+      <div className="d-flex flex-column align-items-center">
+        {isLoading ? (
+          <ClipLoader size={50} color={"#123abc"} loading={isLoading} />
+        ) : error ? (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        ) : (
+          <>
+            <div className="image-wrapper">
+              <img
+                src={`data:image/png;base64,${roomInfo.photo}`}
+                alt="Room photo"
+                className="room-photo"
+              />
+            </div>
+            <div className="mt-3 text-center">
+              <h2>{roomInfo.roomTypeName.name}</h2>
+              <p>{roomInfo.description}</p>
+              <h3 className="mt-4">${roomInfo.roomPrice} / night</h3>
+              <hr />
+              <h4>Amenities</h4>
+              <ul className="list-inline">
+                <li className="list-inline-item">
+                  <FaWifi /> Wifi
+                </li>
+                <li className="list-inline-item">
+                  <FaTv /> Netflix Premium
+                </li>
+                <li className="list-inline-item">
+                  <FaUtensils /> Breakfast
+                </li>
+                <li className="list-inline-item">
+                  <FaWineGlassAlt /> Mini bar refreshment
+                </li>
+                <li className="list-inline-item">
+                  <FaCar /> Car Service
+                </li>
+                <li className="list-inline-item">
+                  <FaParking /> Parking Space
+                </li>
+                <li className="list-inline-item">
+                  <FaTshirt /> Laundry
+                </li>
+              </ul>
+            </div>
+          </>
+        )}
       </div>
-    <style jsx>{`
-    
-    .image-wrapper {
-          width: 100%; /* or any specific width */
-          height: auto; /* adjust height automatically */
-          display: flex; /* center the image */
+      <style jsx>{`
+        .container {
+          max-width: 800px;
+          margin: auto;
+        }
+
+        .image-wrapper {
+          width: 100%;
+          height: auto;
+          display: flex;
           justify-content: center;
           align-items: center;
+          margin-bottom: 20px;
         }
 
         .room-photo {
-          max-width: 70%;
-          max-height: 70%;
-          object-fit: cover; /* maintain aspect ratio */
+          max-width: 100%;
+          max-height: 400px;
+          object-fit: cover;
+          border-radius: 10px;
         }
-`}</style>
+
+        .list-inline-item {
+          margin: 10px 15px;
+          font-size: 1.2em;
+        }
+      `}</style>
     </div>
   );
 };

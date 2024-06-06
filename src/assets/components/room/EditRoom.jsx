@@ -37,7 +37,7 @@ const EditRoom = () => {
 				const roomData = await getRoomById(roomId)
 				setRoom(roomData)
 				setSelectedRoomType(roomData.roomTypeName.name)
-				setSelectedRoomType(roomData.roomLocation)
+				setSelectedLocation(roomData.roomLocation)
 				setImagePreview(roomData.photo)
 			} catch (error) {
 				console.error(error)
@@ -112,8 +112,8 @@ const EditRoom = () => {
 							<div>
 								<RoomLocationSelector
 									handleRoomInputChange={handleInputChange}
-									selectedRoomType={selectedLocation}
-									setSelectedRoomType={setSelectedLocation}
+									selectedLocation={selectedLocation}
+									setSelectedLocation={setSelectedLocation}
 								/>
 							</div>
 						</div>

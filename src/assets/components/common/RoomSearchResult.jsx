@@ -18,7 +18,7 @@ const RoomSearchResults = ({ results, onClearSearch }) => {
   const paginatedResults = results.slice(startIndex, endIndex);
 
   return (
-    <>
+    <div className="results-container">
       {results.length > 0 ? (
         <>
           <h5 className="text-center mt-5">Search Results</h5>
@@ -29,7 +29,7 @@ const RoomSearchResults = ({ results, onClearSearch }) => {
             afterChange={(currentSlide) => setCurrentPage(currentSlide + 1)}
           >
             {paginatedResults.map((room) => (
-              <div key={room.id}>
+              <div key={room.id} className="carousel-slide">
                 <RoomCard room={room} />
               </div>
             ))}
@@ -51,7 +51,36 @@ const RoomSearchResults = ({ results, onClearSearch }) => {
       ) : (
         <p>No results found</p>
       )}
-    </>
+      <style jsx>{`
+        .results-container {
+          width: 100%;
+          max-width: 1400px; /* Increased max-width for larger container */
+          margin: 0 auto; /* Center align */
+          padding: 20px;
+          border-radius: 8px;
+        }
+
+        .results-container h5 {
+          margin-bottom: 20px;
+        }
+
+        .carousel-slide {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+        }
+
+        .results-container .ant-pagination {
+          display: flex;
+          justify-content: center;
+        }
+
+        .results-container .btn {
+          display: block;
+          margin: 20px auto;
+        }
+      `}</style>
+    </div>
   );
 };
 
