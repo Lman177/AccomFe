@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { getAvailableRooms } from "../utils/ApiFunctions";
-import RoomSearchResults from "./RoomSearchResult";
 import RoomTypeSelector from "./RoomTypeSelector";
 import RoomLocationSelector from "./RoomLocationSelector";
-import { DatePicker, Form, Button, Row, Col, Space, Spin } from "antd";
+import RoomCard from "../room/RoomCard";
+import { DatePicker, Form, Button, Row, Col, Space, Spin, Pagination } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 const RoomSearch = () => {
   const [searchQuery, setSearchQuery] = useState({
     checkInDate: "",
     checkOutDate: "",
-    roomType: "",
+    roomTypeName: "",
     roomLocation: ""
   });
 
@@ -20,7 +20,8 @@ const RoomSearch = () => {
   const [selectedRoomType, setSelectedRoomType] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(6); // Adjusted for larger RoomCard
 
   const handleSearch = () => {
     const checkInMoment = moment(searchQuery.checkInDate);
@@ -37,6 +38,7 @@ const RoomSearch = () => {
     }
 
     setIsLoading(true);
+
     getAvailableRooms(
       searchQuery.checkInDate,
       searchQuery.checkOutDate,
@@ -68,106 +70,121 @@ const RoomSearch = () => {
     setErrorMessage("");
   };
 
-  // Function to handle changes in room type and save to localStorage
-  const handleRoomTypeChange = (value) => {
-    setSelectedRoomType(value);
-  };
-
-  // Function to handle changes in location and save to localStorage
-  const handleLocationChange = (value) => {
-    setSelectedLocation(value);
-  };
-
   const handleClearSearch = () => {
     setSearchQuery({
       checkInDate: "",
       checkOutDate: "",
-      roomType: "",
+      roomTypeName: "",
       roomLocation: ""
     });
     setAvailableRooms([]);
     setErrorMessage("");
   };
 
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
+  const paginatedRooms = availableRooms.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   return (
     <div className="search-container">
       <Form onFinish={handleSearch} className="search-form">
         <Space size="large">
-        <Row gutter={[16, 16]} justify="center" align="middle">
-        <Col xs={24} sm={12} md={6} lg={5}>
-          <Form.Item>
-            <DatePicker
-              placeholder="Add dates"
-              name="checkInDate"
-              value={searchQuery.checkInDate ? moment(searchQuery.checkInDate) : null}
-              onChange={(date) => handleDateChange("checkInDate", date)}
-              format="YYYY-MM-DD"
-              style={{ width: "100%"}}
-            />
-          </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={6} lg={5}>
-          <Form.Item>
-            <DatePicker
-              placeholder="Add dates"
-              name="checkOutDate"
-              value={searchQuery.checkOutDate ? moment(searchQuery.checkOutDate) : null}
-              onChange={(date) => handleDateChange("checkOutDate", date)}
-              format="YYYY-MM-DD"
-              style={{ width: "100%"}}
-            />
-          </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={6} lg={5}>
-          <Form.Item>
-            <RoomTypeSelector
-              className="room-type-selector"
-              selectedRoomType={selectedRoomType}
-              setSelectedRoomType={handleRoomTypeChange}
-              style={{ width: "100%", height: "50px" }}
-            />
-          </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={6} lg={5}>
-          <Form.Item>
-            <RoomLocationSelector
-              className="room-location-selector"
-              selectedLocation={selectedLocation}
-              setSelectedLocation={handleLocationChange}
-              style={{ width: "100%", height: "50px" }}
-            />
-          </Form.Item>
-          </Col>
-
-          <Col xs={24} sm={24} md={24} lg={4}>
-          <Button type="primary" htmlType="submit" icon={<SearchOutlined />} />
-
-          </Col>
+          <Row gutter={[16, 16]} justify="center" align="middle">
+            <Col xs={24} sm={12} md={6} lg={5}>
+              <Form.Item>
+                <DatePicker
+                  placeholder="Add dates"
+                  name="checkInDate"
+                  value={searchQuery.checkInDate ? moment(searchQuery.checkInDate) : null}
+                  onChange={(date) => handleDateChange("checkInDate", date)}
+                  format="YYYY-MM-DD"
+                  style={{ width: "100%" }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={6} lg={5}>
+              <Form.Item>
+                <DatePicker
+                  placeholder="Add dates"
+                  name="checkOutDate"
+                  value={searchQuery.checkOutDate ? moment(searchQuery.checkOutDate) : null}
+                  onChange={(date) => handleDateChange("checkOutDate", date)}
+                  format="YYYY-MM-DD"
+                  style={{ width: "100%" }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={6} lg={5}>
+              <Form.Item>
+                <RoomTypeSelector
+                  handleRoomInputChange={handleInputChange}
+                  selectedRoomType={selectedRoomType}
+                  setSelectedRoomType={setSelectedRoomType}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={6} lg={5}>
+              <Form.Item>
+                <RoomLocationSelector
+                  handleRoomInputChange={handleInputChange}
+                  selectedLocation={selectedLocation}
+                  setSelectedLocation={setSelectedLocation}
+                />
+              </Form.Item>
+            </Col>
+            <Col >
+              <Button type="primary" htmlType="submit" icon={<SearchOutlined />} />
+            </Col>
           </Row>
         </Space>
       </Form>
-      {isLoading ? (
-        <div className="text-center mt-4">
-          <Spin tip="Finding available rooms..." size="large" />
-        </div>
-      ) : availableRooms.length > 0 ? (
-        <RoomSearchResults results={availableRooms} onClearSearch={handleClearSearch} />
-      ) : (
-        errorMessage && <div className="mt-4">{errorMessage}</div>
-      )}
-     <style jsx>{`
+
+      <div className="result-container">
+        {isLoading ? (
+          <Spin size="large" />
+        ) : (
+          <>
+            {availableRooms.length > 0 && (
+              <>
+                <Row  justify="center" style={{width:"100%", gap:"5px"}}>
+                  {paginatedRooms.map((room) => (
+                    <RoomCard key={room.id} room={room} />
+                  ))}
+                </Row>
+                <Pagination
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={availableRooms.length}
+                  onChange={handlePageChange}
+                  style={{ marginTop: "20px" }}
+                />
+              </>
+            )}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
+          </>
+        )}
+      </div>
+
+      <style jsx>{`
         .search-container {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center; /* Center horizontally */
+          justify-content: center;
           margin-top: 30px;
           padding: 0 20px;
+          
         }
 
         .search-form {
           width: 100%;
-          max-width: 1200px; /* Limit the max width */
+          max-width: 1200px;
           display: flex;
           flex-direction: row;
           justify-content: center;
@@ -186,6 +203,22 @@ const RoomSearch = () => {
 
         .ant-btn-primary .anticon {
           font-size: 18px;
+        }
+
+        .result-container {
+            max-width: 1150px; /* Increased max-width for larger container */
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+           
+           
+        }
+
+        .error-message {
+          color: red;
+          margin-top: 20px;
         }
 
         @media (max-width: 576px) {

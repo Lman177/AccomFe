@@ -26,9 +26,9 @@ const RoomSearchResults = ({ results, onClearSearch }) => {
             dots
             arrows
             infinite={false}
-            afterChange={(currentSlide) => setCurrentPage(currentSlide + 1)}
+            afterChange={(currentSlide) => handlePageChange(currentSlide + 1)}
           >
-            {paginatedResults.map((room) => (
+            {results.map((room, index) => (
               <div key={room.id} className="carousel-slide">
                 <RoomCard room={room} />
               </div>

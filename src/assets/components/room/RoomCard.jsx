@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const RoomCard = ({ room }) => {
   return (
-    <Col key={room.id} xs={24} sm={12} md={8} lg={6} className="mb-4">
+    <Col key={room.id} xs={24} sm={12} md={8} lg={5} className="mb-4">
       <Card
         hoverable
         cover={
@@ -70,6 +70,7 @@ const RoomCard = ({ room }) => {
           max-height: 300px;
           object-fit: cover;
         }
+
       `}</style>
     </Col>
   );
