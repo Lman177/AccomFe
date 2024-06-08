@@ -176,7 +176,7 @@ export async function registerUser(registration) {
 		if (error.reeponse && error.response.data) {
 			throw new Error(error.response.data)
 		} else {
-			throw new Error(`User registration error : ${error.message}`)
+			throw new Error(`User email or phone number already exists`)
 		}
 	}
 }
@@ -270,3 +270,16 @@ export async function getAllUser() {
 	  throw new Error(`Error fetching user: ${error.response ? error.response.status : error.message}`);
 	}
   }
+
+  export async function getUserOfRoomById(roomId) {
+	try {
+	  const response = await api.get(`/users/owner/${roomId}`, {
+		headers: getHeader()
+	  });
+	  return response.data;
+ 	 }
+	 catch (error) {
+		 new Error(`Error fetching user: ${error.message}`);
+	}
+}
+

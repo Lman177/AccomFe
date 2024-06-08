@@ -9,7 +9,7 @@ import { faGooglePlusG, faFacebookF, faGithub, faLinkedinIn } from '@fortawesome
 const Login = () => {
   const [isLoginActive, setIsLoginActive] = useState(true);
   const [login, setLogin] = useState({ email: "", password: "" });
-  const [registration, setRegistration] = useState({ firstName: "", lastName: "", email: "", password: "" });
+  const [registration, setRegistration] = useState({ firstName: "", phoneNumber: "", email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -108,16 +108,16 @@ const Login = () => {
             id="firstName"
             name="firstName"
             type="text"
-            placeholder="First Name"
+            placeholder="Full Name"
             value={registration.firstName}
             onChange={handleInputChange}
           />
           <input
-            id="lastName"
-            name="lastName"
+            id="phoneNumber"
+            name="phoneNumber"
             type="text"
-            placeholder="Last Name"
-            value={registration.lastName}
+            placeholder="Phone Number"
+            value={registration.phoneNumber}
             onChange={handleInputChange}
           />
           <input

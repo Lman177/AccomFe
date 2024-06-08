@@ -25,6 +25,7 @@ import RoomDetails from "./assets/components/room/RoomDetails"
 import Layout from './assets/components/layout/Layout'
 import UserList from './assets/components/User/UserList'
 import WelcomePage from './assets/components/home/WelcomePage'
+import User from './assets/components/User/User'
 function App() {
   return (
 	<AuthProvider>
@@ -37,7 +38,7 @@ function App() {
             <Route path="/edit-room/:roomId" element={<EditRoom />} />
             <Route path="/existing-rooms" element={<ExistingRooms2 />} />
             <Route path="/add-room" element={<AddRoom />} />
-
+            <Route path="/user" element={<User />} />
             <Route
               path="/book-room/:roomId"
               element={

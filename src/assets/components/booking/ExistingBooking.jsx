@@ -112,6 +112,7 @@ const ExistingBooking = () => {
               <Descriptions.Item label="Children">{selectedBooking.numOfChildren}</Descriptions.Item>
               <Descriptions.Item label="Total Guests">{selectedBooking.totalNumOfGuests}</Descriptions.Item>
               <Descriptions.Item label="Confirmation Code">{selectedBooking.bookingConfirmationCode}</Descriptions.Item>
+              <Descriptions.Item label="Price">{selectedBooking.room.roomPrice}</Descriptions.Item>
             </Descriptions>
           )}
         </Modal>

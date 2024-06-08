@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import BookingForm from "../booking/BookingForm";
+import React, { useEffect, useState } from 'react';
+import BookingForm from '../booking/BookingForm';
+import User from '../User/User';
 import {
   FaUtensils,
   FaWifi,
@@ -7,35 +8,35 @@ import {
   FaWineGlassAlt,
   FaParking,
   FaCar,
-  FaTshirt
-} from "react-icons/fa";
-import { useParams } from "react-router-dom";
-import { getRoomById } from "../utils/ApiFunctions";
+  FaTshirt,
+} from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import { getRoomById } from '../utils/ApiFunctions';
 
 const Checkout = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [roomInfo, setRoomInfo] = useState({
-    photo: "",
-    roomTypeName: "",
-    roomPrice: "",
-    description: ""
+    photo: '',
+    roomTypeName: '',
+    roomPrice: '',
+    description: '',
   });
 
   const { roomId } = useParams();
 
   useEffect(() => {
-    setTimeout(() => {
-      getRoomById(roomId)
-        .then((response) => {
-          setRoomInfo(response);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setError(error);
-          setIsLoading(false);
-        });
-    }, 1000);
+    const fetchRoomInfo = async () => {
+      try {
+        const response = await getRoomById(roomId);
+        setRoomInfo(response);
+        setIsLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setIsLoading(false);
+      }
+    };
+    fetchRoomInfo();
   }, [roomId]);
 
   return (
@@ -88,72 +89,78 @@ const Checkout = () => {
             </>
           )}
         </div>
-        <div  className="col-lg-5" >
+        <div className="col-lg-5">
           {!isLoading && !error && <BookingForm />}
+          {!isLoading && !error && <User roomId={roomId} />}
+          <p className="text-center mt-3">  </p>
+          <p className="text-center mt-3">  </p>
         </div>
       </div>
-      <style jsx>{`.container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .image-wrapper {
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 Aspect Ratio */
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-  }
-  
-  .room-photo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .list-inline-item {
-    display: inline-block;
-    margin-right: 15px;
-  }
+      <style jsx>{`
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+        }
 
-  .text-center {
-    text-align: center;
-  }
-  
-  p {
-    margin: 0;
-    padding: 0;
-  }
-  
-  h2, h3, h4 {
-    margin-top: 15px;
-    margin-bottom: 15px;
-  }
-  
-  h3 {
-    color: #ff5a5f;
-  }
-  
-  ul {
-    padding: 0;
-  }
-  
-  ul.list-inline {
-    list-style: none;
-  }
-  
-  ul.list-inline li {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-  }
-  
-  ul.list-inline li svg {
-    margin-right: 5px;
-  }
-  `}</style>
+        .image-wrapper {
+          width: 100%;
+          padding-top: 56.25%;
+          position: relative;
+          overflow: hidden;
+          border-radius: 10px;
+        }
+
+        .room-photo {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .list-inline-item {
+          display: inline-block;
+          margin-right: 15px;
+        }
+
+        .text-center {
+          text-align: center;
+        }
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+
+        h2,
+        h3,
+        h4 {
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+
+        h3 {
+          color: #ff5a5f;
+        }
+
+        ul {
+          padding: 0;
+        }
+
+        ul.list-inline {
+          list-style: none;
+        }
+
+        ul.list-inline li {
+          font-size: 1.2em;
+          margin-bottom: 10px;
+        }
+
+        ul.list-inline li svg {
+          margin-right: 5px;
+        }
+      `}</style>
     </div>
   );
 };

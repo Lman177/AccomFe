@@ -9,7 +9,7 @@ const Profile = () => {
   const [user, setUser] = useState({
     id: "",
     email: "",
-    firstName: "",
+    phoneNumber: "",
     lastName: "",
     roles: [{ id: "", name: "" }]
   });
@@ -101,9 +101,9 @@ const Profile = () => {
                       </div>
                       <hr />
                       <div className="form-group row">
-                        <label className="col-md-2 col-form-label fw-bold">Last Name:</label>
+                        <label className="col-md-2 col-form-label fw-bold">Phone Number:</label>
                         <div className="col-md-10 mt-2">
-                          <p className="card-text">{user.lastName}</p>
+                          <p className="card-text">{user.phoneNumber}</p>
                         </div>
                       </div>
                       <hr />

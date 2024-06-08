@@ -13,7 +13,7 @@ const RequireAuth = ({ children, adminOnly = false }) => {
     }
 
     // If adminOnly is true and userRole is not 'admin', redirect to home or another designated page
-    if (adminOnly && userRole !== 'ROLE_ADMIN') {
+    if (adminOnly && !userRole.includes('ROLE_ADMIN')) {
         return <Navigate to="/login" state={{ from: location }} />;
     }
 
