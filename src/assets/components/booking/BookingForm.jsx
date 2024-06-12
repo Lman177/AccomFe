@@ -143,8 +143,8 @@ const BookingForm = () => {
               </Form.Group>
 
               <fieldset>
-                <div className="row">
-                  <div className="col-6">
+                
+                  <div >
                     <Form.Label htmlFor="checkInDate" className="hotel-color">
                       Check-in date
                     </Form.Label>
@@ -162,8 +162,7 @@ const BookingForm = () => {
                       Please select a check-in date.
                     </Form.Control.Feedback>
                   </div>
-
-                  <div className="col-6">
+                  <div >
                     <Form.Label htmlFor="checkOutDate" className="hotel-color">
                       Check-out date
                     </Form.Label>
@@ -182,11 +181,10 @@ const BookingForm = () => {
                     </Form.Control.Feedback>
                   </div>
                   {errorMessage && <p className="error-message text-danger">{errorMessage}</p>}
-                </div>
+                
               </fieldset>
 
               <fieldset>
-                <legend>Number of Guests</legend>
                 <div className="row">
                   <div className="col-6">
                     <Form.Label htmlFor="numberOfAdults" className="hotel-color">

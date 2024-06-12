@@ -21,6 +21,8 @@ const Checkout = () => {
     roomTypeName: '',
     roomPrice: '',
     description: '',
+    roomLocation: '',
+    roomCapacity: '',
   });
 
   const { roomId } = useParams();
@@ -57,7 +59,9 @@ const Checkout = () => {
                 />
               </div>
               <div className="mt-3">
-                <h2>{roomInfo.roomTypeName.name}</h2>
+                <h2>{roomInfo.roomTypeName.name} / {roomInfo.roomLocation}</h2>
+                
+                <h5>Max Capacity: {roomInfo.roomCapacity} guests</h5>
                 <p>{roomInfo.description}</p>
                 <h3 className="mt-4">${roomInfo.roomPrice} / night</h3>
                 <hr />

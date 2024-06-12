@@ -73,6 +73,10 @@ const RoomCarousel = () => {
                         title={<span className="hotel-color">{room.roomTypeName.name}</span>}
                         description={<div className="room-price">${room.roomPrice}/night</div>}
                       />
+                      <Card.Meta
+                        title={<span className="hotel-color">{room.roomLocation}</span>}
+                        description={<div className="room-price">{room.Location}</div>}
+                      />
                       <Button type="primary" className="btn-hotel mt-2">
                         <Link to={`/book-room/${room.id}`}>Book Now</Link>
                       </Button>

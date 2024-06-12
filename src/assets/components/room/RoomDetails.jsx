@@ -20,7 +20,8 @@ const Checkout = () => {
     roomTypeName: "",
     roomPrice: "",
     description: "",
-    roomLocation: ""
+    roomLocation: "",
+    roomCapacity: "",
   });
 
   const { roomId } = useParams();
@@ -60,6 +61,7 @@ const Checkout = () => {
             <div className="mt-3 text-center">
               <h2>{roomInfo.roomTypeName.name}</h2>
               <p>{roomInfo.description}</p>
+              
               <h3 className="mt-4">${roomInfo.roomPrice} / night</h3>
               <hr />
               <h4>Amenities</h4>

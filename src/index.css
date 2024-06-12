@@ -80,7 +80,7 @@ body {
   }
  */
 
-/* 
+
 .parallax {
   background-image: url("./assets/images/parrall.jpg");
   background-attachment: fixed;
@@ -107,7 +107,7 @@ body {
   margin-top: 50px;
   color: white;
   text-shadow: 2px 2px black;
-} */
+}
 
 .animated {
   animation-duration: 1s;

@@ -11,22 +11,20 @@ const Home = () => {
 	const location = useLocation()
 
 	const message = location.state && location.state.message
-	const currentUser = localStorage.getItem("userEmail")
+	const currentUser = localStorage.getItem("name")
 	return (
 		<section>
-			{/* {message && <p className="text-warning px-5">{message}</p>}
+			{message && <p className="text-warning px-5">{message}</p>}
 			{currentUser && (
 				<h6 className="text-success text-center"> You are logged-In as {currentUser}</h6>
-			)} */}
+			)}
 			<MainHeader />
 			<div className="container">
 				<RoomSearch />
-				<RoomCarousel2 />
+				{/* <RoomCarousel2 /> */}
 				<RoomCarousel />
-				{/* <Parallax />
+				 <Parallax />
 				<HotelService />
-				<Parallax /> */}
-				
 			</div>
 		</section>
 	)

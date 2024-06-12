@@ -23,9 +23,14 @@ const RoomSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(6); // Adjusted for larger RoomCard
 
+  const disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < moment().startOf('day');
+  };
   const handleSearch = () => {
     const checkInMoment = moment(searchQuery.checkInDate);
     const checkOutMoment = moment(searchQuery.checkOutDate);
+
 
     if (!checkInMoment.isValid() || !checkOutMoment.isValid()) {
       setErrorMessage("Please enter valid dates");
@@ -99,8 +104,9 @@ const RoomSearch = () => {
             <Col xs={24} sm={12} md={6} lg={5}>
               <Form.Item>
                 <DatePicker
-                  placeholder="Add dates"
+                  placeholder="Check-in"
                   name="checkInDate"
+                  disabledDate={disabledDate}
                   value={searchQuery.checkInDate ? moment(searchQuery.checkInDate) : null}
                   onChange={(date) => handleDateChange("checkInDate", date)}
                   format="YYYY-MM-DD"
@@ -111,8 +117,9 @@ const RoomSearch = () => {
             <Col xs={24} sm={12} md={6} lg={5}>
               <Form.Item>
                 <DatePicker
-                  placeholder="Add dates"
+                  placeholder="Check-out"
                   name="checkOutDate"
+                  disabledDate={disabledDate}
                   value={searchQuery.checkOutDate ? moment(searchQuery.checkOutDate) : null}
                   onChange={(date) => handleDateChange("checkOutDate", date)}
                   format="YYYY-MM-DD"
