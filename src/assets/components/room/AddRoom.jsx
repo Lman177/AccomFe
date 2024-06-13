@@ -3,7 +3,7 @@ import { addRoom } from "../utils/ApiFunctions";
 import RoomTypeSelector from "../common/RoomTypeSelector";
 import RoomLocationSelector from "../common/RoomLocationSelector";
 import { Link } from "react-router-dom";
-import { Form, Input, Button, Upload, Alert, Row, Col, Typography, Space } from "antd";
+import { Form, Input, Button, Row, Col, Typography, Space, Modal } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
@@ -16,13 +16,15 @@ const AddRoom = () => {
         roomAddress: "",
         roomLocation: "",
         photo: null,
-        roomPrice: ""
+        roomPrice: "", 
+        roomCapacity: ""
     });
 
     const [selectedRoomType, setSelectedRoomType] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [modalContent, setModalContent] = useState({ message: "", type: "" });
+    const [modalStyle, setModalStyle] = useState({});
     const [imagePreview, setImagePreview] = useState("");
 
     const handleRoomInputChange = (e) => {
@@ -47,7 +49,6 @@ const AddRoom = () => {
     };
 
     const handleSubmit = async (e) => {
-        // e.preventDefault();
         try {
             const success = await addRoom(
                 newRoom.photo,
@@ -55,29 +56,35 @@ const AddRoom = () => {
                 newRoom.roomPrice,
                 newRoom.description,
                 newRoom.roomAddress,
-                newRoom.roomLocation
+                newRoom.roomLocation,
+                newRoom.roomCapacity
             );
             if (success !== undefined) {
-                setSuccessMessage("A new room was added successfully!");
+                setModalContent({ message: "A new room was added successfully!", type: "success" });
+                setModalStyle({ color: "green" });
                 setNewRoom({
                     photo: null,
                     roomTypeName: "",
                     roomPrice: "",
                     description: "",
                     roomAddress: "",
-                    roomLocation: ""
+                    roomLocation: "",
+                    roomCapacity: ""
                 });
+                setSelectedRoomType("");
+                setSelectedLocation("");
                 setImagePreview("");
-                setErrorMessage("");
             } else {
-                setErrorMessage("Error adding new room");
+                setModalContent({ message: "Error adding new room", type: "error" });
+                setModalStyle({ color: "red" });
             }
         } catch (error) {
-            setErrorMessage(error.message);
+            setModalContent({ message: error.message, type: "error" });
+            setModalStyle({ color: "red" });
         }
+        setIsModalVisible(true);
         setTimeout(() => {
-            setSuccessMessage("");
-            setErrorMessage("");
+            setIsModalVisible(false);
         }, 3000);
     };
 
@@ -86,18 +93,20 @@ const AddRoom = () => {
             <Row justify="center">
                 <Col xs={24} sm={20} md={16} lg={12} xl={8}>
                     <Title level={2} className="mt-5 mb-2" style={{ textAlign: "center" }}>Add a New Room</Title>
-                    {successMessage && (
-                        <Alert message={successMessage} type="success" showIcon style={{ marginBottom: "20px" }} />
-                    )}
-                    {errorMessage && (
-                        <Alert message={errorMessage} type="error" showIcon style={{ marginBottom: "20px" }} />
-                    )}
                     <Form onFinish={handleSubmit} layout="vertical" encType="multipart/form-data">
                         <Form.Item label="What type of place will guests have?" name="roomTypeName" >
                             <RoomTypeSelector
                                 handleRoomInputChange={handleRoomInputChange}
                                 selectedRoomType={selectedRoomType}
                                 setSelectedRoomType={setSelectedRoomType}
+                            />
+                        </Form.Item>
+                        <Form.Item label="How many guests fit comfortably in your place?" name="roomCapacity" >
+                        <Input
+                                type="number"
+                                name="roomCapacity"
+                                value={newRoom.roomCapacity}
+                                onChange={handleRoomInputChange}
                             />
                         </Form.Item>
                         <Form.Item label="Number and Lane of your Place?" name="roomAddress" rules={[{ required: true, message: 'Please input the room address!' }]}>
@@ -158,6 +167,17 @@ const AddRoom = () => {
                             </Space>
                         </Form.Item>
                     </Form>
+                    <Modal
+                        title={modalContent.type === "success" ? "Success" : "Error"}
+                        visible={isModalVisible}
+                        onOk={() => setIsModalVisible(false)}
+                        onCancel={() => setIsModalVisible(false)}
+                        okText="OK"
+                        cancelButtonProps={{ style: { display: "none" } }}
+                        bodyStyle={modalStyle}
+                    >
+                        <p>{modalContent.message}</p>
+                    </Modal>
                 </Col>
             </Row>
         </section>

@@ -171,6 +171,7 @@ const Profile = () => {
                   <thead>
                     <tr>
                       <th scope="col">Room Type</th>
+                      <th scope="col">Room Location</th>
                       <th scope="col">Check In Date</th>
                       <th scope="col">Check Out Date</th>
                       <th scope="col">Confirmation Code</th>
@@ -186,6 +187,7 @@ const Profile = () => {
                       return (
                         <tr key={index}>
                           <td>{booking.room.roomTypeName.name}</td>
+                          <td>{booking.room.roomAddress}, {booking.room.roomLocation.locationName}</td>
                           <td>{moment(booking.checkInDate).format("MMM Do, YYYY")}</td>
                           <td>{moment(booking.checkOutDate).format("MMM Do, YYYY")}</td>
                           <td>{booking.bookingConfirmationCode}</td>

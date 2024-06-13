@@ -8,7 +8,7 @@ import { FaEdit, FaEye, FaPlus} from "react-icons/fa";
 const { Title } = Typography;
 const { Option } = Select;
 
-const ExistingRooms2 = () => {
+const UsersRoom = () => {
     const [rooms, setRooms] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -149,7 +149,7 @@ const ExistingRooms2 = () => {
 
     return (
         <div style={{ padding: "20px", backgroundColor: "whitesmoke" }}>
-            <Title level={2}>Existing Rooms</Title>
+            <Title level={2}>Rooms</Title>
             {successMessage && <Alert message="Success" description={successMessage} type="success" showIcon closable />}
             {errorMessage && <Alert message="Error" description={errorMessage} type="error" showIcon closable />}
             <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
@@ -194,4 +194,4 @@ const ExistingRooms2 = () => {
     );
 };
 
-export default ExistingRooms2;
+export default UsersRoom;

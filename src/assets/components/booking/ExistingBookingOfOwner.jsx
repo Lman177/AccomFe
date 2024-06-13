@@ -8,7 +8,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 const { Title } = Typography;
 const localizer = momentLocalizer(moment);
 
-const ExistingBooking = () => {
+const ExistingBookingOfOwner = () => {
   const [bookingInfo, setBookingInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -63,7 +63,7 @@ const ExistingBooking = () => {
 
   return (
     <section>
-      <Title level={2}>Existing Bookings</Title>
+      <Title level={2}>Bookings</Title>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
         {error && (
           <Alert
@@ -90,6 +90,7 @@ const ExistingBooking = () => {
           title="Booking Details"
           visible={isModalVisible}
           onCancel={handleModalCancel}
+          height={200}
           footer={[
             <Button key="cancel" onClick={handleModalCancel}>
               Close
@@ -98,12 +99,10 @@ const ExistingBooking = () => {
               Cancel Booking
             </Button>,
           ]}
-          bodyStyle={{ padding: '24px' }}
+          bodyStyle={{ padding: '24px', width: '100%',height: '500px'}}
         >
           {selectedBooking && (
-            <Descriptions bordered column={1} size="middle">
-              <Descriptions.Item label="Booking ID">{selectedBooking.id}</Descriptions.Item>
-              <Descriptions.Item label="Room ID">{selectedBooking.room.id}</Descriptions.Item>
+            <Descriptions bordered column={1} size="small">
               <Descriptions.Item label="Room Type">{selectedBooking.room.roomTypeName.name}</Descriptions.Item>
               <Descriptions.Item label="Check-In Date">{moment(selectedBooking.checkInDate).format('YYYY-MM-DD')}</Descriptions.Item>
               <Descriptions.Item label="Check-Out Date">{moment(selectedBooking.checkOutDate).format('YYYY-MM-DD')}</Descriptions.Item>
@@ -122,4 +121,4 @@ const ExistingBooking = () => {
   );
 };
 
-export default ExistingBooking;
+export default ExistingBookingOfOwner;

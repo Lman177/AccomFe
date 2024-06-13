@@ -27,6 +27,8 @@ import UserList from './assets/components/User/UserList'
 import WelcomePage from './assets/components/home/WelcomePage'
 import User from './assets/components/User/User'
 import ExistingBookingOfOwner from './assets/components/booking/ExistingBookingOfOwner'
+import ControlPanel from './assets/components/User/ControlPanel'
+import UsersRoom from './assets/components/room/UsersRoom'
 function App() {
   return (
 	<AuthProvider>
@@ -39,6 +41,9 @@ function App() {
             <Route path="/edit-room/:roomId" element={<EditRoom />} />
             <Route path="/existing-rooms" element={<ExistingRooms2 />} />
             <Route path="/add-room" element={<AddRoom />} />
+            <Route path="/admin-rooms" element={<AdminRooms />} />
+            <Route path="/user-rooms" element={<UsersRoom />} />
+
             <Route path="/user" element={<User />} />
             <Route
               path="/book-room/:roomId"
@@ -56,9 +61,9 @@ function App() {
             </RequireAuth>
             } />
 
-            <Route path="/admin-rooms" element={
+            <Route path="/control-panel" element={
             <RequireAuth>
-              <AdminRooms />
+              <ControlPanel />
             </RequireAuth>
             } />
             <Route path="/booking-success" element={<BookingSuccess /> } />
