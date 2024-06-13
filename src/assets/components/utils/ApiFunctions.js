@@ -144,10 +144,10 @@ export async function cancelBooking(bookingId) {
 }
 
 /* This function gets all availavle rooms from the database with a given date and a room type */
-export async function getAvailableRooms(checkInDate, checkOutDate, roomType, roomLocation ) {
+export async function getAvailableRooms(checkInDate, checkOutDate, roomType, roomLocation, minPrice, maxPrice) {
 	const result = await api.get(
 		`rooms/available-rooms?checkInDate=${checkInDate}
-		&checkOutDate=${checkOutDate}&roomType=${roomType}&roomLocation=${roomLocation}`
+		&checkOutDate=${checkOutDate}&roomType=${roomType}&roomLocation=${roomLocation}&minPrice=${minPrice}&maxPrice=${maxPrice}`
 	)
 	return result
 }
@@ -280,6 +280,17 @@ export async function getAllUser() {
  	 }
 	 catch (error) {
 		 new Error(`Error fetching user: ${error.message}`);
+	}
+}
+
+export async function getBookingOfOwner() {
+	try {
+		const response = await api.get('/bookings/get', {
+			headers: getHeader()
+		});
+		return response.data;
+	} catch (error) {
+		throw new Error(`Error fetching booking: ${error.message}`);
 	}
 }
 

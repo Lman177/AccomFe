@@ -8,7 +8,7 @@ import {
   ReadOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
-import ExistingRooms2 from '../room/ExistingRooms2'; // Import the ExistingRooms component
+import ExistingRooms2 from '../room/UsersRoom'; // Import the ExistingRooms component
 import ExistingBooking from '../booking/ExistingBooking'; // Import the ExistingBooking component
 import UserList from '../User/UserList'; // Import the ListUser component
 

@@ -4,7 +4,7 @@ import { getAvailableRooms } from "../utils/ApiFunctions";
 import RoomTypeSelector from "./RoomTypeSelector";
 import RoomLocationSelector from "./RoomLocationSelector";
 import RoomCard from "../room/RoomCard";
-import { DatePicker, Form, Button, Row, Col, Space, Spin, Pagination } from "antd";
+import { DatePicker, Form, Button, Row, Col, Space, Spin, Pagination, Slider } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 const RoomSearch = () => {
@@ -12,7 +12,9 @@ const RoomSearch = () => {
     checkInDate: "",
     checkOutDate: "",
     roomTypeName: "",
-    roomLocation: ""
+    roomLocation: "",
+    minPrice: 0,
+    maxPrice: 1000,
   });
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -21,16 +23,15 @@ const RoomSearch = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(6); // Adjusted for larger RoomCard
+  const [pageSize, setPageSize] = useState(4); // Adjusted for larger RoomCard
 
   const disabledDate = (current) => {
-    // Can not select days before today and today
-    return current && current < moment().startOf('day');
+    return current && current < moment().startOf("day");
   };
+
   const handleSearch = () => {
     const checkInMoment = moment(searchQuery.checkInDate);
     const checkOutMoment = moment(searchQuery.checkOutDate);
-
 
     if (!checkInMoment.isValid() || !checkOutMoment.isValid()) {
       setErrorMessage("Please enter valid dates");
@@ -48,7 +49,9 @@ const RoomSearch = () => {
       searchQuery.checkInDate,
       searchQuery.checkOutDate,
       selectedRoomType,
-      selectedLocation
+      selectedLocation,
+      searchQuery.minPrice,
+      searchQuery.maxPrice
     )
       .then((response) => {
         setAvailableRooms(response.data);
@@ -69,9 +72,8 @@ const RoomSearch = () => {
     setErrorMessage("");
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSearchQuery({ ...searchQuery, [name]: value });
+  const handleRangeChange = (value) => {
+    setSearchQuery({ ...searchQuery, minPrice: value[0], maxPrice: value[1] });
     setErrorMessage("");
   };
 
@@ -80,7 +82,9 @@ const RoomSearch = () => {
       checkInDate: "",
       checkOutDate: "",
       roomTypeName: "",
-      roomLocation: ""
+      roomLocation: "",
+      minPrice: 0,
+      maxPrice: 1000,
     });
     setAvailableRooms([]);
     setErrorMessage("");
@@ -130,7 +134,7 @@ const RoomSearch = () => {
             <Col xs={24} sm={12} md={6} lg={5}>
               <Form.Item>
                 <RoomTypeSelector
-                  handleRoomInputChange={handleInputChange}
+                  handleRoomInputChange={handleRangeChange}
                   selectedRoomType={selectedRoomType}
                   setSelectedRoomType={setSelectedRoomType}
                 />
@@ -139,15 +143,28 @@ const RoomSearch = () => {
             <Col xs={24} sm={12} md={6} lg={5}>
               <Form.Item>
                 <RoomLocationSelector
-                  handleRoomInputChange={handleInputChange}
+                  handleRoomInputChange={handleRangeChange}
                   selectedLocation={selectedLocation}
                   setSelectedLocation={setSelectedLocation}
                 />
               </Form.Item>
             </Col>
-            <Col >
+            <Col xs={24} sm={24} md={12} lg={6}>
+              <Form.Item label="Price Range">
+                <Slider
+                  range
+                  min={0}
+                  max={1000}
+                  defaultValue={[searchQuery.minPrice, searchQuery.maxPrice]}
+                  onChange={handleRangeChange}
+                  tooltipVisible
+                />
+              </Form.Item>
+            </Col>
+            <Col>
               <Button type="primary" htmlType="submit" icon={<SearchOutlined />} />
             </Col>
+            
           </Row>
         </Space>
       </Form>
@@ -159,7 +176,7 @@ const RoomSearch = () => {
           <>
             {availableRooms.length > 0 && (
               <>
-                <Row  justify="center" style={{width:"100%", gap:"5px"}}>
+                <Row justify="center" style={{ width: "100%", gap: "5px" }}>
                   {paginatedRooms.map((room) => (
                     <RoomCard key={room.id} room={room} />
                   ))}
@@ -171,6 +188,12 @@ const RoomSearch = () => {
                   onChange={handlePageChange}
                   style={{ marginTop: "20px" }}
                 />
+                <Col>
+
+              <Button className="mt-3" type="default" onClick={handleClearSearch}>
+                Clear
+              </Button>
+            </Col>
               </>
             )}
             {errorMessage && <div className="error-message">{errorMessage}</div>}
@@ -186,7 +209,6 @@ const RoomSearch = () => {
           justify-content: center;
           margin-top: 30px;
           padding: 0 20px;
-          
         }
 
         .search-form {
@@ -213,14 +235,12 @@ const RoomSearch = () => {
         }
 
         .result-container {
-            max-width: 1150px; /* Increased max-width for larger container */
-            margin-top: 20px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-           
-           
+          max-width: 1150px;
+          margin-top: 20px;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
 
         .error-message {

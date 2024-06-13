@@ -2,7 +2,7 @@ import { useState } from 'react'
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import "/node_modules/bootstrap/dist/js/bootstrap.min.js"
 import AddRoom from './assets/components/room/AddRoom'
-import ExistingRooms2 from './assets/components/room/ExistingRooms2'
+import ExistingRooms2 from './assets/components/room/UsersRoom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import EditRoom from './assets/components/room/EditRoom'
 import Home from './assets/components/home/Home'
@@ -26,6 +26,7 @@ import Layout from './assets/components/layout/Layout'
 import UserList from './assets/components/User/UserList'
 import WelcomePage from './assets/components/home/WelcomePage'
 import User from './assets/components/User/User'
+import ExistingBookingOfOwner from './assets/components/booking/ExistingBookingOfOwner'
 function App() {
   return (
 	<AuthProvider>
@@ -49,7 +50,6 @@ function App() {
             />
             <Route path="/browse-all-rooms" element={<RoomListing />} />
             <Route path="/admin" element={<Admin />} />
-
             <Route path="/admin-panel" element={
             <RequireAuth adminOnly={true}>
               <AdminPanel />
@@ -63,6 +63,7 @@ function App() {
             } />
             <Route path="/booking-success" element={<BookingSuccess /> } />
             <Route path="/existing-bookings" element={<Bookings />} />
+            <Route path="/booking-owner" element={<ExistingBookingOfOwner />} />
             <Route path="/find-booking" element={<FindBooking />} />
             <Route path="/view-room/:roomId" element={<RoomDetails />} />
             <Route path="/login" element={<Login />} />
