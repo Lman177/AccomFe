@@ -27,6 +27,17 @@ const Login = () => {
     }
   };
 
+  const handlePassChange = (e) => {
+    const { name, value } = e.target;
+    const sanitizedValue = value.replace(/\s/g, ''); // Remove spaces
+    if (isLoginActive) {
+      setLogin({ ...login, [name]: sanitizedValue });
+    } else {
+      setRegistration({ ...registration, [name]: sanitizedValue });
+    }
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLoginActive) {
@@ -49,7 +60,7 @@ const Login = () => {
         const result = await registerUser(registration);
         setSuccessMessage(result);
         setErrorMessage("");
-        setRegistration({ firstName: "", lastName: "", email: "", password: "" });
+        setRegistration({ firstName: "", phoneNumber: "", email: "", password: "" });
       } catch (error) {
         setSuccessMessage("");
         setErrorMessage(`Registration error: ${error.message}`);
@@ -79,7 +90,7 @@ const Login = () => {
             type="email"
             placeholder="Email"
             value={login.email}
-            onChange={handleInputChange}
+            onChange={handlePassChange}
           />
           <input
             id="password"
@@ -87,7 +98,7 @@ const Login = () => {
             type="password"
             placeholder="Password"
             value={login.password}
-            onChange={handleInputChange}
+            onChange={handlePassChange}
           />
           {errorMessage && <p className="alert alert-danger">{errorMessage}</p>}
           <a href="#">Forgot Your Password?</a>
@@ -126,7 +137,7 @@ const Login = () => {
             type="email"
             placeholder="Email"
             value={registration.email}
-            onChange={handleInputChange}
+            onChange={handlePassChange}
           />
           <input
             id="password"
@@ -134,7 +145,7 @@ const Login = () => {
             type="password"
             placeholder="Password"
             value={registration.password}
-            onChange={handleInputChange}
+            onChange={handlePassChange}
           />
           {errorMessage && <p className="alert alert-danger">{errorMessage}</p>}
           {successMessage && <p className="alert alert-success">{successMessage}</p>}

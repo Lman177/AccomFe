@@ -63,14 +63,15 @@ const AddRoom = () => {
                 setModalContent({ message: "A new room was added successfully!", type: "success" });
                 setModalStyle({ color: "green" });
                 setNewRoom({
-                    photo: null,
                     roomTypeName: "",
-                    roomPrice: "",
                     description: "",
                     roomAddress: "",
                     roomLocation: "",
+                    photo: null,
+                    roomPrice: "", 
                     roomCapacity: ""
                 });
+                
                 setSelectedRoomType("");
                 setSelectedLocation("");
                 setImagePreview("");

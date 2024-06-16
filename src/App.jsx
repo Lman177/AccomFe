@@ -29,6 +29,8 @@ import User from './assets/components/User/User'
 import ExistingBookingOfOwner from './assets/components/booking/ExistingBookingOfOwner'
 import ControlPanel from './assets/components/User/ControlPanel'
 import UsersRoom from './assets/components/room/UsersRoom'
+import RevenueChart from './assets/components/admin/RevenueChart '
+import BookingStats from './assets/components/admin/BookingStats '
 function App() {
   return (
 	<AuthProvider>
@@ -76,6 +78,8 @@ function App() {
             <Route path="/register" element={<Registration />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/logout" element={<FindBooking />} />
+            <Route path="/profit" element={<RevenueChart />} />
+            <Route path="/total-booking" element={<BookingStats />} />
           </Routes>
         </Layout>
       </Router>

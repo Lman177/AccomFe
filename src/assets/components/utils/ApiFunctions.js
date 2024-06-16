@@ -1,7 +1,8 @@
 import axios from "axios"
 
 export const api = axios.create({
-    baseURL : "http://localhost:8080"
+    // baseURL : "http://localhost:8080"
+    baseURL : "http://100.109.7.158:8080"
 })
 
 export const getHeader = () => {
@@ -295,3 +296,13 @@ export async function getBookingOfOwner() {
 	}
 }
 
+export async function getProfit() {
+	try {
+		const response = await api.get('/bookings/profit', {
+			headers: getHeader()
+		});
+		return response.data;
+	} catch (error) {
+		throw new Error(`Error fetching profit: ${error.message}`);
+	}
+}
