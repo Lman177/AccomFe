@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Carousel, Card, Row, Col, Spin, Alert, Button } from 'antd';
+import { Card, Row, Col, Spin, Alert, Button, Pagination } from 'antd';
 import { getAllRooms } from '../utils/ApiFunctions';
-import RoomPaginator from './RoomPaginator';
 
 const RoomCarousel = () => {
   const [rooms, setRooms] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const roomsPerPage = 4;
 
@@ -16,7 +15,7 @@ const RoomCarousel = () => {
     const fetchRooms = async () => {
       setIsLoading(true);
       try {
-        const data = await getAllRooms(currentPage, roomsPerPage);
+        const data = await getAllRooms(currentPage - 1, roomsPerPage); // Adjusted for 0-based index
         setRooms(data.content);
         setTotalPages(data.totalPages);
       } catch (error) {
@@ -30,7 +29,7 @@ const RoomCarousel = () => {
   }, [currentPage]);
 
   const handlePageChange = (page) => {
-    setCurrentPage(page - 1);
+    setCurrentPage(page);
   };
 
   if (isLoading) {
@@ -51,52 +50,44 @@ const RoomCarousel = () => {
     <section className="room-carousel-section bg-light mb-5 mt-2 shadow">
       <h2 className="heading">All Rooms</h2>
       <div className="container">
-        <Carousel dotPosition="bottom" autoplay>
-          {[...Array(Math.ceil(rooms.length / roomsPerPage))].map((_, index) => (
-            <div key={index}>
-              <Row gutter={16}>
-                {rooms.slice(index * roomsPerPage, (index + 1) * roomsPerPage).map((room) => (
-                  <Col key={room.id} xs={24} sm={12} md={8} lg={6} className="mb-4">
-                    <Card
-                      hoverable
-                      cover={
-                        <Link to={`/book-room/${room.id}`}>
-                          <img
-                            alt="Room Photo"
-                            src={`data:image/png;base64, ${room.photo}`}
-                            className="room-image"
-                          />
-                        </Link>
-                      }
-                    >
-                      {<span className="hotel-color">{room.roomTypeName.name}</span>}
-                      
-                      <div style={{ display: 'flex',
-                        alignItems: 'center',
-                        fontSize: '16px'
-
-                      }} className=''>
-                        <div className="room-address">{room.roomAddress}, {room.roomLocation} </div>
-                      </div>
-                      
-                      <Card.Meta
-                        title={<span className="hotel-color"></span>}
-                        description={<div className="hotel-color">${room.roomPrice}/night</div>}
-                      />
-                      <Button type="primary" className="btn-hotel mt-2">
-                        <Link to={`/book-room/${room.id}`}>Book Now</Link>
-                      </Button>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </div>
+        <Row gutter={16}>
+          {rooms.map((room) => (
+            <Col key={room.id} xs={24} sm={12} md={8} lg={6} className="mb-4">
+              <Card
+                hoverable
+                cover={
+                  <Link to={`/book-room/${room.id}`}>
+                    <img
+                      alt="Room Photo"
+                      src={`data:image/png;base64, ${room.photo}`}
+                      className="room-image"
+                    />
+                  </Link>
+                }
+              >
+                <span className="hotel-color">{room.roomTypeName.name}</span>
+                <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
+                  <div className="room-address-container">
+                    <div className="room-address">{room.roomAddress}, {room.roomLocation}</div>
+                  </div>
+                </div>
+                <Card.Meta
+                  title={<span className="hotel-color"></span>}
+                  description={<div className="hotel-color">${room.roomPrice}/night</div>}
+                />
+                <Button type="primary" className="btn-hotel mt-2">
+                  <Link to={`/book-room/${room.id}`}>Book Now</Link>
+                </Button>
+              </Card>
+            </Col>
           ))}
-        </Carousel>
-        <RoomPaginator
-          currentPage={currentPage + 1}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
+        </Row>
+        <Pagination
+          current={currentPage}
+          total={totalPages * roomsPerPage}
+          pageSize={roomsPerPage}
+          onChange={handlePageChange}
+          className="pagination"
         />
       </div>
       <style jsx>{`
@@ -121,10 +112,6 @@ const RoomCarousel = () => {
         .room-card:hover {
           transform: translateY(-10px);
         }
-        .room-price {
-          font-size: 1.1rem;
-          color: #333;
-        }
         .btn-hotel {
           background-color: #ff5a5f;
           border: none;
@@ -137,10 +124,6 @@ const RoomCarousel = () => {
         .loading-container {
           text-align: center;
           margin-top: 5rem;
-        }
-        .loading-container p {
-          margin-top: 1rem;
-          font-size: 1.2rem;
         }
         .room-carousel-section .ant-card-cover img {
           max-width: 100%;
@@ -202,6 +185,34 @@ const RoomCarousel = () => {
         }
         .star {
           color: gold;
+        }
+        .room-address-container {
+          overflow: hidden;
+          white-space: nowrap;
+          position: relative;
+        }
+        .room-address {
+          display: inline-block;
+          animation: slide 13s linear infinite;
+        }
+        @keyframes slide {
+          0% {
+            transform: translateX(0%);
+          }
+          50% {
+            transform: translateX(-100%);
+          }
+          50.01% {
+            transform: translateX(100%);
+          }
+          100% {
+            transform: translateX(0%);
+          }
+        }
+        .pagination {
+          display: flex;
+          justify-content: center;
+          margin-top: 20px;
         }
       `}</style>
     </section>

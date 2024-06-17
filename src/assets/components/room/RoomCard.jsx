@@ -19,17 +19,21 @@ const RoomCard = ({ room }) => {
         }
         className="room-card"
       >
-        <Card.Meta
-          title={<span className="hotel-color">{room.roomTypeName.name}</span>}
-          description={<div className="room-price">${room.roomPrice}/night</div>}
-        />
-        <Card.Meta
-          title={<span className="hotel-color">{room.roomLocation.name}</span>}
-          description={<div className="room-price">{room.roomLocation}</div>}
-        />
-        <Button type="primary" className="btn-hotel mt-2">
-          <Link to={`/book-room/${room.id}`}>Book Now</Link>
-        </Button>
+        {<span className="hotel-color">{room.roomTypeName.name}</span>}
+                      
+                      <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
+                        <div className="room-address-container">
+                          <div className="room-address">{room.roomAddress}, {room.roomLocation}</div>
+                        </div>
+                      </div>
+                      
+                      <Card.Meta
+                        title={<span className="hotel-color"></span>}
+                        description={<div className="hotel-color">${room.roomPrice}/night</div>}
+                      />
+                      <Button type="primary" className="btn-hotel mt-2">
+                        <Link to={`/book-room/${room.id}`}>Book Now</Link>
+                      </Button>
       </Card>
       <style jsx>{`
         .hotel-color {

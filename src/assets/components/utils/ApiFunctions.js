@@ -57,25 +57,25 @@ export async function getLocation() {
 }
 
 
-/* This function gets all rooms from the database */
-export async function getAllRooms() {
-	try {
-		const result = await api.get("rooms/all-rooms")
-		return result.data
-	} catch (error) {
-		throw new Error("Error fetching rooms")
-	}
-}
+// /* This function gets all rooms from the database */
+// export async function getAllRooms() {
+// 	try {
+// 		const result = await api.get("rooms/all-rooms")
+// 		return result.data
+// 	} catch (error) {
+// 		throw new Error("Error fetching rooms")
+// 	}
+// }
 
 /* This function gets all available rooms from the database */
-export async function getAllAvaRooms() {
+export async function getAllRooms(page, size) {
 	try {
-		const result = await api.get("rooms/available")
-		return result.data
+	  const result = await api.get(`rooms/all-rooms?page=${page}&size=${size}`);
+	  return result.data;
 	} catch (error) {
-		throw new Error("Error fetching rooms")
+	  throw new Error("Error fetching rooms");
 	}
-}
+  }
 /** This function deletes a room by the Id */
 export async function deleteRoom(roomId){
 	try{
@@ -146,10 +146,10 @@ export async function cancelBooking(bookingId) {
 }
 
 /* This function gets all availavle rooms from the database with a given date and a room type */
-export async function getAvailableRooms(checkInDate, checkOutDate, roomType, roomLocation, minPrice, maxPrice) {
+export async function getAvailableRooms(checkInDate, checkOutDate, roomType, roomLocation, minPrice, maxPrice, page, size) {
 	const result = await api.get(
 		`rooms/available-rooms?checkInDate=${checkInDate}
-		&checkOutDate=${checkOutDate}&roomType=${roomType}&roomLocation=${roomLocation}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+		&checkOutDate=${checkOutDate}&roomType=${roomType}&roomLocation=${roomLocation}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&size=${size}`
 	)
 	return result
 }
