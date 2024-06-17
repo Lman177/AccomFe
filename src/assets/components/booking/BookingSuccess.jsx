@@ -40,6 +40,7 @@ const BookingSuccess = () => {
       <Content>
         {message ? (
           <Result
+          status="success"
             icon={<SmileOutlined style={{ color: '#52c41a' }} />}
             title={<span style={{ fontSize: '24px', fontWeight: 'bold' }}>Booking Success!</span>}
             subTitle={<span style={{ fontSize: '18px' }}>{message}</span>}

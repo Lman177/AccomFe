@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import moment from "moment";
 import { getAvailableRooms } from "../utils/ApiFunctions";
 import RoomTypeSelector from "./RoomTypeSelector";
 import RoomLocationSelector from "./RoomLocationSelector";
 import RoomCard from "../room/RoomCard";
-import { DatePicker, Form, Button, Row, Col, Space, Spin, Pagination, Slider } from "antd";
+import { DatePicker, Form, Button, Row, Col, Space, Pagination, Slider, Spin } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { debounce } from "lodash";
 
 const RoomSearch = () => {
   const [searchQuery, setSearchQuery] = useState({
@@ -23,11 +24,58 @@ const RoomSearch = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(4); // Adjusted for larger RoomCard
+  const [pageSize, setPageSize] = useState(4);
+  const [totalRooms, setTotalRooms] = useState(0);
+  const [prefetchedRooms, setPrefetchedRooms] = useState({});
 
   const disabledDate = (current) => {
     return current && current < moment().startOf("day");
   };
+
+  const fetchRooms = useCallback(
+    debounce((page, query = searchQuery) => {
+      setIsLoading(true);
+
+      getAvailableRooms(
+        query.checkInDate,
+        query.checkOutDate,
+        selectedRoomType,
+        selectedLocation,
+        query.minPrice,
+        query.maxPrice,
+        page,
+        pageSize
+      )
+        .then((response) => {
+          if (response.data && Array.isArray(response.data.content)) {
+            setAvailableRooms(response.data.content);
+            setTotalRooms(response.data.totalElements);
+            setPrefetchedRooms((prev) => ({
+              ...prev,
+              [page]: response.data.content,
+            }));
+          } else {
+            setAvailableRooms([]);
+            setErrorMessage("Unexpected response format");
+          }
+          setIsLoading(false);
+          if (response.data.content.length === 0) {
+            setErrorMessage("No rooms available for the selected dates and options.");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsLoading(false);
+        });
+    }, 300),
+    [searchQuery, selectedRoomType, selectedLocation, pageSize]
+  );
+
+  useEffect(() => {
+    if (!prefetchedRooms[currentPage - 1]) {
+      fetchRooms(currentPage - 1);
+    }
+  }, [currentPage, fetchRooms, prefetchedRooms]);
 
   const handleSearch = () => {
     const checkInMoment = moment(searchQuery.checkInDate);
@@ -43,28 +91,8 @@ const RoomSearch = () => {
       return;
     }
 
-    setIsLoading(true);
-
-    getAvailableRooms(
-      searchQuery.checkInDate,
-      searchQuery.checkOutDate,
-      selectedRoomType,
-      selectedLocation,
-      searchQuery.minPrice,
-      searchQuery.maxPrice
-    )
-      .then((response) => {
-        setAvailableRooms(response.data);
-        setIsLoading(false);
-        if (response.data.length === 0) {
-          setErrorMessage("No rooms available for the selected dates and options.");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        setErrorMessage("An error occurred while fetching available rooms.");
-        setIsLoading(false);
-      });
+    setCurrentPage(1);
+    fetchRooms(0);
   };
 
   const handleDateChange = (name, date) => {
@@ -88,17 +116,20 @@ const RoomSearch = () => {
     });
     setAvailableRooms([]);
     setErrorMessage("");
+    setCurrentPage(1); // Reset to first page
   };
 
   const handlePageChange = (page, pageSize) => {
+    setIsLoading(true);
     setCurrentPage(page);
     setPageSize(pageSize);
+    if (prefetchedRooms[page - 1]) {
+      setAvailableRooms(prefetchedRooms[page - 1]);
+      setIsLoading(false);
+    } else {
+      fetchRooms(page - 1); // Adjust for zero-based index
+    }
   };
-
-  const paginatedRooms = availableRooms.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
 
   return (
     <div className="search-container">
@@ -164,41 +195,34 @@ const RoomSearch = () => {
             <Col>
               <Button type="primary" htmlType="submit" icon={<SearchOutlined />} />
             </Col>
-            
           </Row>
         </Space>
       </Form>
 
       <div className="result-container">
-        {isLoading ? (
-          <Spin size="large" />
-        ) : (
+        {isLoading && <Spin size="large" />}
+        {!isLoading && availableRooms.length > 0 && (
           <>
-            {availableRooms.length > 0 && (
-              <>
-                <Row justify="center" style={{ width: "100%", gap: "5px" }}>
-                  {paginatedRooms.map((room) => (
-                    <RoomCard key={room.id} room={room} />
-                  ))}
-                </Row>
-                <Pagination
-                  current={currentPage}
-                  pageSize={pageSize}
-                  total={availableRooms.length}
-                  onChange={handlePageChange}
-                  style={{ marginTop: "20px" }}
-                />
-                <Col>
-
+            <Row justify="center" style={{ width: "100%", gap: "5px" }}>
+              {availableRooms.map((room) => (
+                <RoomCard key={room.id} room={room} />
+              ))}
+            </Row>
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={totalRooms}
+              onChange={handlePageChange}
+              style={{ marginTop: "20px" }}
+            />
+            <Col>
               <Button className="mt-3" type="default" onClick={handleClearSearch}>
                 Clear
               </Button>
             </Col>
-              </>
-            )}
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
           </>
         )}
+        {!isLoading && errorMessage && <div className="error-message">{errorMessage}</div>}
       </div>
 
       <style jsx>{`
@@ -241,6 +265,10 @@ const RoomSearch = () => {
           display: flex;
           flex-direction: column;
           align-items: center;
+        }
+
+        .result-container > .ant-spin {
+          margin-top: 20px;
         }
 
         .error-message {

@@ -186,8 +186,8 @@ const Profile = () => {
                       const isPastCheckout = currentDate.isAfter(checkOutDate);
                       return (
                         <tr key={index}>
-                          <td>{booking.room.roomTypeName.name}</td>
-                          <td>{booking.room.roomAddress}, {booking.room.roomLocation.locationName}</td>
+                          <td>{booking.room && booking.room.roomTypeName ? booking.room.roomTypeName.name : "N/A"}</td>
+                          <td>{booking.room && booking.room.roomLocation ? `${booking.room.roomAddress}, ${booking.room.roomLocation.locationName}` : "N/A"}</td>
                           <td>{moment(booking.checkInDate).format("MMM Do, YYYY")}</td>
                           <td>{moment(booking.checkOutDate).format("MMM Do, YYYY")}</td>
                           <td>{booking.bookingConfirmationCode}</td>

@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Row, Col, Spin, Alert, Button, Pagination } from 'antd';
+import { Card, Row, Col, Alert, Button, Pagination, Spin } from 'antd';
 import { getAllRooms } from '../utils/ApiFunctions';
 
 const RoomCarousel = () => {
   const [rooms, setRooms] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const roomsPerPage = 4;
+  const cache = useRef({});
 
   useEffect(() => {
-    const fetchRooms = async () => {
+    const fetchRooms = async (page) => {
       setIsLoading(true);
       try {
-        const data = await getAllRooms(currentPage - 1, roomsPerPage); // Adjusted for 0-based index
-        setRooms(data.content);
-        setTotalPages(data.totalPages);
+        if (cache.current[page]) {
+          setRooms(cache.current[page].content);
+          setTotalPages(cache.current[page].totalPages);
+        } else {
+          const data = await getAllRooms(page, roomsPerPage);
+          setRooms(data.content);
+          setTotalPages(data.totalPages);
+          cache.current[page] = data;
+        }
       } catch (error) {
         setErrorMessage(error.message);
       } finally {
@@ -25,20 +32,28 @@ const RoomCarousel = () => {
       }
     };
 
-    fetchRooms();
+    fetchRooms(currentPage - 1);
+  }, [currentPage]);
+
+  useEffect(() => {
+    const prefetchNextPage = async () => {
+      const nextPage = currentPage;
+      if (!cache.current[nextPage]) {
+        try {
+          const data = await getAllRooms(nextPage, roomsPerPage);
+          cache.current[nextPage] = data;
+        } catch (error) {
+          console.error("Error prefetching data: ", error);
+        }
+      }
+    };
+
+    prefetchNextPage();
   }, [currentPage]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <Spin tip="Loading rooms..." size="large" />
-      </div>
-    );
-  }
 
   if (errorMessage) {
     return (
@@ -47,48 +62,57 @@ const RoomCarousel = () => {
   }
 
   return (
-    <section className="room-carousel-section bg-light mb-5 mt-2 shadow">
+    <section className={`room-carousel-section bg-light mb-5 mt-2 shadow ${isLoading ? 'loading' : ''}`}>
       <h2 className="heading">All Rooms</h2>
       <div className="container">
-        <Row gutter={16}>
-          {rooms.map((room) => (
-            <Col key={room.id} xs={24} sm={12} md={8} lg={6} className="mb-4">
-              <Card
-                hoverable
-                cover={
-                  <Link to={`/book-room/${room.id}`}>
-                    <img
-                      alt="Room Photo"
-                      src={`data:image/png;base64, ${room.photo}`}
-                      className="room-image"
+        {isLoading && (
+          <div className="loading-container">
+            <Spin size="large" />
+          </div>
+        )}
+        {!isLoading && (
+          <>
+            <Row gutter={16}>
+              {rooms.map((room) => (
+                <Col key={room.id} xs={24} sm={12} md={8} lg={6} className="mb-4">
+                  <Card
+                    hoverable
+                    cover={
+                      <Link to={`/book-room/${room.id}`}>
+                        <img
+                          alt="Room Photo"
+                          src={`data:image/png;base64, ${room.photo}`}
+                          className="room-image"
+                        />
+                      </Link>
+                    }
+                  >
+                    <span className="hotel-color">{room.roomTypeName.name}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px', width: "100%" }}>
+                      <div className="room-address-container">
+                        <div className="room-address">{room.roomAddress}, {room.roomLocation}</div>
+                      </div>
+                    </div>
+                    <Card.Meta
+                      title={<span className="hotel-color"></span>}
+                      description={<div className="hotel-color">${room.roomPrice}/night</div>}
                     />
-                  </Link>
-                }
-              >
-                <span className="hotel-color">{room.roomTypeName.name}</span>
-                <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
-                  <div className="room-address-container">
-                    <div className="room-address">{room.roomAddress}, {room.roomLocation}</div>
-                  </div>
-                </div>
-                <Card.Meta
-                  title={<span className="hotel-color"></span>}
-                  description={<div className="hotel-color">${room.roomPrice}/night</div>}
-                />
-                <Button type="primary" className="btn-hotel mt-2">
-                  <Link to={`/book-room/${room.id}`}>Book Now</Link>
-                </Button>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-        <Pagination
-          current={currentPage}
-          total={totalPages * roomsPerPage}
-          pageSize={roomsPerPage}
-          onChange={handlePageChange}
-          className="pagination"
-        />
+                    <Button type="primary" className="btn-hotel mt-2">
+                      <Link to={`/book-room/${room.id}`}>Book Now</Link>
+                    </Button>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+            <Pagination
+              current={currentPage}
+              total={totalPages * roomsPerPage}
+              pageSize={roomsPerPage}
+              onChange={handlePageChange}
+              className="pagination"
+            />
+          </>
+        )}
       </div>
       <style jsx>{`
         .heading {
@@ -99,6 +123,10 @@ const RoomCarousel = () => {
           background-color: #f8f9fa;
           padding: 2rem 0;
           border-radius: 8px;
+          transition: opacity 0.5s ease-in-out;
+        }
+        .room-carousel-section.loading {
+          opacity: 0.5;
         }
         .hotel-color {
           color: #000000;
@@ -120,10 +148,6 @@ const RoomCarousel = () => {
         .btn-hotel:hover {
           background-color: #fff;
           color: #fff;
-        }
-        .loading-container {
-          text-align: center;
-          margin-top: 5rem;
         }
         .room-carousel-section .ant-card-cover img {
           max-width: 100%;
@@ -193,7 +217,7 @@ const RoomCarousel = () => {
         }
         .room-address {
           display: inline-block;
-          animation: slide 13s linear infinite;
+          animation: slide 11.5s linear infinite;
         }
         @keyframes slide {
           0% {
@@ -213,6 +237,12 @@ const RoomCarousel = () => {
           display: flex;
           justify-content: center;
           margin-top: 20px;
+        }
+        .loading-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 200px; /* Adjust height as needed */
         }
       `}</style>
     </section>

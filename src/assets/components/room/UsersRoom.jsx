@@ -3,7 +3,7 @@ import { Table, Space, message, Spin, Typography, Select, Alert, Button } from "
 import { getAllRooms, deleteRoom, getRoomTypes, getLocation } from "../utils/ApiFunctions";
 import { FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { FaEdit, FaEye, FaPlus} from "react-icons/fa";
+import { FaEye, FaPlus } from "react-icons/fa";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -17,18 +17,22 @@ const UsersRoom = () => {
     const [selectedRoomType, setSelectedRoomType] = useState("");
     const [selectedLocation, setSelectedLocation] = useState("");
     const [locations, setLocation] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalRooms, setTotalRooms] = useState(0);
+    const pageSize = 6;
 
     useEffect(() => {
-        fetchRooms();
+        fetchRooms(currentPage);
         fetchRoomTypes();
         fetchLocations();
-    }, []);
+    }, [currentPage]);
 
-    const fetchRooms = async () => {
+    const fetchRooms = async (page) => {
         setIsLoading(true);
         try {
-            const result = await getAllRooms();
-            setRooms(result);
+            const result = await getAllRooms(page - 1, pageSize); // Adjust for 0-based index
+            setRooms(result.content);
+            setTotalRooms(result.totalElements);
             setIsLoading(false);
         } catch (error) {
             setErrorMessage(error.message);
@@ -59,9 +63,9 @@ const UsersRoom = () => {
             const result = await deleteRoom(roomId);
             if (result === "") {
                 setSuccessMessage(`Room No ${roomId} was deleted`);
-                fetchRooms();
+                fetchRooms(currentPage);
             } else {
-                console.error(`Error deleting room : ${result.message}`);
+                console.error(`Error deleting room: ${result.message}`);
             }
         } catch (error) {
             setErrorMessage(error.message);
@@ -140,12 +144,14 @@ const UsersRoom = () => {
                     >
                         <FaTrashAlt />
                     </Button>
-                    
                 </Space>
-                
             ),
         },
     ];
+
+    const handleTableChange = (pagination) => {
+        setCurrentPage(pagination.current);
+    };
 
     return (
         <div style={{ padding: "20px", backgroundColor: "whitesmoke" }}>
@@ -187,7 +193,7 @@ const UsersRoom = () => {
                     columns={columns}
                     dataSource={filteredRooms}
                     rowKey="id"
-                    pagination={{ pageSize: 6 }}
+                    pagination={{ current: currentPage, pageSize: pageSize, total: totalRooms, onChange: handleTableChange }}
                 />
             )}
         </div>
