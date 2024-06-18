@@ -26,23 +26,21 @@ const RoomSearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(4);
   const [totalRooms, setTotalRooms] = useState(0);
-  const [prefetchedRooms, setPrefetchedRooms] = useState({});
 
   const disabledDate = (current) => {
     return current && current < moment().startOf("day");
   };
 
   const fetchRooms = useCallback(
-    debounce((page, query = searchQuery) => {
+    debounce((page) => {
       setIsLoading(true);
-
       getAvailableRooms(
-        query.checkInDate,
-        query.checkOutDate,
+        searchQuery.checkInDate,
+        searchQuery.checkOutDate,
         selectedRoomType,
         selectedLocation,
-        query.minPrice,
-        query.maxPrice,
+        searchQuery.minPrice,
+        searchQuery.maxPrice,
         page,
         pageSize
       )
@@ -50,10 +48,6 @@ const RoomSearch = () => {
           if (response.data && Array.isArray(response.data.content)) {
             setAvailableRooms(response.data.content);
             setTotalRooms(response.data.totalElements);
-            setPrefetchedRooms((prev) => ({
-              ...prev,
-              [page]: response.data.content,
-            }));
           } else {
             setAvailableRooms([]);
             setErrorMessage("Unexpected response format");
@@ -71,12 +65,6 @@ const RoomSearch = () => {
     [searchQuery, selectedRoomType, selectedLocation, pageSize]
   );
 
-  useEffect(() => {
-    if (!prefetchedRooms[currentPage - 1]) {
-      fetchRooms(currentPage - 1);
-    }
-  }, [currentPage, fetchRooms, prefetchedRooms]);
-
   const handleSearch = () => {
     const checkInMoment = moment(searchQuery.checkInDate);
     const checkOutMoment = moment(searchQuery.checkOutDate);
@@ -93,6 +81,12 @@ const RoomSearch = () => {
 
     setCurrentPage(1);
     fetchRooms(0);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSearchQuery({ ...searchQuery, [name]: value });
+    setErrorMessage("");
   };
 
   const handleDateChange = (name, date) => {
@@ -120,15 +114,10 @@ const RoomSearch = () => {
   };
 
   const handlePageChange = (page, pageSize) => {
-    setIsLoading(true);
     setCurrentPage(page);
     setPageSize(pageSize);
-    if (prefetchedRooms[page - 1]) {
-      setAvailableRooms(prefetchedRooms[page - 1]);
-      setIsLoading(false);
-    } else {
-      fetchRooms(page - 1); // Adjust for zero-based index
-    }
+    setIsLoading(true);
+    fetchRooms(page - 1); // Adjust for zero-based index
   };
 
   return (
@@ -165,7 +154,7 @@ const RoomSearch = () => {
             <Col xs={24} sm={12} md={6} lg={5}>
               <Form.Item>
                 <RoomTypeSelector
-                  handleRoomInputChange={handleRangeChange}
+                  handleRoomInputChange={handleInputChange}
                   selectedRoomType={selectedRoomType}
                   setSelectedRoomType={setSelectedRoomType}
                 />
@@ -174,7 +163,7 @@ const RoomSearch = () => {
             <Col xs={24} sm={12} md={6} lg={5}>
               <Form.Item>
                 <RoomLocationSelector
-                  handleRoomInputChange={handleRangeChange}
+                  handleRoomInputChange={handleInputChange}
                   selectedLocation={selectedLocation}
                   setSelectedLocation={setSelectedLocation}
                 />
