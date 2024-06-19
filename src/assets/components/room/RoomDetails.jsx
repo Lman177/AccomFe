@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getRoomById } from "../utils/ApiFunctions";
 import {
   FaUtensils,
@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa";
 import ClipLoader from "react-spinners/ClipLoader";
 
-const Checkout = () => {
+const RoomDetails = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [roomInfo, setRoomInfo] = useState({
@@ -25,6 +25,7 @@ const Checkout = () => {
   });
 
   const { roomId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -42,6 +43,9 @@ const Checkout = () => {
 
   return (
     <div className="container mt-5">
+      <button className="btn btn-secondary mb-3" onClick={() => navigate('/room')}>
+        Back
+      </button>
       <div className="d-flex flex-column align-items-center">
         {isLoading ? (
           <ClipLoader size={50} color={"#123abc"} loading={isLoading} />
@@ -123,4 +127,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default RoomDetails;

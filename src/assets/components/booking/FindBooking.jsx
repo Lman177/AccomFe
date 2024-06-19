@@ -103,6 +103,7 @@ const FindBooking = () => {
           <p className="text-success">Confirmation Code: {bookingInfo.bookingConfirmationCode}</p>
           {/* <p>Room Number: {bookingInfo.room.id}</p> */}
           <p>Room Type: {bookingInfo.room && bookingInfo.room.roomTypeName ? bookingInfo.room.roomTypeName.name : "N/A"}</p>
+          <p>Room Address: {bookingInfo.room.roomAddress}, {bookingInfo.room.roomLocation.locationName}</p>
           <p>Check-in Date: {moment(bookingInfo.checkInDate).format("MMM Do, YYYY")}</p>
           <p>Check-out Date: {moment(bookingInfo.checkOutDate).format("MMM Do, YYYY")}</p>
           <p>Full Name: {bookingInfo.guestName}</p>

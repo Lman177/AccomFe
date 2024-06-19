@@ -27,8 +27,23 @@ const RevenueChart = () => {
 
     const processChartData = (data) => {
         const owners = [...new Set(data.map(item => item.ownerId))];
-        const colors = ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)']; // Add more colors if needed
-
+        const colors = [
+            'rgba(255, 99, 132, 0.5)', // red
+            'rgba(54, 162, 235, 0.5)', // blue
+            'rgba(75, 192, 192, 0.5)', // greenish cyan
+            'rgba(153, 102, 255, 0.5)', // purple
+            'rgba(255, 159, 64, 0.5)',  // orange
+            'rgba(255, 205, 86, 0.5)',  // yellow
+            'rgba(201, 203, 207, 0.5)', // light gray
+            'rgba(233, 30, 99, 0.5)',   // pink
+            'rgba(0, 188, 212, 0.5)',   // cyan
+            'rgba(255, 87, 34, 0.5)',   // deep orange
+            'rgba(76, 175, 80, 0.5)',   // green
+            'rgba(96, 125, 139, 0.5)',  // blue gray
+            'rgba(63, 81, 181, 0.5)',   // indigo
+            'rgba(244, 67, 54, 0.5)'    // bright red
+        ];
+        
         const filteredData = selectedMonth
             ? data.filter(item => `${item.year}-${String(item.month).padStart(2, '0')}` === selectedMonth)
             : data;
@@ -124,8 +139,8 @@ const RevenueChart = () => {
                     margin-bottom: 20px;
                 }
                 .chart-wrapper {
-                    width: 100%;
-                    height: 400px;
+                    width: 600px;
+                    height: 300px;
                 }
             `}</style>
         </div>

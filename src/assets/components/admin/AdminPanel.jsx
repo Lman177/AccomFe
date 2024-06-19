@@ -11,6 +11,7 @@ import { Button, Layout, Menu, theme } from 'antd';
 import ExistingRooms2 from '../room/UsersRoom'; // Import the ExistingRooms component
 import ExistingBooking from '../booking/ExistingBooking'; // Import the ExistingBooking component
 import UserList from '../User/UserList'; // Import the ListUser component
+import Statics from './Statics';
 
 const { Header, Sider, Content } = Layout;
 
@@ -53,6 +54,11 @@ const App = () => {
                 icon: <ReadOutlined />,
                 label: 'Booking',
               },
+              {
+                key: 'Statics',
+                icon: <UploadOutlined />,
+                label: 'Statics',
+              },
             ]}
           />
         </Sider>
@@ -87,6 +93,7 @@ const App = () => {
             {currentPage === 'User' && <UserList/>}
             {currentPage === 'Room' && <ExistingRooms2/>}
             {currentPage === 'Booking' && <ExistingBooking/>}
+            {currentPage === 'Statics' && <Statics  />}
           </Content>
         </Layout>
       </Layout>
