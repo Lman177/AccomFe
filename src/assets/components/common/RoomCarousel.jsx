@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Row, Col, Alert, Button, Pagination, Spin } from 'antd';
 import { getAllRooms } from '../utils/ApiFunctions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 const RoomCarousel = () => {
   const [rooms, setRooms] = useState([]);
@@ -97,9 +99,20 @@ const RoomCarousel = () => {
                       title={<span className="hotel-color"></span>}
                       description={<div className="hotel-color">${room.roomPrice}/night</div>}
                     />
+                    
                     <Button type="primary" className="btn-hotel mt-2">
                       <Link to={`/book-room/${room.id}`}>Book Now</Link>
                     </Button>
+
+                    <div className="rating">
+                      {Array(5).fill(0).map((_, index) => (
+                        <FontAwesomeIcon 
+                          key={index} 
+                          icon={faStar} 
+                          className={index < room.rating ? "star-rated" : "star-unrated"} 
+                        />
+                      ))}
+                    </div>
                   </Card>
                 </Col>
               ))}
@@ -147,7 +160,7 @@ const RoomCarousel = () => {
         }
         .btn-hotel:hover {
           background-color: #fff;
-          color: #fff;
+          color: #ff5a5f;
         }
         .room-carousel-section .ant-card-cover img {
           max-width: 100%;
@@ -207,8 +220,11 @@ const RoomCarousel = () => {
           font-size: 14px;
           font-weight: bold;
         }
-        .star {
+        .star-rated {
           color: gold;
+        }
+        .star-unrated {
+          color: #ccc;
         }
         .room-address-container {
           overflow: hidden;

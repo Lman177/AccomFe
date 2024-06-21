@@ -17,7 +17,7 @@ const NavBar = () => {
       <div className="container-fluid">
         <Link to={"/"} className="navbar-brand">
           <span className="hotel-color">
-            <i className="fas fa-hotel"></i> LakeSide Hotel
+            <i className="fas fa-hotel"></i> Accom.
           </span>
         </Link>
 

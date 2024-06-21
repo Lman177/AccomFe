@@ -1,8 +1,8 @@
 import axios from "axios"
 
 export const api = axios.create({
-    // baseURL : "http://localhost:8080"
-    baseURL : "http://100.109.7.158:8080"
+    baseURL : "http://localhost:8080"
+    // baseURL : "http://100.109.7.158:8080"
 })
 
 export const getHeader = () => {
@@ -147,12 +147,23 @@ export async function cancelBooking(bookingId) {
 
 /* This function gets all availavle rooms from the database with a given date and a room type */
 export async function getAvailableRooms(checkInDate, checkOutDate, roomType, roomLocation, minPrice, maxPrice, page, size) {
-	const result = await api.get(
-		`rooms/available-rooms?checkInDate=${checkInDate}
-		&checkOutDate=${checkOutDate}&roomType=${roomType}&roomLocation=${roomLocation}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${page}&size=${size}`
-	)
-	return result
+    const Url = 'rooms/available-rooms';
+    const queryParams = new URLSearchParams({
+        checkInDate: checkInDate || '',  // Provide a default empty string if undefined
+        checkOutDate: checkOutDate || '',
+        roomType: roomType || '',
+        roomLocation: roomLocation || '',
+        minPrice: minPrice || '',
+        maxPrice: maxPrice || '',
+        page: page || 0,  // Default to first page if undefined
+        size: size || 10  // Default to size 10 if undefined
+    }).toString();
+
+    const result = await api.get(`${Url}?${queryParams}`);
+    return result;
 }
+
+
 /* This function saves a new booking to the databse */
 export async function bookRoom(roomId, booking) {
 	try {
@@ -304,5 +315,16 @@ export async function getProfit() {
 		return response.data;
 	} catch (error) {
 		throw new Error(`Error fetching profit: ${error.message}`);
+	}
+}
+
+export async function getRoomRating(){
+	try{
+		const response = await api.get('/reviews/get/{roomId}', {
+			headers: getHeader()
+		});
+		return response.data;
+	}catch(error){
+		throw new Error(`Error fetching rating: ${error.message}`);
 	}
 }

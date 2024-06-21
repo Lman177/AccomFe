@@ -10,6 +10,7 @@ const BookingForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [roomPrice, setRoomPrice] = useState(0);
+  const [roomCapacity, setRoomCapacity] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
   const currentUser = localStorage.getItem("userEmail")
@@ -20,7 +21,8 @@ const BookingForm = () => {
     checkInDate: "",
     checkOutDate: "",
     numberOfAdults: "",
-    numberOfChildren: ""
+    numberOfChildren: "",
+
   });
 
   const { roomId } = useParams();
@@ -36,6 +38,7 @@ const BookingForm = () => {
     try {
       const response = await getRoomById(roomId);
       setRoomPrice(response.roomPrice);
+      setRoomCapacity(response.roomCapacity);
     } catch (error) {
       throw new Error(error);
     }
@@ -73,12 +76,24 @@ const BookingForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
+
+    // Calculate totalCount directly here
+    const adultCount = parseInt(booking.numberOfAdults);
+    const childrenCount = parseInt(booking.numberOfChildren);
+    const totalCount = adultCount + childrenCount;
     if (form.checkValidity() === false || !isGuestCountValid() || !isCheckOutDateValid()) {
       e.stopPropagation();
-    } else {
-      setShowModal(true);
+    } 
+    else {
+      if(totalCount >= roomCapacity){
+        setErrorMessage("Room capacity exceeded");
+      }
+      else{
+        setShowModal(true);
+        setValidated(true);
+      }
     }
-    setValidated(true);
+
   };
 
   const handleFormSubmit = async () => {
