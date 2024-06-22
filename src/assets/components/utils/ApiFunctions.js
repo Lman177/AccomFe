@@ -328,3 +328,20 @@ export async function getRoomRating(){
 		throw new Error(`Error fetching rating: ${error.message}`);
 	}
 }
+
+export async function rateRoom(roomId, rating, comment, userResponse = null) {
+    try {
+        const payload = { rating, comment };
+        if (userResponse) {
+            payload.response = userResponse;
+        }
+        const apiResponse = await api.post(`/reviews/room/${roomId}`, payload, {
+            headers: getHeader()
+        });
+        return apiResponse.data;
+    } catch (error) {
+        throw new Error(`Error rating room: ${error.response ? error.response.data : error.message}`);
+    }
+}
+
+

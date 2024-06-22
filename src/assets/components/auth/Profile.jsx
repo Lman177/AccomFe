@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { deleteUser, getBookingsByUserId, getUser, cancelBooking } from "../utils/ApiFunctions";
+import { deleteUser, getBookingsByUserId, getUser, cancelBooking, rateRoom } from "../utils/ApiFunctions";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { Avatar, Modal, Button, notification } from 'antd';
+import { Avatar, Modal, notification } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import RateRoomModal from "../booking/RateRoomModal";
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -13,12 +14,44 @@ const Profile = () => {
     lastName: "",
     roles: [{ id: "", name: "" }]
   });
+  const [isRateModalVisible, setIsRateModalVisible] = useState(false);
+  const [currentBookingId, setCurrentBookingId] = useState(null);
+  const [submittedReviews, setSubmittedReviews] = useState({});
+
+  const showRateModal = (bookingId) => {
+    setCurrentBookingId(bookingId);
+    setIsRateModalVisible(true);
+  };
+
+  const closeRateModal = () => {
+    setIsRateModalVisible(false);
+    setCurrentBookingId(null);
+  };
+
+  const submitRate = async (roomId, rating, comment) => {
+    try {
+      const response = await rateRoom(roomId, rating, comment);
+      notification.success({
+        message: 'Review Submitted',
+        description: 'Your review has been successfully submitted!'
+      });
+      setSubmittedReviews((prevReviews) => ({
+        ...prevReviews,
+        [roomId]: true,
+      }));
+      closeRateModal();
+    } catch (error) {
+      notification.error({
+        message: 'Error Submitting Review',
+        description: error.message
+      });
+    }
+  };
 
   const [bookings, setBookings] = useState([]);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentBookingId, setCurrentBookingId] = useState(null);
   const navigate = useNavigate();
   const userEmail = localStorage.getItem("userEmail");
   const token = localStorage.getItem("token");
@@ -34,7 +67,7 @@ const Profile = () => {
     };
 
     fetchUser();
-  }, [userEmail]);
+  }, [userEmail, token]);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -48,25 +81,24 @@ const Profile = () => {
     };
 
     fetchBookings();
-  }, [userEmail]);
+  }, [userEmail, token]);
 
   const handleDeleteAccount = async () => {
     const confirmed = window.confirm(
       "Are you sure you want to delete your account? This action cannot be undone."
     );
     if (confirmed) {
-      await deleteUser(userEmail)
-        .then((response) => {
-          setMessage(response.data);
-          localStorage.removeItem("token");
-          localStorage.removeItem("userEmail");
-          localStorage.removeItem("userRole");
-          navigate("/");
-          window.location.reload();
-        })
-        .catch((error) => {
-          setErrorMessage(error.data);
-        });
+      try {
+        const response = await deleteUser(userEmail);
+        setMessage(response.data);
+        localStorage.removeItem("token");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userRole");
+        navigate("/");
+        window.location.reload();
+      } catch (error) {
+        setErrorMessage(error.data);
+      }
     }
   };
 
@@ -192,7 +224,19 @@ const Profile = () => {
                           <td>{moment(booking.checkOutDate).format("MMM Do, YYYY")}</td>
                           <td>{booking.bookingConfirmationCode}</td>
                           <td className={isPastCheckout ? 'text-muted' : 'text-success'}>
-                            {isPastCheckout ? 'Completed' : 'On-going'}
+                            {booking.review === true ? 'Completed' : (
+                              isPastCheckout ? (
+                                submittedReviews[booking.room.id] ? (
+                                  <span>Reviewed</span>
+                                ) : (
+                                  <button className="btn btn-primary btn-sm" onClick={() => showRateModal(booking.room.id)}>
+                                    Rate
+                                  </button>
+                                )
+                              ) : (
+                                'On-going'
+                              )
+                            )}
                           </td>
                           <td>
                             <button className="btn btn-danger btn-sm" onClick={() => showModal(booking.id)}>
@@ -232,6 +276,13 @@ const Profile = () => {
       >
         <p>Are you sure you want to cancel this booking?</p>
       </Modal>
+  
+      <RateRoomModal
+        isVisible={isRateModalVisible}
+        onRate={submitRate}
+        onCancel={closeRateModal}
+        roomId={currentBookingId}
+      />
 
       <style jsx>{`
         .container {
@@ -249,10 +300,13 @@ const Profile = () => {
 
         .text-danger {
           color: #dc3545;
+          font-weight: bold;
+
         }
 
         .text-success {
           color: #28a745;
+          font-weight: bold;
         }
 
         .text-muted {
