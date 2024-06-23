@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { getRoomById } from '../utils/ApiFunctions';
+import ReviewBlock from '../Review/ReviewBlock';
 
 const Checkout = () => {
   const [error, setError] = useState(null);
@@ -99,7 +100,12 @@ const Checkout = () => {
           <p className="text-center mt-3">  </p>
           <p className="text-center mt-3">  </p>
         </div>
+        
       </div>
+      <div>
+        {!isLoading && !error && <ReviewBlock roomId={roomId} />}
+
+        </div>
       <style jsx>{`
         .container {
           max-width: 1200px;

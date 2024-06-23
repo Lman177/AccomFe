@@ -1,8 +1,8 @@
 import axios from "axios"
 
 export const api = axios.create({
-    baseURL : "http://localhost:8080"
-    // baseURL : "http://100.109.7.158:8080"
+    // baseURL : "http://localhost:8080"
+    baseURL : "http://100.109.7.158:8080"
 })
 
 export const getHeader = () => {
@@ -344,4 +344,13 @@ export async function rateRoom(roomId, rating, comment, userResponse = null) {
     }
 }
 
-
+export async function getRoomReviews(roomId) {
+	try {
+		const response = await api.get(`/reviews/get/${roomId}`, {
+			headers: getHeader()
+		});
+		return response.data;
+	} catch (error) {
+		throw new Error(`Error fetching reviews: ${error.message}`);
+	}
+}

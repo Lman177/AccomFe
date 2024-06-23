@@ -77,6 +77,7 @@ const RoomCarousel = () => {
             <Row gutter={16}>
               {rooms.map((room) => (
                 <Col key={room.id} xs={24} sm={12} md={8} lg={6} className="mb-4">
+                  <Link to={`/book-room/${room.id}`}>
                   <Card
                     hoverable
                     cover={
@@ -100,9 +101,7 @@ const RoomCarousel = () => {
                       description={<div className="hotel-color">${room.roomPrice}/night</div>}
                     />
                     
-                    <Button type="primary" className="btn-hotel mt-2">
-                      <Link to={`/book-room/${room.id}`}>Book Now</Link>
-                    </Button>
+            
 
                     <div className="rating">
                       {Array(5).fill(0).map((_, index) => (
@@ -114,6 +113,7 @@ const RoomCarousel = () => {
                       ))}
                     </div>
                   </Card>
+                  </Link>
                 </Col>
               ))}
             </Row>
