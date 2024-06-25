@@ -77,7 +77,7 @@ const RoomCarousel = () => {
             <Row gutter={16}>
               {rooms.map((room) => (
                 <Col key={room.id} xs={24} sm={12} md={8} lg={6} className="mb-4">
-                  <Link to={`/book-room/${room.id}`}>
+                  <Link to={`/book-room/${room.id}`} className="room-link">
                   <Card
                     hoverable
                     cover={
@@ -100,9 +100,6 @@ const RoomCarousel = () => {
                       title={<span className="hotel-color"></span>}
                       description={<div className="hotel-color">${room.roomPrice}/night</div>}
                     />
-                    
-            
-
                     <div className="rating">
                       {Array(5).fill(0).map((_, index) => (
                         <FontAwesomeIcon 
@@ -145,6 +142,10 @@ const RoomCarousel = () => {
           color: #000000;
           font-weight: bold;
           font-size: 1.25rem;
+          text-decoration: none;
+        }
+        .room-link, .room-link:hover, .room-link:focus, .room-link:active {
+          text-decoration: none;
         }
         .room-card {
           border: none;
@@ -152,15 +153,6 @@ const RoomCarousel = () => {
         }
         .room-card:hover {
           transform: translateY(-10px);
-        }
-        .btn-hotel {
-          background-color: #ff5a5f;
-          border: none;
-          color: #fff;
-        }
-        .btn-hotel:hover {
-          background-color: #fff;
-          color: #ff5a5f;
         }
         .room-carousel-section .ant-card-cover img {
           max-width: 100%;
@@ -199,6 +191,7 @@ const RoomCarousel = () => {
         .room-date,
         .room-price {
           display: block;
+          text-decoration: none;
         }
         .guest-favorite {
           position: absolute;
@@ -214,7 +207,6 @@ const RoomCarousel = () => {
           position: absolute;
           bottom: 16px;
           right: 16px;
-          background: rgba(255, 255, 255, 0.8);
           padding: 4px 8px;
           border-radius: 8px;
           font-size: 14px;

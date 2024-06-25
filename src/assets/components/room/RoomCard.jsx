@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, Col, Button } from "antd";
 import { Link } from "react-router-dom";
@@ -8,7 +7,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 const RoomCard = ({ room }) => {
   return (
     <Col key={room.id} xs={24} sm={12} md={8} lg={5} className="mb-4">
-      <Link to={`/book-room/${room.id}`}> {/* Wrap the Card with Link */}
+      <Link to={`/book-room/${room.id}`} className="room-link"> {/* Wrap the Card with Link */}
         <Card
           hoverable
           cover={
@@ -33,7 +32,6 @@ const RoomCard = ({ room }) => {
             description={<div className="hotel-color">${room.roomPrice}/night</div>}
           />
 
-      
           <div className="rating">
             {Array(5).fill(0).map((_, index) => (
               <FontAwesomeIcon 
@@ -53,30 +51,33 @@ const RoomCard = ({ room }) => {
           text-decoration: none;
         }
 
-        .hotel-color:hover {
-          text-decoration: underline;
+        .room-link, .room-link:hover, .room-link:focus, .room-link:active {
+          text-decoration: none;
         }
 
         .room-card {
           border: none;
           transition: transform 0.2s;
+          text-decoration: none;
         }
 
         .room-card:hover {
           transform: translateY(-10px);
+          text-decoration: none;
         }
 
         .btn-hotel {
           background-color: #ff5a5f;
           border: none;
           color: #fff;
+          text-decoration: none;
         }
           
-
         .btn-hotel:hover {
           background-color: #ff6b6b;
           border: none;
           color: #fff;
+          text-decoration: none;
         }
 
         .ant-card-cover img {
@@ -85,9 +86,16 @@ const RoomCard = ({ room }) => {
           object-fit: cover;
         }
 
+        .star-rated {
+          color: gold;
+        }
+        
+        .star-unrated {
+          color: #ccc;
+        }
       `}</style>
     </Col>
   );
 };
 
-export default RoomCard;  
+export default RoomCard;

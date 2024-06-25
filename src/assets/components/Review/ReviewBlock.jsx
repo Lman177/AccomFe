@@ -32,7 +32,7 @@ const ReviewBlock = ({ roomId }) => {
         dots: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 3,
+        slidesToShow: reviews.length >= 3 ? 3 : reviews.length,
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
@@ -98,8 +98,8 @@ const ReviewBlock = ({ roomId }) => {
                     border-radius: 10px;
                     background-color: white;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    margin: 10px;
-                    display: flex;
+                    // margin: 10px;
+                    // display: flex;
                     flex-direction: column;
                     justify-content: space-between;
                     position: relative;
