@@ -10,17 +10,14 @@ const BookingStats = () => {
     const [bookingCounts, setBookingCounts] = useState({});
     const [selectedMonth, setSelectedMonth] = useState('');
 
-    // Fetch booking data on component mount
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/bookings/all-bookings');
+                const response = await axios.get('http://100.109.7.158:8080/bookings/all-bookings');
                 const bookingsData = response.data;
                 
-                // Helper function to format month-year key
                 const formatMonthYear = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 
-                // Accumulate bookings by month
                 const counts = bookingsData.reduce((acc, { checkInDate }) => {
                     const date = new Date(...checkInDate);
                     const key = formatMonthYear(date);
@@ -39,19 +36,20 @@ const BookingStats = () => {
 
     const handleMonthChange = (date, dateString) => setSelectedMonth(dateString);
 
-    // Calculate total bookings for selected month, or overall if no month selected
     const totalBookings = selectedMonth ? bookingCounts[selectedMonth] || 0 : Object.values(bookingCounts).reduce((sum, count) => sum + count, 0);
 
     return (
         <div style={{ 
             padding: '20px',
             backgroundColor: '#f5f5f5',
-            width: '30%',
-            height: '40%',
+            width: '40%',
+            height: '300px',
             borderRadius: '10px',
-            boxShadow: '0 4px 8px rgba(0,0,0,0.1)'  // Added slight shadow for depth
+            boxShadow: '0 4px 8px rgba(0,0,0,0.1)' 
         }}>
-            <Title level={4} style={{ marginBottom: '20px' }}><CalendarOutlined /> Monthly Statistics</Title>
+            <Title level={3} style={{ marginBottom: '20px', textAlign: 'center', color: '#1890ff' }}>
+                <CalendarOutlined style={{ marginRight: '10px' }} /> Monthly Booking
+            </Title>
             <MonthPicker 
                 placeholder="Select Month"
                 onChange={handleMonthChange}
@@ -59,7 +57,9 @@ const BookingStats = () => {
                 style={{ marginBottom: '20px', width: '100%' }}
             />
             <Card bordered={false} style={{ textAlign: 'center', width: '100%' }}>
-                <Text>Total Bookings: {totalBookings}</Text>
+                <Text style={{ fontSize: '50px', fontWeight: 'bold' }}>
+                    {totalBookings}
+                </Text>
             </Card>
         </div>
     );

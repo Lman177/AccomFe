@@ -5,6 +5,7 @@ import moment from "moment";
 import { Avatar, Modal, notification } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import RateRoomModal from "../booking/RateRoomModal";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [user, setUser] = useState({

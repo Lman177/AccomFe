@@ -85,7 +85,7 @@ const BookingForm = () => {
       e.stopPropagation();
     } 
     else {
-      if(totalCount >= roomCapacity){
+      if(totalCount > roomCapacity){
         setErrorMessage("Room capacity exceeded");
       }
       else{

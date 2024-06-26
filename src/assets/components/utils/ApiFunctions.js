@@ -334,13 +334,6 @@ export async function getRoomRating(){
 	}
 }
 
-<<<<<<< HEAD
-
-
-
-
-
-=======
 export async function rateRoom(roomId, rating, comment, userResponse = null) {
     try {
         const payload = { rating, comment };
@@ -366,4 +359,50 @@ export async function getRoomReviews(roomId) {
 		throw new Error(`Error fetching reviews: ${error.message}`);
 	}
 }
->>>>>>> 082813828766dc558fc5576f0002bc83ef69b3a1
+
+export async function updateProfile(userEmail, values) {
+    try {
+        const response = await api.post(`/users/update`, null, {
+            params: {
+                userEmail,
+                ...values
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function countUser(){
+	try{
+		const response = await api.get('/users/total', {
+			headers: getHeader()
+		});
+		return response.data;
+	}catch(error){
+		throw new Error(`Error fetching user count: ${error.message}`);
+	}
+}
+
+export async function calculateRevenue(){
+	try{
+		const response = await api.get('/bookings/revenue', {
+			headers: getHeader()
+		});
+		return response.data;
+	}catch(error){
+		throw new Error(`Error fetching booking count: ${error.message}`);
+	}
+}
+
+export async function totalRoom(){
+	try{
+		const response = await api.get('/rooms/total', {
+			headers: getHeader()
+		});
+		return response.data;
+	}catch(error){
+		throw new Error(`Error fetching room count: ${error.message}`);
+	}
+}

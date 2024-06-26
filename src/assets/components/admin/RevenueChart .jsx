@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, TimeScale } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { Bar } from 'react-chartjs-2';
+import { DatePicker, Space, Button } from 'antd';
+import moment from 'moment';
 
 // Register all necessary Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, TimeScale);
@@ -15,7 +17,7 @@ const RevenueChart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/bookings/profit');
+                const response = await axios.get('http://100.109.7.158:8080/bookings/profit');
                 processChartData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -43,7 +45,7 @@ const RevenueChart = () => {
             'rgba(63, 81, 181, 0.5)',   // indigo
             'rgba(244, 67, 54, 0.5)'    // bright red
         ];
-        
+
         const filteredData = selectedMonth
             ? data.filter(item => `${item.year}-${String(item.month).padStart(2, '0')}` === selectedMonth)
             : data;
@@ -83,7 +85,7 @@ const RevenueChart = () => {
                 legend: { display: true },
                 tooltip: {
                     callbacks: {
-                        label: (tooltipItem) => `Revenue: ${tooltipItem.raw.y.toLocaleString()}`,
+                        label: (tooltipItem) => `Revenue: ${tooltipItem.raw.y.toLocaleString()}$`,
                     },
                 },
             },
@@ -92,59 +94,65 @@ const RevenueChart = () => {
         });
     };
 
-    const handleMonthChange = (event) => {
-        setSelectedMonth(event.target.value);
+    const handleMonthChange = (date, dateString) => {
+        setSelectedMonth(dateString);
     };
 
     return (
-        <div className="chart-container">
-            <h3>Monthly Revenue Comparison</h3>
-            <label htmlFor="month-select" className="month-label">Select Month: </label>
-            <input
-                type="month"
-                id="month-select"
-                value={selectedMonth}
-                onChange={handleMonthChange}
-                className="month-input"
-            />
-            <div className="chart-wrapper">
+        <div style={styles.container}>
+            <h3 style={styles.header}>Monthly Revenue Comparison</h3>
+            <Space direction="vertical" size="middle" style={styles.filterContainer}>
+                <DatePicker
+                    picker="month"
+                    onChange={handleMonthChange}
+                    style={styles.datePicker}
+                    placeholder="Select Month"
+                />
+                
+            </Space>
+            <div style={styles.chartWrapper}>
                 <Bar data={chartData} options={chartOptions} />
             </div>
-            <style>{`
-                .chart-container {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 20px;
-                    background-color: #f5f5f5;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                    max-width: 800px;
-                    margin: auto;
-                }
-                h3 {
-                    color: #333;
-                    margin-bottom: 20px;
-                }
-                .month-label {
-                    margin-bottom: 10px;
-                    font-size: 16px;
-                }
-                .month-input {
-                    padding: 8px;
-                    font-size: 16px;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    margin-bottom: 20px;
-                }
-                .chart-wrapper {
-                    width: 600px;
-                    height: 300px;
-                }
-            `}</style>
         </div>
     );
+};
+
+const styles = {
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '8px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        maxWidth: '800px',
+        margin: 'auto',
+        marginLeft: '25px',
+    },
+    header: {
+        color: '#333',
+        marginBottom: '20px',
+    },
+    filterContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: '20px',
+    },
+    datePicker: {
+        marginRight: '10px',
+    },
+    button: {
+        backgroundColor: '#1890ff',
+        color: '#fff',
+        borderRadius: '5px',
+        padding: '10px',
+    },
+    chartWrapper: {
+        width: '600px',
+        height: '400px',
+    },
 };
 
 export default RevenueChart;
