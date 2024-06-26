@@ -31,6 +31,7 @@ import ControlPanel from './assets/components/User/ControlPanel'
 import UsersRoom from './assets/components/room/UsersRoom'
 import RevenueChart from './assets/components/admin/RevenueChart '
 import BookingStats from './assets/components/admin/BookingStats '
+import UpdateUserForm from './assets/components/User/UpdateUserForm'
 function App() {
   return (
 	<AuthProvider>
@@ -80,6 +81,7 @@ function App() {
             <Route path="/logout" element={<FindBooking />} />
             <Route path="/profit" element={<RevenueChart />} />
             <Route path="/total-booking" element={<BookingStats />} />
+            <Route path="/update-profile" element={<UpdateUserForm />} />
           </Routes>
         </Layout>
       </Router>

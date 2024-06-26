@@ -95,7 +95,12 @@ export async function updateRoom(roomId, roomData){
 	formData.append("roomAddress", roomData.roomAddress)
 	formData.append("roomLocation", roomData.roomLocation)
 	const response = await api.put(`/rooms/update/${roomId}`, formData)
-	return response
+	if(response.status === 200){
+		return true
+	
+	}else{
+		return false
+	}
 }
 
 //This function get a room by id
@@ -328,3 +333,9 @@ export async function getRoomRating(){
 		throw new Error(`Error fetching rating: ${error.message}`);
 	}
 }
+
+
+
+
+
+

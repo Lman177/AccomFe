@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { deleteUser, getBookingsByUserId, getUser, cancelBooking } from "../utils/ApiFunctions";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { Avatar, Modal, Button, notification } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -107,6 +107,7 @@ const Profile = () => {
       {message && <p className="text-success">{message}</p>}
       {user ? (
         <div className="card p-5 mt-5" style={{ backgroundColor: "whitesmoke" }}>
+          
           <h4 className="card-title text-center">User Information</h4>
           <div className="card-body">
             <div className="col-md-10 mx-auto">
@@ -116,6 +117,9 @@ const Profile = () => {
                     <div className="d-flex justify-content-center align-items-center mt-4">
                       <Avatar size={80} style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
                     </div>
+                    <Link to="/update-profile" className="btn btn-primary btn-sm mt-3">
+                      Update Profile
+                    </Link>
                   </div>
                   <div className="col-md-10">
                     <div className="card-body">
