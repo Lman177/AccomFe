@@ -1,8 +1,8 @@
 import axios from "axios"
 
 export const api = axios.create({
-    baseURL : "http://localhost:8080"
-    // baseURL : "http://100.109.7.158:8080"
+    // baseURL : "http://localhost:8080"
+    baseURL : "http://100.109.7.158:8080"
 })
 
 export const getHeader = () => {
@@ -334,8 +334,36 @@ export async function getRoomRating(){
 	}
 }
 
+<<<<<<< HEAD
 
 
 
 
 
+=======
+export async function rateRoom(roomId, rating, comment, userResponse = null) {
+    try {
+        const payload = { rating, comment };
+        if (userResponse) {
+            payload.response = userResponse;
+        }
+        const apiResponse = await api.post(`/reviews/room/${roomId}`, payload, {
+            headers: getHeader()
+        });
+        return apiResponse.data;
+    } catch (error) {
+        throw new Error(`Error rating room: ${error.response ? error.response.data : error.message}`);
+    }
+}
+
+export async function getRoomReviews(roomId) {
+	try {
+		const response = await api.get(`/reviews/get/${roomId}`, {
+			headers: getHeader()
+		});
+		return response.data;
+	} catch (error) {
+		throw new Error(`Error fetching reviews: ${error.message}`);
+	}
+}
+>>>>>>> 082813828766dc558fc5576f0002bc83ef69b3a1

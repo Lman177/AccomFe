@@ -103,7 +103,7 @@ const ExistingBookingOfOwner = () => {
         >
           {selectedBooking && (
             <Descriptions bordered column={1} size="small">
-              <Descriptions.Item label="Room Type">{selectedBooking.room.roomTypeName.name}</Descriptions.Item>
+              <Descriptions.Item label="Room Type">{selectedBooking?.room?.roomTypeName?.name ?? 'N/A'}</Descriptions.Item>              
               <Descriptions.Item label="Check-In Date">{moment(selectedBooking.checkInDate).format('YYYY-MM-DD')}</Descriptions.Item>
               <Descriptions.Item label="Check-Out Date">{moment(selectedBooking.checkOutDate).format('YYYY-MM-DD')}</Descriptions.Item>
               <Descriptions.Item label="Guest Name">{selectedBooking.guestName}</Descriptions.Item>
