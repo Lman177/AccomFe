@@ -20,7 +20,7 @@ import Profile from "./assets/components/auth/Profile"
 import RequireAuth from "./assets/components/auth/RequireAuth"
 import AdminPanel from "./assets/components/admin/AdminPanel"
 import AdminRooms from './assets/components/admin/AdminRooms'
-// import Footer from './assets/components/layout/Footer'
+import Footer from './assets/components/layout/Footer'
 import RoomDetails from "./assets/components/room/RoomDetails"
 import Layout from './assets/components/layout/Layout'
 import UserList from './assets/components/User/UserList'
@@ -32,6 +32,7 @@ import UsersRoom from './assets/components/room/UsersRoom'
 import RevenueChart from './assets/components/admin/RevenueChart '
 import BookingStats from './assets/components/admin/BookingStats '
 import UpdateUserForm from './assets/components/User/UpdateUserForm'
+
 function App() {
   return (
 	<AuthProvider>
@@ -84,9 +85,14 @@ function App() {
             <Route path="/update-profile" element={<UpdateUserForm />} />
           </Routes>
         </Layout>
+
       </Router>
+      
     </main>
+
   </AuthProvider>
+      
+
   )
 }
 

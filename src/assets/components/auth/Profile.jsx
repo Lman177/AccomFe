@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { deleteUser, getBookingsByUserId, getUser, cancelBooking } from "../utils/ApiFunctions";
+import { deleteUser, getBookingsByUserId, getUser, cancelBooking, rateRoom } from "../utils/ApiFunctions";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { Avatar, Modal, notification } from 'antd';
@@ -12,43 +12,12 @@ const Profile = () => {
     id: "",
     email: "",
     phoneNumber: "",
-    lastName: "",
+    firstName: "",
     roles: [{ id: "", name: "" }]
   });
   const [isRateModalVisible, setIsRateModalVisible] = useState(false);
   const [currentBookingId, setCurrentBookingId] = useState(null);
   const [submittedReviews, setSubmittedReviews] = useState({});
-
-  const showRateModal = (bookingId) => {
-    setCurrentBookingId(bookingId);
-    setIsRateModalVisible(true);
-  };
-
-  const closeRateModal = () => {
-    setIsRateModalVisible(false);
-    setCurrentBookingId(null);
-  };
-
-  const submitRate = async (roomId, rating, comment) => {
-    try {
-      const response = await rateRoom(roomId, rating, comment);
-      notification.success({
-        message: 'Review Submitted',
-        description: 'Your review has been successfully submitted!'
-      });
-      setSubmittedReviews((prevReviews) => ({
-        ...prevReviews,
-        [roomId]: true,
-      }));
-      closeRateModal();
-    } catch (error) {
-      notification.error({
-        message: 'Error Submitting Review',
-        description: error.message
-      });
-    }
-  };
-
   const [bookings, setBookings] = useState([]);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -134,137 +103,133 @@ const Profile = () => {
     setIsModalVisible(false);
   };
 
+  const showRateModal = (bookingId) => {
+    setCurrentBookingId(bookingId);
+    setIsRateModalVisible(true);
+  };
+
+  const closeRateModal = () => {
+    setIsRateModalVisible(false);
+    setCurrentBookingId(null);
+  };
+
+  const submitRate = async (roomId, rating, comment) => {
+    try {
+      await rateRoom(roomId, rating, comment);
+      notification.success({
+        message: 'Review Submitted',
+        description: 'Your review has been successfully submitted!'
+      });
+      setSubmittedReviews((prevReviews) => ({
+        ...prevReviews,
+        [roomId]: true,
+      }));
+      closeRateModal();
+    } catch (error) {
+      notification.error({
+        message: 'Error Submitting Review',
+        description: error.message
+      });
+    }
+  };
+
   return (
     <div className="container">
       {errorMessage && <p className="text-danger">{errorMessage}</p>}
       {message && <p className="text-success">{message}</p>}
       {user ? (
-        <div className="card p-5 mt-5" style={{ backgroundColor: "whitesmoke" }}>
-          
-          <h4 className="card-title text-center">User Information</h4>
-          <div className="card-body">
-            <div className="col-md-10 mx-auto">
-              <div className="card mb-3 shadow">
-                <div className="row g-0">
-                  <div className="col-md-2">
-                    <div className="d-flex justify-content-center align-items-center mt-4">
-                      <Avatar size={80} style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-                    </div>
-                    <Link to="/update-profile" className="btn btn-primary btn-sm mt-3">
-                      Update Profile
-                    </Link>
-                  </div>
-                  <div className="col-md-10">
-                    <div className="card-body">
-                      <div className="form-group row">
-                        <label className="col-md-2 col-form-label fw-bold">ID:</label>
-                        <div className="col-md-10 mt-2">
-                          <p className="card-text">{user.id}</p>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="form-group row">
-                        <label className="col-md-2 col-form-label fw-bold">First Name:</label>
-                        <div className="col-md-10 mt-2">
-                          <p className="card-text">{user.firstName}</p>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="form-group row">
-                        <label className="col-md-2 col-form-label fw-bold">Phone Number:</label>
-                        <div className="col-md-10 mt-2">
-                          <p className="card-text">{user.phoneNumber}</p>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="form-group row">
-                        <label className="col-md-2 col-form-label fw-bold">Email:</label>
-                        <div className="col-md-10 mt-2">
-                          <p className="card-text">{user.email}</p>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="form-group row">
-                        <label className="col-md-2 col-form-label fw-bold">Roles:</label>
-                        <div className="col-md-10 mt-2">
-                          <ul className="list-unstyled">
-                            {user.roles && user.roles.map((role) => (
-                              <li key={role.id} className="card-text">
-                                {role.name}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <h4 className="card-title text-center">Booking History</h4>
-
-              {bookings.length > 0 ? (
-                <table className="table table-bordered table-hover shadow">
-                  <thead>
-                    <tr>
-                      <th scope="col">Room Type</th>
-                      <th scope="col">Room Location</th>
-                      <th scope="col">Check In Date</th>
-                      <th scope="col">Check Out Date</th>
-                      <th scope="col">Confirmation Code</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {bookings.map((booking, index) => {
-                      const checkOutDate = moment(booking.checkOutDate, "YYYY-MM-DD");
-                      const currentDate = moment();
-                      const isPastCheckout = currentDate.isAfter(checkOutDate);
-                      return (
-                        <tr key={index}>
-                          <td>{booking.room && booking.room.roomTypeName ? booking.room.roomTypeName.name : "N/A"}</td>
-                          <td>{booking.room && booking.room.roomLocation ? `${booking.room.roomAddress}, ${booking.room.roomLocation.locationName}` : "N/A"}</td>
-                          <td>{moment(booking.checkInDate).format("MMM Do, YYYY")}</td>
-                          <td>{moment(booking.checkOutDate).format("MMM Do, YYYY")}</td>
-                          <td>{booking.bookingConfirmationCode}</td>
-                          <td className={isPastCheckout ? 'text-muted' : 'text-success'}>
-                            {booking.review === true ? 'Completed' : (
-                              isPastCheckout ? (
-                                submittedReviews[booking.room.id] ? (
-                                  <span>Reviewed</span>
-                                ) : (
-                                  <button className="btn btn-primary btn-sm" onClick={() => showRateModal(booking.room.id)}>
-                                    Rate
-                                  </button>
-                                )
-                              ) : (
-                                'On-going'
-                              )
-                            )}
-                          </td>
-                          <td>
-                            <button className="btn btn-danger btn-sm" onClick={() => showModal(booking.id)}>
-                              Cancel
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              ) : (
-                <p>You have not made any bookings yet.</p>
-              )}
-
-              <div className="d-flex justify-content-center">
-                <div className="mx-2">
-                  <button className="btn btn-danger btn-sm" onClick={handleDeleteAccount}>
-                    Close account
-                  </button>
-                </div>
+        <div className="card p-5 mt-5 shadow-lg rounded">
+          <h4 className="card-title text-center mb-4">User Information</h4>
+          <div className="row">
+            <div className="col-md-3 text-center mb-3">
+              <Avatar size={80} style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+              <div className="mt-3">
+                <Link to="/update-profile" className="btn btn-secondary btn-sm">
+                  Update Profile
+                </Link>
               </div>
             </div>
+            <div className="col-md-9">
+              <div className="mb-3">
+                <label ><strong>ID:</strong> {user.id}</label>
+              </div>
+              <div className="mb-3">
+                <label ><strong>First Name:</strong> {user.firstName}</label>
+              </div>
+              <div className="mb-3">
+                <label ><strong>Phone Number:</strong> {user.phoneNumber}</label>
+              </div>
+              <div className="mb-3">
+                <label ><strong>Email:</strong> {user.email}</label>
+              </div>
+              <div className="mb-3">
+                <label ><strong>Roles:</strong></label>
+                <ul>
+                  {user.roles.map((role) => (
+                    <li key={role.id}>{role.name}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h4 className="card-title text-center mt-5 mb-4">Booking History</h4>
+          {bookings.length > 0 ? (
+            <table className="table table-bordered table-hover shadow">
+              <thead className="table-primary">
+                <tr>
+                  <th scope="col">Check In Date</th>
+                  <th scope="col">Check Out Date</th>
+                  <th scope="col">Confirmation Code</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookings.map((booking, index) => {
+                  const checkOutDate = moment(booking.checkOutDate, "YYYY-MM-DD");
+                  const currentDate = moment();
+                  const isPastCheckout = currentDate.isAfter(checkOutDate);
+                  return (
+                    <tr key={index}>
+                      {/* <td>{booking.room?.roomTypeName?.name || "N/A"}</td>
+                      <td>{booking.room ? `${booking.room.roomAddress}, ${booking.room.roomLocation.locationName}` : "N/A"}</td> */}
+                      <td>{moment(booking.checkInDate).format("MMM Do, YYYY")}</td>
+                      <td>{moment(booking.checkOutDate).format("MMM Do, YYYY")}</td>
+                      <td>{booking.bookingConfirmationCode}</td>
+                      <td className={isPastCheckout ? 'text-muted' : 'text-success'}>
+                        {booking.review === true ? 'reviewed' : (
+                          isPastCheckout ? (
+                            submittedReviews[booking.room.id] ? (
+                              <span>Reviewed</span>
+                            ) : (
+                              <button className="btn btn-primary btn-sm" onClick={() => showRateModal(booking.room.id)}>
+                                Rate
+                              </button>
+                            )
+                          ) : (
+                            'On-going'
+                          )
+                        )}
+                      </td>
+                      <td>
+                        <button className="btn btn-danger btn-sm" onClick={() => showModal(booking.id)}>
+                          Cancel
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <p>You have not made any bookings yet.</p>
+          )}
+
+          <div className="d-flex justify-content-center mt-4">
+            <button className="btn btn-danger" onClick={handleDeleteAccount}>
+              Close Account
+            </button>
           </div>
         </div>
       ) : (
@@ -281,7 +246,7 @@ const Profile = () => {
       >
         <p>Are you sure you want to cancel this booking?</p>
       </Modal>
-  
+
       <RateRoomModal
         isVisible={isRateModalVisible}
         onRate={submitRate}
@@ -306,7 +271,6 @@ const Profile = () => {
         .text-danger {
           color: #dc3545;
           font-weight: bold;
-
         }
 
         .text-success {
@@ -327,6 +291,11 @@ const Profile = () => {
           border: none;
         }
 
+        .btn-primary {
+          background-color: #007bff;
+          border: none;
+        }
+
         .btn-sm {
           padding: 0.25rem 0.5rem;
         }
@@ -335,12 +304,16 @@ const Profile = () => {
           margin-top: 3rem;
         }
 
-        .mt-2 {
-          margin-top: 0.5rem;
+        .mt-4 {
+          margin-top: 1.5rem;
         }
 
         .mb-3 {
           margin-bottom: 1rem;
+        }
+
+        .fw-bold {
+          font-weight: bold;
         }
 
         .d-flex {
@@ -360,17 +333,18 @@ const Profile = () => {
           margin-right: 0.5rem;
         }
 
-        .col-form-label {
-          text-align: right;
-        }
+        @media (max-width: 768px) {
+          .card-body {
+            text-align: center;
+          }
 
-        .form-group {
-          margin-bottom: 1rem;
-        }
+          .col-form-label {
+            text-align: left;
+          }
 
-        .g-0 {
-          margin-left: 0;
-          margin-right: 0;
+          .table {
+            font-size: 0.9rem;
+          }
         }
       `}</style>
     </div>

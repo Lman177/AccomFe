@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
+import Footer from "../layout/Footer";
 
 // Lazy load components
 const MainHeader = lazy(() => import("../layout/MainHeader"));
@@ -26,7 +27,10 @@ const Home = () => {
                     <RoomSearch />
                     <RoomCarousel />
                     <Parallax />
+                    
+
                     <HotelService />
+                    <Footer />
                 </div>
             </section>
         </Suspense>

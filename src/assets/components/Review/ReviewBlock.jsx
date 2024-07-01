@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Slider from 'react-slick';
 import { getRoomReviews } from '../utils/ApiFunctions';
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
@@ -25,116 +22,138 @@ const ReviewBlock = ({ roomId }) => {
         fetchRoomReviews();
     }, [roomId]);
 
-    if (isLoading) return <p>Loading review information...</p>;
-    if (error) return <p>Error: {error}</p>;
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setReviews((prevReviews) => {
+                if (prevReviews.length > 0) {
+                    const [first, ...rest] = prevReviews;
+                    return [...rest, first];
+                }
+                return prevReviews;
+            });
+        }, 3000); // Change slide every 3 seconds
+        return () => clearInterval(interval);
+    }, [reviews]);
 
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: reviews.length >= 3 ? 3 : reviews.length,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
+    const truncateText = (text, maxLength) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + '...';
+        }
+        return text;
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    if (reviews.length === 0) {
+        return <div>This room has not been reviewed yet.</div>;
+    }
+
     return (
-        <div className="reviews-container mt-5">
-            <h4>Room Reviews</h4>
-            <Slider {...settings}>
-                {reviews.length > 0 ? (
-                    reviews.map((review, index) => (
-                        <div className="review-block" key={index}>
-                            <div className="review-header">
-                                <h5>{review.guestName}</h5>
-                                <p className="review-date">{new Date(review.createdDate.join('-')).toLocaleDateString()}</p>
-                            </div>
-                            <div className="review-body">
-                                <p><strong>Review:</strong> {review.comment}</p>
-                                <div className="rating">
-                                    <strong>Rating: </strong>
-                                    {Array(5).fill(0).map((_, idx) => (
-                                        <FontAwesomeIcon 
-                                            key={idx} 
-                                            icon={faStar} 
-                                            className={idx < review.rating ? "star-rated" : "star-unrated"} 
-                                        />
-                                    ))}
-                                </div>
-                            </div>
+        <div className="review-block">
+            <div className="review-container">
+                {reviews.concat(reviews).map((review, index) => (
+                    <div key={index} className="review-card">
+                        <p className="review-guest"><strong>Guest Name:</strong> {review.guestName}</p>
+                        <div className="rating">
+                            {Array(5).fill(0).map((_, idx) => (
+                                <FontAwesomeIcon 
+                                    key={idx} 
+                                    icon={faStar} 
+                                    className={idx < review.rating ? "star-rated" : "star-unrated"} 
+                                />
+                            ))}
                         </div>
-                    ))
-                ) : (
-                    <p>No reviews available for this room.</p>
-                )}
-            </Slider>
+                        <p className="review-comment"><strong>Comment:</strong> {truncateText(review.comment, 100)}</p>
+                        <p className="review-date"><strong>Date:</strong> {new Date(review.createdDate).toLocaleDateString()}</p>
+                    </div>
+                ))}
+            </div>
+
             <style jsx>{`
-                .reviews-container {
-                    width: 90%;
-                    margin: 0 auto;
-                    margin-bottom: 50px;
-                }
                 .review-block {
-                    border: 1px solid #ddd;
-                    padding: 20px;
-                    border-radius: 10px;
-                    background-color: white;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    // margin: 10px;
-                    // display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
+                    display: flex;
+                    align-items: center;
+                    overflow: hidden;
+                    width: 100%;
                     position: relative;
+                    margin: 1em 0;
+                    margin-bottom: 2em;
                 }
-                .review-header {
+
+                .review-container {
                     display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 10px;
+                    width: 100%;
+                    animation: slide 40s linear infinite;
                 }
-                .review-header h5 {
-                    margin: 0;
-                    font-size: 1.2em;
-                    color: #333;
+
+                @keyframes slide {
+                    0% { transform: translateX(0%); }
+                    50% { transform: translateX(-50%); }
+                    100% { transform: translateX(-100%); }
                 }
+
+                .review-card {
+                    min-width: 200px;
+                    box-sizing: border-box;
+                    padding: 1em;
+                    border: 1px solid #ccc;
+                    margin: 0 0.5em;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    flex: 0 0 auto;
+                }
+
+                .review-guest,
+                .review-rating,
+                .review-comment,
                 .review-date {
-                    font-size: 0.9em;
-                    color: #888;
+                    margin: 0.5em 0;
                 }
-                .review-body p {
-                    margin: 5px 0;
+
+                .review-guest {
+                    font-weight: bold;
+                    font-size: 1.1em;
                 }
-                .slick-slide {
-                    display: flex;
-                    justify-content: center;
-                }
-                .rating {
+
+                .review-rating {
                     display: flex;
                     align-items: center;
                 }
+
                 .star-rated {
                     color: gold;
                 }
+
                 .star-unrated {
                     color: #ccc;
+                }
+
+                .review-comment {
+                    font-style: italic;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3; /* number of lines to show */
+                    -webkit-box-orient: vertical;
+                }
+
+                .review-date {
+                    color: #95a5a6;
+                    font-size: 0.9em;
+                    text-align: right;
+                }
+
+                @media (min-width: 768px) {
+                    .review-card {
+                        min-width: 300px;
+                    }
                 }
             `}</style>
         </div>

@@ -1,154 +1,235 @@
-// import React from "react";
-// import FooterLogo from "../assets/logo.png";
-// import {
-//   FaFacebook,
-//   FaInstagram,
-//   FaLinkedin,
-//   FaLocationArrow,
-//   FaMobileAlt,
-// } from "react-icons/fa";
-// import NatureVid from "../assets/footer.mp4";
-// import { Link } from "react-router-dom";
+import React from 'react';
+import { Container, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { faGooglePlusG, faFacebookF, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-// const FooterLinks = [
-//   {
-//     title: "Home",
-//     link: "/",
-//   },
-//   {
-//     title: "About",
-//     link: "/about",
-//   },
-//   {
-//     title: "Best Places",
-//     link: "/best-places",
-//   },
-//   {
-//     title: "Blogs",
-//     link: "/blogs",
-//   },
-// ];
+const footerLinks1 = [
+  {
+    path: '/',
+    display: 'Home'
+  },
+  {
+    path: '/find-booking',
+    display: 'Find Booking'
+  },
+  {
+    path: '/login',
+    display: 'Login'
+  },
+  {
+    path: '/register',
+    display: 'Register'
+  },
+];
 
-// const Footer = () => {
-//   return (
-//     <>
-//       <div className=" dark:bg-gray-950 py-10 relative overflow-hidden">
-//         <video
-//           autoPlay
-//           loop
-//           muted
-//           className="absolute right-0 top-0 h-full overflow-hidden w-full object-cover z-[-1]"
-//         >
-//           <source src={NatureVid} type="video/mp4" />
-//         </video>
-//         <div className="container">
-//           <div className="grid md:grid-cols-3 py-5 bg-white/80 backdrop-blur-sm rounded-t-xl">
-//             <div className="py-8 px-4">
-//               <h1 className="flex items-center gap-3 text-xl sm:text-3xl font-bold text-justify sm:text-left">
-//                 <img src={FooterLogo} alt="" className="max-h-[60px]" />
-//                 {/* TravelloGo */}
-//               </h1>
-//               <p className="text-sm">
-//                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
-//                 facere ab hic accusamus omnis dolor voluptatibus illo, tempore
-//                 eum tenetur.
-//               </p>
-//               <br />
-//               <div className="flex items-center gap-3 ">
-//                 <FaLocationArrow />
-//                 <p>Noida, Uttar Pradesh</p>
-//               </div>
-//               <div className="flex items-center gap-3 mt-3">
-//                 <FaMobileAlt />
-//                 <p>+91 123456789</p>
-//               </div>
-//               {/* social handles */}
-//               <div>
-//                 <div className="flex items-center gap-3 mt-6">
-//                   <a href="#">
-//                     <FaInstagram className="text-3xl" />
-//                   </a>
-//                   <a href="#">
-//                     <FaFacebook className="text-3xl" />
-//                   </a>
-//                   <a href="#">
-//                     <FaLinkedin className="text-3xl" />
-//                   </a>
-//                 </div>
-//               </div>
-//             </div>
-//             <div className="grid grid-cols-2 sm:grid-cols-3 col-span-2 md:pl-10">
-//               <div>
-//                 <div className="py-8 px-4">
-//                   <h1 className="text-xl font-bold text-justify sm:text-left mb-3">
-//                     Important Links
-//                   </h1>
-//                   <ul className="flex flex-col gap-3">
-//                     {FooterLinks.map((link) => (
-//                       <li className="cursor-pointer hover:translate-x-1 duration-300 hover:!text-primary space-x-1 text-gray-700 dark:text-gray-200">
-//                         <Link
-//                           to={link.link}
-//                           onClick={() => window.scrollTo(0, 0)}
-//                         >
-//                           <span>&#11162;</span>
-//                           <span>{link.title}</span>
-//                         </Link>
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 </div>
-//               </div>
-//               <div>
-//                 <div className="py-8 px-4">
-//                   <h1 className="text-xl font-bold text-justify sm:text-left mb-3">
-//                     Important Links
-//                   </h1>
-//                   <ul className="flex flex-col gap-3">
-//                     {FooterLinks.map((link) => (
-//                       <li className="cursor-pointer hover:translate-x-1 duration-300 hover:!text-primary space-x-1 text-gray-700 dark:text-gray-200">
-//                         <Link
-//                           to={link.link}
-//                           onClick={() => window.scrollTo(0, 0)}
-//                         >
-//                           <span>&#11162;</span>
-//                           <span>{link.title}</span>
-//                         </Link>
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 </div>
-//               </div>
-//               <div>
-//                 <div className="py-8 px-4">
-//                   <h1 className="text-xl font-bold text-justify sm:text-left mb-3">
-//                     Important Links
-//                   </h1>
-//                   <ul className="flex flex-col gap-3">
-//                     {FooterLinks.map((link) => (
-//                       <li className="cursor-pointer hover:translate-x-1 duration-300 hover:!text-primary space-x-1 text-gray-700 dark:text-gray-200">
-//                         <Link
-//                           to={link.link}
-//                           onClick={() => window.scrollTo(0, 0)}
-//                         >
-//                           <span>&#11162;</span>
-//                           <span>{link.title}</span>
-//                         </Link>
-//                       </li>
-//                     ))}
-//                   </ul>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//           <div>
-//             <div className="text-center py-5 border-t-2 border-gray-300/50 bg-primary text-white">
-//               @copyright 2024 All rights reserved || Made with ❤️ by Namlimo
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
+const footerLinks2 = [
+  {
+    icon: <FontAwesomeIcon icon={faInstagram} />,
+    path: 'https://instagram.com',
+    display: 'Instagram'
+  },
+  {
+    icon: <FontAwesomeIcon icon={faFacebookF} />,
+    path: 'https://facebook.com',
+    display: 'Facebook'
+  },
+  {
+    icon: <FontAwesomeIcon icon={faLinkedinIn} />,
+    path: 'https://linkedin.com',
+    display: 'LinkedIn'
+  },
+];
 
-// export default Footer;
+const Footer = () => {
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className='footer'>
+      <Container>
+        <Row>
+          <Col lg='3' md='6'>
+            <div className="logo">
+              <img src='src/assets/images/23625ce4-8f56-4442-be94-19cebb728aca.jpg' alt="Logo" />
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, enim.</p>
+              <div className="social__link d-flex align-items-center gap-3">
+                {footerLinks2.map((item, index) => (
+                  <span key={index}>
+                    <a href={item.path} target="_blank" rel="noopener noreferrer">
+                      {item.icon}
+                    </a>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Col>
+
+          <Col lg='3' md='6'>
+            <h5 className="footer__link-title">Quick Links</h5>
+            <ListGroup className='footer__quick-links'>
+              {footerLinks1.map((item, index) => (
+                <ListGroupItem key={index} className='ps-0 border-0'>
+                  <Link to={item.path}>{item.display}</Link>
+                </ListGroupItem>
+              ))}
+            </ListGroup>
+          </Col>
+
+          <Col lg='3' md='6'>
+            <h5 className="footer__link-title">Follow Us</h5>
+            <ListGroup className='footer__quick-links'>
+              {footerLinks2.map((item, index) => (
+                <ListGroupItem key={index} className='ps-0 border-0'>
+                  <a href={item.path} target="_blank" rel="noopener noreferrer">
+                    {item.icon} {item.display}
+                  </a>
+                </ListGroupItem>
+              ))}
+            </ListGroup>
+          </Col>
+
+          <Col lg='3' md='6'>
+            <h5 className="footer__link-title">Contact</h5>
+            <ListGroup className='footer__quick-links'>
+              <ListGroupItem className='ps-0 border-0 d-flex align-items-center gap-3'>
+                <h6 className='mb-0 d-flex align-items-center gap-2'>
+                  <span><i className='ri-map-pin-line'></i></span>
+                  Address:
+                </h6>
+                <p className='mb-0'>18, Hoang Quoc Viet</p>
+              </ListGroupItem>
+
+              <ListGroupItem className='ps-0 border-0 d-flex align-items-center gap-3'>
+                <h6 className='mb-0 d-flex align-items-center gap-2'>
+                  <span><i className='ri-mail-line'></i></span>
+                  Email:
+                </h6>
+                <p className='mb-0'>accom@gmail.com</p>
+              </ListGroupItem>
+
+              <ListGroupItem className='ps-0 border-0 d-flex align-items-center gap-3'>
+                <h6 className='mb-0 d-flex align-items-center gap-2'>
+                  <span><i className='ri-phone-fill'></i></span>
+                  Phone:
+                </h6>
+                <p className='mb-0'>+84 98765432</p>
+              </ListGroupItem>
+            </ListGroup>
+          </Col>
+        </Row>
+        <Row className="mt-5">
+          <Col lg='12' className='text-center'>
+            <h5 className="footer__link-title">Newsletter</h5>
+            <div className="newsletter">
+              <input type="email" placeholder="Enter your email" />
+              <button type="button">Subscribe</button>
+            </div>
+            <p className='copyright'>&copy; {year} All rights reserved || Made with ❤️ by Namlimo</p>
+          </Col>
+        </Row>
+      </Container>
+      <style jsx>{`
+        .footer {
+          background-color: #ffffff;
+          color: #1a202c;
+          padding-top: 70px;
+          padding-bottom: 30px;
+          border-top: 1px solid #e2e8f0;
+        }
+
+        .footer .logo img {
+          width: 80px;
+          height: 100px;
+          margin-bottom: 1rem;
+        }
+
+        .footer .logo p {
+          color: #4a5568;
+          font-size: 1rem;
+        }
+
+        .social__link span a {
+          text-decoration: none;
+          color: #4a5568;
+          font-size: 1.5rem;
+          transition: color 0.3s;
+        }
+
+        .social__link span a:hover {
+          color: #3182ce;
+        }
+
+        .footer__link-title {
+          color: #1a202c;
+          margin-bottom: 1rem;
+          font-size: 1.25rem;
+          font-weight: 600;
+        }
+
+        .footer__quick-links li a {
+          text-decoration: none;
+          color: #4a5568;
+          font-size: 1.1rem;
+          transition: color 0.3s;
+        }
+
+        .footer__quick-links a:hover {
+          color: #3182ce;
+        }
+
+        .footer__quick-links h6 span i {
+          color: #3182ce;
+          font-size: 1.4rem;
+        }
+
+        .footer__quick-links h6 {
+          margin-bottom: 1rem;
+        }
+
+        .footer__quick-links p {
+          font-size: 1.1rem;
+          color: #4a5568;
+        }
+
+        .newsletter {
+          display: flex;
+          justify-content: center;
+          margin-top: 1rem;
+          margin-bottom: 2rem;
+        }
+
+        .newsletter input {
+          padding: 0.5rem;
+          font-size: 1rem;
+          border: 1px solid #e2e8f0;
+          border-radius: 0.25rem 0 0 0.25rem;
+          outline: none;
+          width: 300px;
+        }
+
+        .newsletter button {
+          padding: 0.5rem 1rem;
+          font-size: 1rem;
+          background-color: #3182ce;
+          color: #fff;
+          border: none;
+          border-radius: 0 0.25rem 0.25rem 0;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .newsletter button:hover {
+          background-color: #2c5282;
+        }
+
+        .copyright {
+          color: #4a5568;
+          font-size: 1.2rem;
+          margin-top: 2rem;
+        }
+      `}</style>
+    </footer>
+  );
+};
+
+export default Footer;

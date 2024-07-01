@@ -104,11 +104,14 @@ const Checkout = () => {
       </div>
       <div>
         {!isLoading && !error && <ReviewBlock roomId={roomId} />}
-
+   
+        
+        
         </div>
+        
       <style jsx>{`
         .container {
-          max-width: 1200px;
+          max-width: 1200px ;
           margin: 0 auto;
         }
 

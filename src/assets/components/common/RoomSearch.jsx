@@ -106,7 +106,7 @@ const RoomSearch = () => {
       roomTypeName: "",
       roomLocation: "",
       minPrice: 0,
-      maxPrice: 1000,
+      maxPrice: 100,
     });
     setAvailableRooms([]);
     setErrorMessage("");
@@ -174,7 +174,7 @@ const RoomSearch = () => {
                 <Slider
                   range
                   min={0}
-                  max={1000}
+                  max={100}
                   defaultValue={[searchQuery.minPrice, searchQuery.maxPrice]}
                   onChange={handleRangeChange}
                   tooltipVisible
