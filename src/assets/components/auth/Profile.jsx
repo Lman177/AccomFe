@@ -61,9 +61,7 @@ const Profile = () => {
       try {
         const response = await deleteUser(userEmail);
         setMessage(response.data);
-        localStorage.removeItem("token");
-        localStorage.removeItem("userEmail");
-        localStorage.removeItem("userRole");
+        localStorage.clear();
         navigate("/");
         window.location.reload();
       } catch (error) {
@@ -151,19 +149,19 @@ const Profile = () => {
             </div>
             <div className="col-md-9">
               <div className="mb-3">
-                <label ><strong>ID:</strong> {user.id}</label>
+                <label><strong>ID:</strong> {user.id}</label>
               </div>
               <div className="mb-3">
-                <label ><strong>First Name:</strong> {user.firstName}</label>
+                <label><strong>First Name:</strong> {user.firstName}</label>
               </div>
               <div className="mb-3">
-                <label ><strong>Phone Number:</strong> {user.phoneNumber}</label>
+                <label><strong>Phone Number:</strong> {user.phoneNumber}</label>
               </div>
               <div className="mb-3">
-                <label ><strong>Email:</strong> {user.email}</label>
+                <label><strong>Email:</strong> {user.email}</label>
               </div>
               <div className="mb-3">
-                <label ><strong>Roles:</strong></label>
+                <label><strong>Roles:</strong></label>
                 <ul>
                   {user.roles.map((role) => (
                     <li key={role.id}>{role.name}</li>
@@ -192,30 +190,35 @@ const Profile = () => {
                   const isPastCheckout = currentDate.isAfter(checkOutDate);
                   return (
                     <tr key={index}>
-                      {/* <td>{booking.room?.roomTypeName?.name || "N/A"}</td>
-                      <td>{booking.room ? `${booking.room.roomAddress}, ${booking.room.roomLocation.locationName}` : "N/A"}</td> */}
                       <td>{moment(booking.checkInDate).format("MMM Do, YYYY")}</td>
                       <td>{moment(booking.checkOutDate).format("MMM Do, YYYY")}</td>
                       <td>{booking.bookingConfirmationCode}</td>
                       <td className={isPastCheckout ? 'text-muted' : 'text-success'}>
-                        {booking.review === true ? 'reviewed' : (
-                          isPastCheckout ? (
-                            submittedReviews[booking.room.id] ? (
-                              <span>Reviewed</span>
-                            ) : (
-                              <button className="btn btn-primary btn-sm" onClick={() => showRateModal(booking.room.id)}>
-                                Rate
-                              </button>
-                            )
-                          ) : (
-                            'On-going'
-                          )
+                        {isPastCheckout ? (
+                          <span>Completed</span>
+                        ) : (
+                          'On-going'
                         )}
                       </td>
                       <td>
-                        <button className="btn btn-danger btn-sm" onClick={() => showModal(booking.id)}>
-                          Cancel
-                        </button>
+                      {
+                        booking.review === true ? (
+                          'Reviewed'
+                        ) : isPastCheckout ? (
+                          submittedReviews[booking.room.id] ? (
+                            <span>Reviewed</span>
+                          ) : (
+                            <button className="btn btn-primary btn-sm mx-2" onClick={() => showRateModal(booking.room.id)}>
+                              Rate
+                            </button>
+                          )
+                        ) : (
+                          <button className="btn btn-danger btn-sm mx-2" onClick={() => showModal(booking.id)}>
+                            Cancel
+                          </button>
+                        )
+                      }
+                        
                       </td>
                     </tr>
                   );
