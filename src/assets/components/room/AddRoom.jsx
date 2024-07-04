@@ -90,10 +90,10 @@ const AddRoom = () => {
     };
 
     return (
-        <section className="container mt-5 mb-5">
+        <section className="container mb-5">
             <Row justify="center">
                 <Col xs={24} sm={20} md={16} lg={12} xl={8}>
-                    <Title level={2} className="mt-5 mb-2" style={{ textAlign: "center" }}>Add a New Room</Title>
+                    <Title level={2} className="mt-2 mb-2" style={{ textAlign: "center" }}>Add a New Room</Title>
                     <Form onFinish={handleSubmit} layout="vertical" encType="multipart/form-data">
                         <Form.Item label="What type of place will guests have?" name="roomTypeName" >
                             <RoomTypeSelector
