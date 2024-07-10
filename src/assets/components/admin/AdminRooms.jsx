@@ -140,52 +140,45 @@ const AdminRooms = () => {
     ];
 
     return (
-        <div style={{ padding: "20px", backgroundColor: "whitesmoke" }}>
+        <div style={{ padding: "20px", backgroundColor: "whitesmoke", height:"100%" }}>
             <Title level={2}>Your Rooms</Title>
             {successMessage && <Alert message="Success" description={successMessage} type="success" showIcon closable />}
             {errorMessage && <Alert message="Error" description={errorMessage} type="error" showIcon closable />}
-            <div style={{ marginBottom: "20px" }}>
-                <Row>
-                    <Col>
+            <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
+                <Col xs={24} sm={12} md={8} lg={6}>
                     <Select
-                    placeholder="Select a room type"
-                    onChange={handleRoomTypeChange}
-                    value={selectedRoomType}
-                    style={{ width: 200 }}
-                >
-                    <Option value="">All Room Types</Option>
-                    {roomTypes.map((roomType) => (
-                        <Option key={roomType.id} value={roomType.name}>
-                            {roomType.name}
-                        </Option>
-                    ))}
-                </Select>
-                <Select
-                    placeholder="Select location"
-                    onChange={handleLocationChange}
-                    value={selectedLocation}
-                    style={{ width: 200 }}
-                >
-                    <Option value="">All Locations</Option>
-                    {locations.map((location, index) => (
-                        <Option key={index} value={location.locationName}>
-                            {location.locationName}
-                        </Option>
-                    ))}
-                </Select>
-                    </Col>
-                    <Col>
-                        <Link to="/add-room">
-                            <Button type="primary">
-                                <FaPlus /> Add Room
-                            </Button>
-                        </Link>
-                    </Col>
-                
-
-                </Row>
-                
-            </div>
+                        placeholder="Select a room type"
+                        onChange={handleRoomTypeChange}
+                        value={selectedRoomType}
+                        style={{ width: '100%' }}
+                    >
+                        <Option value="">All Room Types</Option>
+                        {roomTypes.map((roomType) => (
+                            <Option key={roomType.id} value={roomType.name}>{roomType.name}</Option>
+                        ))}
+                    </Select>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={6}>
+                    <Select
+                        placeholder="Select location"
+                        onChange={handleLocationChange}
+                        value={selectedLocation}
+                        style={{ width: '100%' }}
+                    >
+                        <Option value="">All Locations</Option>
+                        {locations.map((location, index) => (
+                            <Option key={index} value={location.locationName}>{location.locationName}</Option>
+                        ))}
+                    </Select>
+                </Col>
+                <Col xs={24} sm={24} md={8} lg={12} style={{ textAlign: 'right' }}>
+                    <Link to="/add-room">
+                        <Button type="primary" icon={<FaPlus />}>
+                            Add Room
+                        </Button>
+                    </Link>
+                </Col>
+            </Row>
             {isLoading ? (
                 <Spin tip="Loading existing rooms..." size="large" />
             ) : (
@@ -194,6 +187,7 @@ const AdminRooms = () => {
                     dataSource={filteredRooms}
                     rowKey="id"
                     pagination={{ pageSize: 6 }}
+                    scroll={{ x: 'max-content' }}
                 />
             )}
         </div>

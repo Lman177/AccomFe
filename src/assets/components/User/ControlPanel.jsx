@@ -12,6 +12,7 @@ import UserList from '../User/UserList'; // Import the ListUser component
 import UsersRoom from '../room/UsersRoom';
 import ExistingBookingOfOwner from '../booking/ExistingBookingOfOwner';
 import AdminRooms from '../admin/AdminRooms';
+import UserRevenue from '../User/UserRevenue'
 
 const { Header, Sider, Content } = Layout;
 
@@ -28,7 +29,7 @@ const ControlPanel = () => {
   };
 
   return (
-    <div className=""style={{ height: '100%', width: '100%' }}>
+    <div className=""style={{ height: 'auto', width: 'auto' }}>
       
       <Layout style={{ height: '100%', width: '100%' }}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -87,7 +88,7 @@ const ControlPanel = () => {
           >
             {currentPage === 'Room' && <AdminRooms/>}
             {currentPage === 'Booking' && <ExistingBookingOfOwner/>}
-            {currentPage === 'Static'  }
+            {currentPage === 'Static'  && <UserRevenue/>}
 
           </Content>
         </Layout>

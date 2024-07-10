@@ -1,8 +1,8 @@
 import axios from "axios"
 
 export const api = axios.create({
-    // baseURL : "http://localhost:8080"
-    baseURL : "http://100.109.7.158:8080"
+    // baseURL : "https://deploybe-657a31bc3d6c.herokuapp.com"
+    baseURL : "http://34.41.181.239:8080"
 })
 
 export const getHeader = () => {

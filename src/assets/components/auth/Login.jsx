@@ -107,14 +107,14 @@ const Login = () => {
       </div>
       <div className="form-container sign-up">
         <form onSubmit={handleSubmit}>
-          <h1 style={{ whiteSpace: 'nowrap' }}>Create Account</h1>
+          
+          <h1 style={{ whiteSpace: 'nowrap' }}>Sign Up</h1>
           <div className="social-icons">
             <a href="#" className="icon"><FontAwesomeIcon icon={faGooglePlusG} /></a>
             <a href="#" className="icon"><FontAwesomeIcon icon={faFacebookF} /></a>
             <a href="#" className="icon"><FontAwesomeIcon icon={faGithub} /></a>
             <a href="#" className="icon"><FontAwesomeIcon icon={faLinkedinIn} /></a>
           </div>
-          <span>or use your email for registration</span>
           <input
             id="firstName"
             name="firstName"
@@ -184,6 +184,8 @@ const Login = () => {
           justify-content: center;
           flex-direction: column;
           height: 100vh;
+          width: 100%;
+          margin: 0;
         }
 
         .container {
@@ -192,10 +194,13 @@ const Login = () => {
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
           position: relative;
           overflow: hidden;
-          width: 768px;
-          max-width: 100%;
+          width: 80%; /* Adjusted to percentage for responsiveness */
+          max-width: 768px; /* Keeps the container from getting too wide */
           min-height: 480px;
+          min-width: 768px; 
         }
+
+          
 
         .container p {
           font-size: 14px;
@@ -377,6 +382,12 @@ const Login = () => {
         .container.active .toggle-right {
           transform: translateX(200%);
         }
+      @media (max-width: 768px) {
+      .container {
+        width: 100%;
+        max-width: none; /* Disable max-width */
+        min-width: 400px; /* Enforce min-width */
+      }
       `}</style>
     </div>
   );

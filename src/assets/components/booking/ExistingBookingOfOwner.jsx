@@ -23,7 +23,6 @@ const ExistingBookingOfOwner = () => {
     try {
       const data = await getBookingOfOwner();
       setBookingInfo(data);
-      console.log(data);
       setIsLoading(false);
     } catch (error) {
       setError(error.message);
@@ -45,9 +44,8 @@ const ExistingBookingOfOwner = () => {
   const events = bookingInfo.map(booking => ({
     id: booking.id,
     title: booking.guestName,
-    start: new Date(booking.checkInDate),
+    start: new Date(booking.checkInDate), // Ensure these are valid date strings
     end: new Date(booking.checkOutDate),
-    bookingId: booking.id,
     ...booking,
   }));
 
@@ -82,7 +80,7 @@ const ExistingBookingOfOwner = () => {
             events={events}
             startAccessor="start"
             endAccessor="end"
-            style={{ height: 500 }}
+            style={{ height: 500 }} // You may adjust this to 'auto' or specific height based on your layout
             onSelectEvent={handleSelectEvent}
           />
         )}
@@ -90,7 +88,6 @@ const ExistingBookingOfOwner = () => {
           title="Booking Details"
           visible={isModalVisible}
           onCancel={handleModalCancel}
-          height={200}
           footer={[
             <Button key="cancel" onClick={handleModalCancel}>
               Close
@@ -99,11 +96,14 @@ const ExistingBookingOfOwner = () => {
               Cancel Booking
             </Button>,
           ]}
-          bodyStyle={{ padding: '24px', width: '100%',height: '500px'}}
+          bodyStyle={{ padding: '24px', height: 'auto' }}
+          width="100%"
+          maxWidth={600}
         >
           {selectedBooking && (
             <Descriptions bordered column={1} size="small">
-              <Descriptions.Item label="Room Type">{selectedBooking?.room?.roomTypeName?.name ?? 'N/A'}</Descriptions.Item>              
+              <Descriptions.Item label="Room Type">{selectedBooking?.room?.roomTypeName?.name ?? "n/a"}</Descriptions.Item>              
+              <Descriptions.Item label="Room Type">{selectedBooking?.room?.roomLocation?.locationName ?? "n/a"}</Descriptions.Item>              
               <Descriptions.Item label="Check-In Date">{moment(selectedBooking.checkInDate).format('YYYY-MM-DD')}</Descriptions.Item>
               <Descriptions.Item label="Check-Out Date">{moment(selectedBooking.checkOutDate).format('YYYY-MM-DD')}</Descriptions.Item>
               <Descriptions.Item label="Guest Name">{selectedBooking.guestName}</Descriptions.Item>
@@ -112,7 +112,7 @@ const ExistingBookingOfOwner = () => {
               <Descriptions.Item label="Children">{selectedBooking.numOfChildren}</Descriptions.Item>
               <Descriptions.Item label="Total Guests">{selectedBooking.totalNumOfGuests}</Descriptions.Item>
               <Descriptions.Item label="Confirmation Code">{selectedBooking.bookingConfirmationCode}</Descriptions.Item>
-              <Descriptions.Item label="Price">{selectedBooking.room.roomPrice}</Descriptions.Item>
+              <Descriptions.Item label="Price">{selectedBooking.price}</Descriptions.Item>
             </Descriptions>
           )}
         </Modal>

@@ -25,7 +25,6 @@ const RoomDetails = () => {
   });
 
   const { roomId } = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -43,9 +42,7 @@ const RoomDetails = () => {
 
   return (
     <div className="container mt-5">
-      <button className="btn btn-secondary mb-3" onClick={() => navigate('/room')}>
-        Back
-      </button>
+
       <div className="d-flex flex-column align-items-center">
         {isLoading ? (
           <ClipLoader size={50} color={"#123abc"} loading={isLoading} />

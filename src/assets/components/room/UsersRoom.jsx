@@ -193,7 +193,14 @@ const UsersRoom = () => {
                     columns={columns}
                     dataSource={filteredRooms}
                     rowKey="id"
-                    pagination={{ current: currentPage, pageSize: pageSize, total: totalRooms, onChange: handleTableChange }}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: 6,
+                        
+                        total: totalRooms,  // Ensure this is the correct total count
+                        onChange: handleTableChange,
+                    }}
+                    scroll={{ x: 'max-content' }}
                 />
             )}
         </div>
