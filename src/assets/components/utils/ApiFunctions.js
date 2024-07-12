@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const api = axios.create({
     // baseURL : "https://deploybe-657a31bc3d6c.herokuapp.com"
-    baseURL : "http://35.238.250.153:8080"
+    baseURL : "http://152.67.115.24:8080"
 })
 
 export const getHeader = () => {
