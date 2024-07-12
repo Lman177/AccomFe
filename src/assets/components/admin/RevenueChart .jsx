@@ -17,7 +17,7 @@ const RevenueChart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://35.238.250.153:8080/bookings/profit');
+                const response = await axios.get('http://152.67.115.24:8080/bookings/profit');
                 processChartData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
