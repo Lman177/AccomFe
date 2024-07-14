@@ -102,8 +102,8 @@ const ExistingBooking = () => {
           {selectedBooking && (
             <Descriptions bordered column={1} size="middle">
               <Descriptions.Item label="Booking ID">{selectedBooking.id}</Descriptions.Item>
-              <Descriptions.Item label="Room ID">{selectedBooking.room.id}</Descriptions.Item>
-              <Descriptions.Item label="Room Type">{selectedBooking.room.roomTypeName.name}</Descriptions.Item>
+              {/* <Descriptions.Item label="Room ID">{selectedBooking.room.id}</Descriptions.Item> */}
+              {/* <Descriptions.Item label="Room Type">{selectedBooking.room.roomTypeName.name}</Descriptions.Item> */}
               <Descriptions.Item label="Check-In Date">{moment(selectedBooking.checkInDate).format('YYYY-MM-DD')}</Descriptions.Item>
               <Descriptions.Item label="Check-Out Date">{moment(selectedBooking.checkOutDate).format('YYYY-MM-DD')}</Descriptions.Item>
               <Descriptions.Item label="Guest Name">{selectedBooking.guestName}</Descriptions.Item>
@@ -112,7 +112,7 @@ const ExistingBooking = () => {
               <Descriptions.Item label="Children">{selectedBooking.numOfChildren}</Descriptions.Item>
               <Descriptions.Item label="Total Guests">{selectedBooking.totalNumOfGuests}</Descriptions.Item>
               <Descriptions.Item label="Confirmation Code">{selectedBooking.bookingConfirmationCode}</Descriptions.Item>
-              <Descriptions.Item label="Price">{selectedBooking.room.roomPrice}</Descriptions.Item>
+              <Descriptions.Item label="Price">{selectedBooking.price}$</Descriptions.Item>
             </Descriptions>
           )}
         </Modal>

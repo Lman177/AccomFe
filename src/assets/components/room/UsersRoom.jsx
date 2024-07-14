@@ -19,7 +19,7 @@ const UsersRoom = () => {
     const [locations, setLocation] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalRooms, setTotalRooms] = useState(0);
-    const pageSize = 6;
+    const pageSize = 10;
 
     useEffect(() => {
         fetchRooms(currentPage);

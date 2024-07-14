@@ -14,6 +14,7 @@ const RevenueChart = () => {
     const [chartOptions, setChartOptions] = useState({});
     const [selectedMonth, setSelectedMonth] = useState('');
     const ownerId = localStorage.getItem("userId");
+    const currentUser = localStorage.getItem("name");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,7 +41,7 @@ const RevenueChart = () => {
             : data;
 
         const datasets = owners.map((owner, index) => ({
-            label: `Owner ${owner}`,
+            label: `Owner: ${currentUser}`,
             data: filteredData.filter(item => item.ownerId === owner).map(item => ({
                 x: new Date(item.year, item.month - 1),
                 y: item.totalRevenue,

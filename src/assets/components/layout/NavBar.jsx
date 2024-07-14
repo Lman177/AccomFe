@@ -35,7 +35,8 @@ const NavBar = () => {
 
         <div className="collapse navbar-collapse" id="navbarScroll">
           <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
-            {isLoggedIn && userRole === "ROLE_ADMIN" && (
+            
+            {isLoggedIn && userRole.includes('ROLE_ADMIN') && (
               <li className="nav-item">
                 <NavLink className="nav-link" aria-current="page" to={"/admin-panel"}>
                   <i className="fas fa-user-shield"></i> Admin Panel

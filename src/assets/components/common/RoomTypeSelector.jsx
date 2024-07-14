@@ -34,12 +34,12 @@ const RoomTypeSelector = ({ handleRoomInputChange, selectedRoomType, setSelected
                 showSearch
                 allowClear
             >
-                {roomTypes.map((roomType, index) => (
+                {Array.isArray(roomTypes) ? roomTypes.map((roomType, index) => (
                     <Option key={index} value={roomType.name}>
                         {roomType.name}
                     </Option>
-                ))}
-            </Select>
+                )) : null}
+            </Select>   
         </div>
     );
 };

@@ -28,19 +28,19 @@ const RoomTypeSelector = ({ handleRoomInputChange, selectedLocation, setSelected
 					required
 					name="roomLocation"
 					onChange={handleChange}
-					value={selectedLocation || undefined}
+					value={selectedLocation || undefined} // Ensure value is undefined if not selected
 					style={{ width: '100%' }}
 					placeholder="Select a location"
 					showSearch
-                	allowClear
+					allowClear
 				>
-					{locations.map((location, index) => (
+					{Array.isArray(locations) ? locations.map((location, index) => (
 						<Option key={index} value={location.locationName}>
 							{location.locationName}
 						</Option>
-					))}
+					)) : null}
 				</Select>
-			
+							
 		</div>
 	);
 };
